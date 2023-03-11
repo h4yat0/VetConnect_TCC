@@ -4,8 +4,7 @@
 
 # VET CONNECT
 
-Uma breve descrição sobre o que esse projeto faz e para quem ele é
-
+O sistema tem como objetivo o gerenciamento de serviços prestados por uma rede de clínicas veterinárias, visando apenas animais domésticos. O sistema realizará o  gerenciamento de serviços. Dentre os serviços estão: consultas, castrações, banhos, tosas e vacinação. Além do completo gerenciamento das informações dos animais, clientes, funcionários, veterinários e clínicas veterinárias da rede.
 
 ## Autores
 
