@@ -1,4 +1,4 @@
-package com.example.api.entity;
+package com.example.api.entity.Prontuario;
 
 
 import lombok.AllArgsConstructor;
@@ -17,10 +17,13 @@ public class ExameEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id_animal")
-    private Long idAnimal;
+    @JoinColumn(name = "id_prontuario")
+    private Long idProntuario;
+    @Column(nullable = false)
     private String data;
+    @Column(nullable = false)
     private String nome;
+    @Column(nullable = false)
     private String resultado;
     private String observacao;
 

@@ -1,4 +1,4 @@
-package com.example.api.entity;
+package com.example.api.entity.Agendamento;
 
 
 import lombok.AllArgsConstructor;
@@ -17,6 +17,8 @@ public class ServicoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String nome;
+    @Column(nullable = false)
     private BigDecimal preco;
 }

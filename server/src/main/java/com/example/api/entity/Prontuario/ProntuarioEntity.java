@@ -1,4 +1,4 @@
-package com.example.api.entity;
+package com.example.api.entity.Prontuario;
 
 
 import lombok.AllArgsConstructor;
@@ -18,9 +18,10 @@ public class ProntuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "id_animal")
     private Long idAnimal;
+    @Column(nullable = false)
     private String dataAbertura;
     private String enfermidade;
     private String alergia;
@@ -31,6 +32,9 @@ public class ProntuarioEntity {
 
     @OneToMany(mappedBy = "prontuario", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
     private List<ExameEntity> exames = new ArrayList<>();
+
+    @OneToMany(mappedBy =  "prontuario", cascade = CascadeType.PERSIST)
+    private  List<ItemProntuarioEntity> itemProntuario = new ArrayList<>();
 
 
 }

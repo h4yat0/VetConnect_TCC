@@ -1,4 +1,4 @@
-package com.example.api.entity;
+package com.example.api.entity.Prontuario;
 
 
 import lombok.AllArgsConstructor;
@@ -18,8 +18,11 @@ public class VacinaEntity {
     @ManyToOne
     @JoinColumn(name = "id_prontuario")
     private Long idProntuario;
+    @Column(nullable = false)
     private String nome;
+    @Column(nullable = false)
     private String dataValidade;
+    @Column(nullable = false)
     private String dataAplicacao;
     private String observacoes;
 }
