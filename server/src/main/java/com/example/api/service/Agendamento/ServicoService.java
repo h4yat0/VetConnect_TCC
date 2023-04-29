@@ -1,7 +1,7 @@
-package com.example.api.service;
+package com.example.api.service.Agendamento;
 
-import com.example.api.entity.ServicoEntity;
-import com.example.api.repository.ServicoRepository;
+import com.example.api.entity.Agendamento.ServicoEntity;
+import com.example.api.repository.Agendamento.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
