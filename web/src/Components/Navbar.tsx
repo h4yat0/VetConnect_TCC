@@ -1,3 +1,5 @@
+import "../styles/Components/navbar.css";
+
 function Navbar() {
   return (
    <header>
@@ -12,7 +14,7 @@ function Navbar() {
         </ul>
         <a href="#" className="navbar_btn">Seja Cliente</a>
         <div className="toogle_btn">
-          
+          a
         </div> 
       </div>
    </header>
