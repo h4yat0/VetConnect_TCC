@@ -23,13 +23,18 @@
     color: blue;
   }
   
-  header {
+  footer {
     background-color: #4ECCA3 ;
-    position: relative;
-    padding: 0 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
   }
+
+
   
-  .navbar {
+  
+  .footer {
    
     width: 100%;
     height: 60px;
@@ -39,27 +44,27 @@
     justify-items: space-between;
   }
   
-  .navbar .logo a {
+  .footer .logo a {
     margin-right: 2rem;
     font-size: 1.5rem;
     font-weight: bold;
   }
   
-  .navbar .itens {
+  .footer .itens {
     display: flex;
     gap: 2rem;
     flex-grow: 1;
     justify-content: center;
   }
   
-  .navbar .toogle_btn {
+  .footer .toogle_btn {
     color: #ffffff;
     font-size: 1.5rem;
     cursor: pointer;
     display: none;
   }
   
-  .navbar_btn {
+  .footer_btn {
     margin: 2rem;
     background-color: #383e46;
     color: #ffffff;
@@ -74,12 +79,12 @@
     margin-left: auto;
   }
   
-  .navbar_btn:hover {
+  .footer_btn:hover {
     scale: 1.05;
     color: #4ECCA3;
   }
   
-  .navbar_btn:hover {
+  .footer_btn:hover {
     scale: 0.95;
   }
   
