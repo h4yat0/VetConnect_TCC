@@ -83,3 +83,9 @@
     scale: 0.95;
   }
   
+  .svgLogo{
+    width:6%;
+    height: auto;
+    
+    display:relative;
+  }
