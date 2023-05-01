@@ -1,4 +1,4 @@
-import "../styles/Components/navbar.css";
+import "../styles/components/navbar.css";
 import svgLogo from '../assets/svgs/vetConnectLogo.svg';
 
 function Navbar() {
