@@ -2,7 +2,9 @@
 function ContentHome() {
   return (
   <div>
-    a
+    <div className="border border-sky-500">
+      aaaaaaaaa
+    </div>
   </div>
   );
 }
