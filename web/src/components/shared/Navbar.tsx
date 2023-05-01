@@ -1,5 +1,5 @@
-import "../styles/components/navbar.css";
-import svgLogo from '../assets/svgs/vetConnectLogo.svg';
+import "../../styles/components/navbar.css";
+import svgLogo from '../../assets/svgs/vetConnectLogo.svg';
 
 function Navbar() {
   return (
