@@ -23,7 +23,7 @@ public class AnimalController {
 
     @PostMapping("/cadastro")
     public AnimalEntity cadastroAnimal(@RequestBody AnimalEntity animal){
-        ClienteEntity cliente = clienteService.getById(animal.getId_cliente());
+        ClienteEntity cliente = clienteService.getById(animal.getIdCliente());
         if(cliente == null){
             return null;
         }else{

@@ -13,8 +13,10 @@ public class ClienteController {
     @Autowired
     private ClienteService service;
 
-    @GetMapping("/login/{email}/{senha}")
-    public ClienteEntity getLogin(@PathVariable String email, @PathVariable String senha){
+
+
+    @PostMapping("/login")
+    public ClienteEntity getLogin(@RequestBody String email, @RequestBody String senha){
         return service.getClienteByEmailSenha(email, senha);
     }
 

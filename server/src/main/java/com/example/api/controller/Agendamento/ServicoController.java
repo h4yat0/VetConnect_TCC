@@ -1,4 +1,4 @@
-package com.example.api.controller;
+package com.example.api.controller.Agendamento;
 
 
 import com.example.api.entity.Agendamento.ServicoEntity;
