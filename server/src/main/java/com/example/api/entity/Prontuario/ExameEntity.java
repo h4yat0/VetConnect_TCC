@@ -17,7 +17,7 @@ public class ExameEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id_prontuario")
+    @JoinColumn(name = "prontuario_id")
     private Long idProntuario;
     @Column(nullable = false)
     private String data;

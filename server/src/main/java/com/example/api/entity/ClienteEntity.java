@@ -21,7 +21,7 @@ public class ClienteEntity {
     private Long id;
     @Column(nullable = false, length = 30)
     private String nome;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "data_nascimento")
     private String dataNascimento;
 
 

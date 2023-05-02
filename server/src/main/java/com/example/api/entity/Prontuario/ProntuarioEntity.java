@@ -19,9 +19,9 @@ public class ProntuarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
-    @JoinColumn(name = "id_animal")
+    @JoinColumn(name = "animal_id")
     private Long idAnimal;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "data_abertura")
     private String dataAbertura;
     private String enfermidade;
     private String alergia;

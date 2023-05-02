@@ -1,8 +1,8 @@
 package com.example.api.controller;
 
 
-import com.example.api.entity.ServicoEntity;
-import com.example.api.service.ServicoService;
+import com.example.api.entity.Agendamento.ServicoEntity;
+import com.example.api.service.Agendamento.ServicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

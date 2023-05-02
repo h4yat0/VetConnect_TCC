@@ -16,21 +16,21 @@ public class AgendamentoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id_cliente")
+    @JoinColumn(name = "cliente_id")
     private Long idCliente;
     @ManyToOne
-    @JoinColumn(name = "id_animal")
+    @JoinColumn(name = "animal_id")
     private Long idAnimal;
     @ManyToOne
-    @JoinColumn(name = "id_servico")
+    @JoinColumn(name = "servico_id")
     private Long idServico;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "data_agendada")
     private String dataAgendada;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "hora_agendada")
     private String horaAgendada;
     @Column(nullable = false)
     private String unidade;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "valor_agendado")
     private String valorAgendado;
 
 

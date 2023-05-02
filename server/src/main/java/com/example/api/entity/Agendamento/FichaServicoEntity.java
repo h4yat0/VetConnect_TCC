@@ -16,14 +16,14 @@ public class FichaServicoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
-    @JoinColumn(name = "id_agendamento")
+    @JoinColumn(name = "agendamento_id")
     private Long idAgendamento;
-    @Column(nullable = false)
+    @Column( name = "observacao_servico")
     private String observacaoServico;
-    @Column(nullable = false)
-    private String valorFcihaServico;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "valor_ficha_servico")
+    private String valorFichaServico;
+    @Column(nullable = false, name = "servico_realizado")
     private String servicoRealizado;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "nome_funcionario")
     private String nomeFuncionario;
 }

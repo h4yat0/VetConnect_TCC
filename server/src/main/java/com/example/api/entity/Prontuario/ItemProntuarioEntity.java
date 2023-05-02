@@ -17,13 +17,14 @@ public class ItemProntuarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToMany
-    @JoinColumn(name = "id_prontuario")
+    @JoinColumn(name = "prontuario_id")
     private Long idProntuario;
     @Column(nullable = false)
     private String data;
     @Column(nullable = false)
     private String veterinario;
     private String sintomas;
+    @Column(name = "exames_solicitados")
     private String examesSolicitados;
     private String diagnostico;
     private String prescricao;

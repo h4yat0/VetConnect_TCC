@@ -21,11 +21,12 @@ public class AnimalEntity {
     @Column(nullable = false)
     private String nome;
     @ManyToOne
-    @JoinColumn(name = "id_cliente")
+    @JoinColumn(name = "cliente_id")
     private Long idCliente;
     @Column(nullable = false)
     private String cor;
     private String raca;
+    @Column(nullable = false, name = "data_nascimento")
     private String dataNascimento;
     @Column(nullable = false)
     private String peso;

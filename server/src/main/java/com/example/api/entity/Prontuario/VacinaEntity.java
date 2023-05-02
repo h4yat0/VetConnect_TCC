@@ -16,13 +16,13 @@ public class VacinaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id_prontuario")
+    @JoinColumn(name = "prontuario_id")
     private Long idProntuario;
     @Column(nullable = false)
     private String nome;
-    @Column(nullable = false)
+    @Column(nullable = false, name= "data_validade")
     private String dataValidade;
-    @Column(nullable = false)
+    @Column(nullable = false, name= "data_aplicacao")
     private String dataAplicacao;
     private String observacoes;
 }
