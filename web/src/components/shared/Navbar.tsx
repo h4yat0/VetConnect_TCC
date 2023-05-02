@@ -1,8 +1,17 @@
+import "../../styles/components/navbar.css";
+import svgLogo from '../../assets/svgs/vetConnectLogo.svg';
+
 function Navbar() {
   return (
    <header>
       <div className="navbar">
-        <div className="logo"><a href="#">VetConnect</a></div>
+      <img src={svgLogo} className="svgLogo" alt="SVG image" />
+        <div className="logo">
+          <a href="#">
+         
+           VetConnect
+          </a>
+        </div>
         <ul className="itens">
           <li><a href="#">Home</a></li>
           <li><a href="#">Sobre</a></li>
@@ -12,9 +21,11 @@ function Navbar() {
         </ul>
         <a href="#" className="navbar_btn">Seja Cliente</a>
         <div className="toogle_btn">
-          
+          a
         </div> 
       </div>
    </header>
   );
 }
+
+export default Navbar

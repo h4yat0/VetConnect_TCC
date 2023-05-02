@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    height: 100vh;
+    background-color: #ffffff;
+  }
+  
+  li {
+    list-style: none;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1rem;
+  }
+  
+  a:hover {
+    color: blue;
+  }
+  
+  header {
+    background-color: #4ECCA3 ;
+    position: relative;
+    padding: 0 1rem;
+  }
+  
+  .navbar {
+   
+    width: 100%;
+    height: 60px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-items: space-between;
+  }
+  
+  .navbar .logo a {
+    margin-right: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .navbar .itens {
+    display: flex;
+    gap: 2rem;
+    flex-grow: 1;
+    justify-content: center;
+  }
+  
+  .navbar .toogle_btn {
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+  }
+  
+  .navbar_btn {
+    margin: 2rem;
+    background-color: #383e46;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: scale 0.2 ease;
+    margin-left: auto;
+  }
+  
+  .navbar_btn:hover {
+    scale: 1.05;
+    color: #4ECCA3;
+  }
+  
+  .navbar_btn:hover {
+    scale: 0.95;
+  }
+  
+  .svgLogo{
+    width:4rem;
+    height: auto;
+    
+    display:relative;
+  }
