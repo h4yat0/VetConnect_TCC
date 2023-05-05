@@ -1,4 +1,5 @@
 import "../../styles/components/navbar.css";
+import "../../styles/btnHamburger.css";
 import svgLogo from '../../assets/svgs/vetConnectLogo.svg';
 
 function Navbar() {
@@ -21,7 +22,12 @@ function Navbar() {
         </ul>
         <a href="#" className="navbar_btn">Seja Cliente</a>
         <div className="toogle_btn">
-          a
+          <label htmlFor="check">
+            <input type="checkbox" id="check"/> 
+            <span></span>
+            <span></span>
+            <span></span>
+          </label>
         </div> 
       </div>
    </header>

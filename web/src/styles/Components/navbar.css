@@ -20,7 +20,7 @@
   }
   
   a:hover {
-    color: blue;
+    color: #373e46;
   }
   
   header {
@@ -88,4 +88,17 @@
     height: auto;
     
     display:relative;
+  }
+
+  /* Reponsive Navbar */
+
+  @media(max-width:992px){
+    .navbar .links,
+    .navbar .action_btn{
+      display:none;
+    }
+
+    .navbar .toogle_btn {
+      display:block;
+    }
   }

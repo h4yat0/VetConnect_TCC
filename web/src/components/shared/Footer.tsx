@@ -4,8 +4,8 @@ function Footer() {
   return (
    <footer>
       <div className="footer">
-        <div className="logo"><a href="#">VetConnect</a></div>
-        <ul className="itens">
+        <div></div>
+        <ul>
           <li><a href="#"></a></li>
           
         </ul>

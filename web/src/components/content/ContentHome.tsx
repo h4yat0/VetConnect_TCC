@@ -1,8 +1,7 @@
-
 function ContentHome() {
   return (
   <div>
-    <div className="border border-sky-500">
+    <div>
       aaaaaaaaa
     </div>
   </div>

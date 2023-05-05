@@ -6,34 +6,22 @@
   
   body {
     height: 100vh;
-    background-color: #ffffff;
   }
   
   li {
     list-style: none;
   }
   
-  a {
-    text-decoration: none;
-    color: #ffffff;
-    font-size: 1rem;
-  }
-  
-  a:hover {
-    color: blue;
-  }
+
   
   footer {
-    background-color: #4ECCA3 ;
+    background-color: #373e46 ;
     position: fixed;
     bottom: 0;
     width: 100%;
     padding: 20px;
   }
 
-
-  
-  
   .footer {
    
     width: 100%;
@@ -48,13 +36,6 @@
     margin-right: 2rem;
     font-size: 1.5rem;
     font-weight: bold;
-  }
-  
-  .footer .itens {
-    display: flex;
-    gap: 2rem;
-    flex-grow: 1;
-    justify-content: center;
   }
   
   .footer .toogle_btn {
