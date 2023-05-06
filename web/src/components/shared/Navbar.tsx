@@ -22,13 +22,25 @@ function Navbar() {
         </ul>
         <a href="#" className="navbar_btn">Seja Cliente</a>
         <div className="toogle_btn">
-          <label htmlFor="check">
-            <input type="checkbox" id="check"/> 
-            <span></span>
-            <span></span>
-            <span></span>
-          </label>
+        <input type="checkbox" id="menu_checkbox"/>
+      <label htmlFor="menu_checkbox">
+        <div></div>
+        <div></div>
+        <div></div>
+      </label>
+      <div className="dropdown_menu">
+          <ul className="">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Sobre</a></li>
+              <li><a href="#">Serviços</a></li>
+              <li><a href="#">Contato</a></li>
+              <li><a href="#">Agendamento</a></li>
+              <li><a href="#" className="">Seja Cliente</a></li>
+            </ul>
+        </div>
         </div> 
+         
+      
       </div>
    </header>
   );

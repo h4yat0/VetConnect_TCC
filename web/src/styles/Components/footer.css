@@ -4,10 +4,6 @@
     box-sizing: border-box;
   }
   
-  body {
-    height: 100vh;
-  }
-  
   li {
     list-style: none;
   }
