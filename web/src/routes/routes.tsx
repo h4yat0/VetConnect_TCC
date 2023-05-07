@@ -6,6 +6,8 @@ import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
+import UnitPage from "../pages/UnitPage";
+import UnitListPage from "../pages/UnitListPage";
 
 export const router = createBrowserRouter([
 	{
@@ -16,6 +18,14 @@ export const router = createBrowserRouter([
 			{
 				path: "/",
 				element: <Home />,
+			},
+			{
+				path: "unidades",
+				element: <UnitListPage />,
+			},
+			{
+				path: "unidades/:id",
+				element: <UnitPage />,
 			},
 		],
 	},
