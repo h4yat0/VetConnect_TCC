@@ -1,102 +1,67 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    height: 100%;
-    background-color: #000000;
-  }
-  
-  li {
-    list-style: none;
-  }
-  
-  a {
-    text-decoration: none;
-    color: #ffffff;
-    font-size: 1rem;
-  }
-  
-  a:hover {
-    color: #373e46;
-  }
-  
-  header {
-    background-color: #4ECCA3 ;
-    position: relative;
-    width: 100%;
-  }
-  
-  .navbar {
-    width: 100%;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-items: space-between;
-  }
-  
-  .navbar .logo a {
-    margin-right: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .navbar .itens {
-    display: flex;
-    gap: 2rem;
-    flex-grow: 1;
-    justify-content: center;
-  }
-  
-  .navbar .toogle_btn {
-    color: #ffffff;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: none;
-  }
-  
-  .navbar_btn {
-    margin: 2rem;
-    background-color: #383e46;
-    color: #ffffff;
-    padding: 0.5rem 1rem;
-    border: none;
-    outline: none;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: scale 0.2 ease;
-    margin-left: auto;
-  }
-  
-  .navbar_btn:hover {
-    scale: 1.05;
-    color: #4ECCA3;
-  }
-  
-  .navbar_btn:hover {
-    scale: 0.95;
-  }
-  
-  .svgLogo{
-    width:4rem;
-    height: auto;
-    
-    display:relative;
-  }
+li {
+	list-style: none;
+}
 
-  /* Reponsive Navbar */
+a {
+	text-decoration: none;
+	color: #ffffff;
+	font-size: 1rem;
+}
 
-  @media(max-width:992px){
-    .navbar .itens,
-    .navbar .navbar_btn{
-      display:none;
-    }
+a:hover {
+	color: #373e46;
+}
 
-    .navbar .toogle_btn {
-      display:block;
-    }
-  }
+header {
+	background-color: #4ecca3;
+	position: relative;
+	width: 100%;
+}
+
+.navbar {
+	width: 100%;
+	height: 60px;
+	display: flex;
+	align-items: center;
+	justify-items: space-between;
+}
+
+.navbar .logo a {
+	margin-right: 1rem;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.navbar .itens {
+	display: flex;
+	gap: 2rem;
+	flex-grow: 1;
+	justify-content: center;
+}
+
+.navbar .toogle_btn {
+	color: #ffffff;
+	font-size: 1.5rem;
+	cursor: pointer;
+	display: none;
+}
+
+.svgLogo {
+	width: 4rem;
+	height: auto;
+
+	display: relative;
+}
+
+/* Reponsive Navbar */
+
+@media (max-width: 992px) {
+	.navbar .itens,
+	.navbar .navbar_btn {
+		display: none;
+	}
+
+	.navbar .toogle_btn {
+		display: block;
+	}
+}
