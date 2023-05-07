@@ -1,4 +1,4 @@
-import Unit from "./Unit";
+import UnitCard from "./UnitCard";
 
 const clinicas = {
 	clinicas: [
@@ -31,7 +31,7 @@ export default function UnitList() {
 			<h1 className='text-2xl font-black '>Clinicas</h1>
 			<div className='flex flex-row gap-20 pt-5'>
 				{clinicas.clinicas.map((clinica) => (
-					<Unit
+					<UnitCard
 						key={clinica.id}
 						title={clinica.nome}
 						imgPath={"src/assets/imgs/" + clinica.imgPath}
