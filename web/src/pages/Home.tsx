@@ -1,7 +1,9 @@
+import UnitList from "../components/UnitList";
+
 export default function Home() {
 	return (
-		<div className='bg-vetConnectGray h-10 w-10'>
-			<div>a</div>
+		<div className='p-10 font-inter'>
+			<UnitList />
 		</div>
 	);
 }
