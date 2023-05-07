@@ -1,5 +1,5 @@
 interface buttonPrimaryProps {
-	text: String;
+	text: string;
 }
 
 export default function buttonPrimary(props: buttonPrimaryProps) {
