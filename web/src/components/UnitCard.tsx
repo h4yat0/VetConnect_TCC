@@ -2,7 +2,7 @@ interface UnitProps {
 	title: string;
 	imgPath: string;
 }
-export default function Unit(props: UnitProps) {
+export default function UnitCard(props: UnitProps) {
 	const { title, imgPath } = props;
 
 	return (
