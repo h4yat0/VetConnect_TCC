@@ -6,10 +6,11 @@ import "../styles/global.css";
 
 export default function Root() {
 	return (
-		<div className='min-h-screen'>
+		<div>
 			<Navbar />
-			<Outlet />
-			<Footer />
+			<div className='min-h-screen mx-auto flex flex-col max-w-7xl items-center px-6 lg:px-8'>
+				<Outlet />
+			</div>
 		</div>
 	);
 }
