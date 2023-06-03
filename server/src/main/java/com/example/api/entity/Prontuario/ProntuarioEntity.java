@@ -1,11 +1,15 @@
 package com.example.api.entity.Prontuario;
 
 
+import com.example.api.entity.AnimalEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,27 +17,30 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_prontuario")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "exames"}) // anotação adicionada aqui
+
 @Entity
 public class ProntuarioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
-    @JoinColumn(name = "animal_id")
-    private Long idAnimal;
+    @JoinColumn(name = "id_animal")
+    @JsonIgnore
+    private AnimalEntity idAnimal;
     @Column(nullable = false, name = "data_abertura")
     private String dataAbertura;
     private String enfermidade;
     private String alergia;
     private String medicamento;
 
-    @OneToMany(mappedBy = "prontuario", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
+    @OneToMany(mappedBy = "idProntuario", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
     private List<VacinaEntity> vacinas = new ArrayList<>();
 
-    @OneToMany(mappedBy = "prontuario", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
+    @OneToMany(mappedBy = "idProntuario", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
     private List<ExameEntity> exames = new ArrayList<>();
 
-    @OneToMany(mappedBy =  "prontuario", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy =  "idProntuario", cascade = CascadeType.PERSIST)
     private  List<ItemProntuarioEntity> itemProntuario = new ArrayList<>();
 
 

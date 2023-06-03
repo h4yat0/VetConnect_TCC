@@ -1,23 +1,27 @@
 package com.example.api.entity.Prontuario;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_vacina")
+@Entity
 public class VacinaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "prontuario_id")
-    private Long idProntuario;
+    @JoinColumn(name = "id_prontuario")
+    @JsonIgnore
+    private ProntuarioEntity idProntuario;
     @Column(nullable = false)
     private String nome;
     @Column(nullable = false, name= "data_validade")

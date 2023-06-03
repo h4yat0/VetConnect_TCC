@@ -1,12 +1,17 @@
 package com.example.api.entity.Agendamento;
 
+import com.example.api.entity.AnimalEntity;
+import com.example.api.entity.ClienteEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_agendamento")
@@ -16,14 +21,14 @@ public class AgendamentoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Long idCliente;
+    @JoinColumn(name = "id_cliente")
+    private ClienteEntity idCliente;
     @ManyToOne
-    @JoinColumn(name = "animal_id")
-    private Long idAnimal;
+    @JoinColumn(name = "id_animal")
+    private AnimalEntity idAnimal;
     @ManyToOne
-    @JoinColumn(name = "servico_id")
-    private Long idServico;
+    @JoinColumn(name = "id_servico")
+    private ServicoEntity idServico;
     @Column(nullable = false, name = "data_agendada")
     private String dataAgendada;
     @Column(nullable = false, name = "hora_agendada")
@@ -34,6 +39,7 @@ public class AgendamentoEntity {
     private String valorAgendado;
 
 
-    @OneToOne(mappedBy = "agendamento", cascade = CascadeType.PERSIST)
-    private FichaServicoEntity fichaServico;
+    @OneToOne(mappedBy = "idAgendamento", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private FichaServicoEntity fichaServico = new FichaServicoEntity();
 }

@@ -1,11 +1,13 @@
 package com.example.api.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_cliente")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "animais"}) // anotação adicionada aqui
 @Entity
 public class ClienteEntity {
     @Id
@@ -37,6 +40,6 @@ public class ClienteEntity {
     private String senha;
 
    // @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL) se não tiver animal não tem cliente
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
+    @OneToMany(mappedBy = "idCliente", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
     private List<AnimalEntity> animais = new ArrayList<>();
 }

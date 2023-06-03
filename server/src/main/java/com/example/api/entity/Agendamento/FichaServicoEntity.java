@@ -1,23 +1,29 @@
 package com.example.api.entity.Agendamento;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_ficha_servico")
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class FichaServicoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    @JoinColumn(name = "agendamento_id")
-    private Long idAgendamento;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_agendamento")
+    private AgendamentoEntity idAgendamento;
+
+
+
     @Column( name = "observacao_servico")
     private String observacaoServico;
     @Column(nullable = false, name = "valor_ficha_servico")
