@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URL;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/cliente")
 public class ClienteController {
@@ -37,7 +37,7 @@ public class ClienteController {
         return service.alteararCliente(cliente);
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteCliente(@PathVariable Long id){
         service.delete(id);
     }
