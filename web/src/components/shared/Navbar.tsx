@@ -21,34 +21,22 @@ import {
 
 const products = [
 	{
-		name: "Analytics",
-		description: "Get a better understanding of your traffic",
+		name: "Banho",
+		description: "Deixe seu pet limpo e cheiroso",
 		href: "#",
 		icon: ChartPieIcon,
 	},
 	{
-		name: "Engagement",
-		description: "Speak directly to your customers",
+		name: "Tosa",
+		description: "Estilize o pelo do seu pet",
 		href: "#",
-		icon: CursorArrowRaysIcon,
+		icon: ChartPieIcon,
 	},
 	{
-		name: "Security",
-		description: "Your customers’ data will be safe and secure",
+		name: "Veterinário",
+		description: "Cuide da saúde do seu pet",
 		href: "#",
-		icon: FingerPrintIcon,
-	},
-	{
-		name: "Integrations",
-		description: "Connect with third-party tools",
-		href: "#",
-		icon: SquaresPlusIcon,
-	},
-	{
-		name: "Automations",
-		description: "Build strategic funnels that will convert",
-		href: "#",
-		icon: ArrowPathIcon,
+		icon: ChartPieIcon,
 	},
 ];
 const callsToAction = [
@@ -94,9 +82,12 @@ export default function Navbar() {
 					</button>
 				</div>
 				<Popover.Group className='hidden lg:flex lg:gap-x-12'>
+					<a href='/' className='text-sm font-semibold leading-6 text-gray-900'>
+						Página principal
+					</a>
 					<Popover className='relative'>
 						<Popover.Button className='flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900'>
-							Product
+							Agendar serviço
 							<ChevronDownIcon
 								className='h-5 w-5 flex-none text-gray-400'
 								aria-hidden='true'
@@ -157,19 +148,19 @@ export default function Navbar() {
 						</Transition>
 					</Popover>
 
-					<a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
-						Features
-					</a>
-					<a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
-						Marketplace
-					</a>
-					<a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
-						Company
+					<a
+						href='/unidades'
+						className='text-sm font-semibold leading-6 text-gray-900'
+					>
+						Unidades
 					</a>
 				</Popover.Group>
 				<div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-					<a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
-						Log in <span aria-hidden='true'>&rarr;</span>
+					<a
+						href='/signin'
+						className='text-sm font-semibold leading-6 text-gray-900'
+					>
+						Entrar <span aria-hidden='true'>&rarr;</span>
 					</a>
 				</div>
 			</nav>
@@ -251,10 +242,10 @@ export default function Navbar() {
 							</div>
 							<div className='py-6'>
 								<a
-									href='#'
+									href='/signin'
 									className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
 								>
-									Log in
+									Entrar
 								</a>
 							</div>
 						</div>
