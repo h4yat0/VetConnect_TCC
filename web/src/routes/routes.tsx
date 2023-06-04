@@ -8,6 +8,7 @@ import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import UnitPage from "../pages/UnitPage";
 import UnitListPage from "../pages/UnitListPage";
+import UserClientPage from "../pages/UserClientPage";
 
 export const router = createBrowserRouter([
 	{
@@ -27,10 +28,14 @@ export const router = createBrowserRouter([
 				path: "unidades/:id",
 				element: <UnitPage />,
 			},
+			{
+				path: "user/client",
+				element: <UserClientPage />,
+			},
 		],
 	},
 	{
-		path: "/signIn",
+		path: "/signin",
 		element: <SignIn />,
 		errorElement: <ErrorPage />,
 	},
