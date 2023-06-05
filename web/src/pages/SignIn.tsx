@@ -1,6 +1,36 @@
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
 
 export default function SignIn() {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+
+	const navigate = useNavigate();
+
+	const api = axios.create({
+		baseURL: `http://localhost:9191`,
+	});
+
+	const postSignIn = async () => {
+		let reponse = await api
+			.post("/cliente/login", {
+				email: email,
+				senha: password,
+			})
+			.then(function (response) {
+				console.log(response);
+				navigate("/");
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	};
+
+	const saveOnStore = () => {};
+
 	return (
 		<div
 			className='min-h-screen flex flex-col flex-1 justify-center items-center'
@@ -39,6 +69,8 @@ export default function SignIn() {
 									type='email'
 									autoComplete='email'
 									required
+									value={email}
+									onChange={(e) => setEmail(e.target.value)}
 									className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 								/>
 							</div>
@@ -60,18 +92,19 @@ export default function SignIn() {
 									type='password'
 									autoComplete='current-password'
 									required
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
 									className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 								/>
 							</div>
 						</div>
 
 						<div>
-							<button
-								type='submit'
-								className='flex w-full justify-center rounded-md bg-vetConnectPrimaryGreen px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-vetConnectSecundaryGreen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vetConnectPrimaryGreen'
-							>
-								Entrar
-							</button>
+							<ButtonPrimary
+								text='Cadastrar'
+								width='w-full'
+								onClickFunction={postSignIn}
+							/>
 						</div>
 					</form>
 

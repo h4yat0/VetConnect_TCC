@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cleave from "cleave.js/react";
 import "../modules/cleave-phone.br.js";
@@ -19,6 +19,8 @@ export default function SignUp() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
+	const navigate = useNavigate();
+
 	const api = axios.create({
 		baseURL: `http://localhost:9191`,
 	});
@@ -36,7 +38,7 @@ export default function SignUp() {
 			})
 			.then(function (response) {
 				console.log(response);
-				redirect("/home");
+				navigate("/");
 			})
 			.catch(function (error) {
 				console.log(error);
