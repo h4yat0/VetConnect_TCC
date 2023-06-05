@@ -1,6 +1,7 @@
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface ClientState {
+	id: number;
 	name: string;
 	cpf: string;
 	birthDate: string;
@@ -11,6 +12,7 @@ interface ClientState {
 }
 
 const initialState: ClientState = {
+	id: -1,
 	name: "",
 	birthDate: "",
 	cpf: "",
@@ -24,6 +26,9 @@ const clientSlice = createSlice({
 	name: "client",
 	initialState,
 	reducers: {
+		updateId: (state, action: PayloadAction<number>) => {
+			state.id = action.payload;
+		},
 		updateName: (state, action: PayloadAction<string>) => {
 			state.name = action.payload;
 		},
@@ -48,13 +53,8 @@ const clientSlice = createSlice({
 	},
 });
 
-const store = configureStore({
-	reducer: {
-		client: clientSlice.reducer,
-	},
-});
-
 export const {
+	updateId,
 	updateName,
 	updateBirthDate,
 	updateCpf,
@@ -63,5 +63,17 @@ export const {
 	updateEmail,
 	updatePassword,
 } = clientSlice.actions;
+
+export const getId = (state: { client: ClientState }) => state.client.id;
+export const getName = (state: { client: ClientState }) => state.client.name;
+export const getPhone = (state: { client: ClientState }) => state.client.phone;
+export const getEmail = (state: { client: ClientState }) => state.client.email;
+export const getCpf = (state: { client: ClientState }) => state.client.cpf;
+export const getBirthDate = (state: { client: ClientState }) =>
+	state.client.birthDate;
+export const getAddress = (state: { client: ClientState }) =>
+	state.client.address;
+export const getPassword = (state: { client: ClientState }) =>
+	state.client.password;
 
 export default clientSlice.reducer;

@@ -1,14 +1,25 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+	updateAddress,
+	updateBirthDate,
+	updateCpf,
+	updateEmail,
+	updateName,
+	updatePhone,
+	updateId,
+} from "../redux/client";
 import axios from "axios";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
 
 export default function SignIn() {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-
-	const navigate = useNavigate();
 
 	const api = axios.create({
 		baseURL: `http://localhost:9191`,
@@ -21,16 +32,33 @@ export default function SignIn() {
 				senha: password,
 			})
 			.then(function (response) {
-				console.log(response);
+				let data = response.data;
+				dispatch(updateId(data.id));
+				dispatch(updateName(data.nome));
+				dispatch(updateCpf(data.cpf));
+				dispatch(updateEmail(data.email));
+				dispatch(updateBirthDate(data.dataNascimento));
+				dispatch(updateAddress(data.endereco));
+				dispatch(updatePhone(data.telefone));
+
 				navigate("/");
 			})
 			.catch(function (error) {
 				console.log(error);
 			});
 	};
-
-	const saveOnStore = () => {};
-
+	/*
+	useEffect(() => {
+		console.log("id:", id);
+		console.log("name:", name);
+		console.log("cpf:", cpf);
+		console.log("birthDate:", birthDate);
+		console.log("address:", address);
+		console.log("phone:", phone);
+		console.log("email:", emailstore);
+		console.log("password:", passwordstore);
+	}, [id, nome, cpf, birthDate, address, phone, emailstore, passwordstore]);
+	*/
 	return (
 		<div
 			className='min-h-screen flex flex-col flex-1 justify-center items-center'
