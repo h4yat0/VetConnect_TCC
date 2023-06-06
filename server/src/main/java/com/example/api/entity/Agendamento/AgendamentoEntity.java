@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
 @Data
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fichaServico"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_agendamento")
@@ -29,17 +29,20 @@ public class AgendamentoEntity {
     @ManyToOne
     @JoinColumn(name = "id_servico")
     private ServicoEntity idServico;
+    @ManyToOne
+    @JoinColumn(name = "id_unidade")
+    private UnidadeEntity idUnidade;
+
+
     @Column(nullable = false, name = "data_agendada")
     private String dataAgendada;
     @Column(nullable = false, name = "hora_agendada")
     private String horaAgendada;
-    @Column(nullable = false)
-    private String unidade;
+
     @Column(nullable = false, name = "valor_agendado")
     private String valorAgendado;
 
 
-    @OneToOne(mappedBy = "idAgendamento", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private FichaServicoEntity fichaServico = new FichaServicoEntity();
+    @OneToOne(mappedBy = "idAgendamento",cascade = CascadeType.ALL)
+    private FichaServicoEntity fichaServico;
 }
