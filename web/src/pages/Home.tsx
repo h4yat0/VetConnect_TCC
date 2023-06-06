@@ -51,6 +51,7 @@ const servicos = {
 			nome: "Vacinação",
 			iconName: "Clínica PetVet - Zona Norte.jpg",
 		},
+	
 	],
 };
 
@@ -73,22 +74,20 @@ export default function Home() {
 					</div>
 				</div>
 
-				<div className='py-5'>
-					<h1 className='text-2xl font-black '>
-						[Últimos serviços utilizados]
-					</h1>
-					<div className='flex flex-row gap-20 pt-5 '>
-						{servicos.servicos.map((servicos) => (
-							<ServiceCard
-								key={servicos.id}
-								title={servicos.nome}
-								serviceId={servicos.id}
-								iconName={"src/assets/imgs/" + servicos.iconName}
-							/>
-						))}
-					</div>
+			<div className='py-5'>
+				<h1 className='text-2xl font-black '>Últimos serviços utilizados</h1>
+				<div className='flex flex-row gap-20 pt-5 '>
+					{servicos.servicos.map((servicos) => (
+						<ServiceCard
+							key={servicos.id}
+							title={servicos.nome}
+							serviceId={servicos.id}
+							iconName={"src/assets/imgs/" + servicos.iconName}
+						/>
+					))}
 				</div>
 			</div>
 		</div>
+	</div>
 	);
 }
