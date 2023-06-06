@@ -51,6 +51,7 @@ const servicos = {
 			nome: "Vacinação",
 			iconName: "Clínica PetVet - Zona Norte.jpg",
 		},
+	
 	],
 };
 
@@ -74,7 +75,7 @@ export default function Home() {
 			</div>
 
 			<div className='py-5'>
-				<h1 className='text-2xl font-black '>[Últimos serviços utilizados]</h1>
+				<h1 className='text-2xl font-black '>Últimos serviços utilizados</h1>
 				<div className='flex flex-row gap-20 pt-5 '>
 					{servicos.servicos.map((servicos) => (
 						<ServiceCard
@@ -87,6 +88,6 @@ export default function Home() {
 				</div>
 			</div>
 		</div>
-		</div>
+	</div>
 	);
 }
