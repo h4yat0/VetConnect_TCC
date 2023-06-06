@@ -1,10 +1,44 @@
 import Cleave from "cleave.js/react";
-
 import "../modules/cleave-phone.br.js";
+
 import ButtonPrimary from "../components/buttons/ButtonPrimary.js";
 import ButtonSecundary from "../components/buttons/ButtonSecundary.js";
 
+import { useDispatch, useSelector } from "react-redux";
+import {
+	updateAddress,
+	updateBirthDate,
+	updateCpf,
+	updateEmail,
+	updateName,
+	updatePhone,
+	updateId,
+	getAddress,
+	getBirthDate,
+	getCpf,
+	getEmail,
+	getId,
+	getName,
+	getPassword,
+	getPhone,
+} from "../redux/client.js";
+import axios from "axios";
+
+function formatCPF(cpf: string) {
+	const cpfRegex = /^(\d{3})(\d{3})(\d{3})(\d{2})$/;
+	return cpf.replace(cpfRegex, "$1.$2.$3-$4");
+}
+
 export default function UserClientPage() {
+	const id = useSelector(getId);
+	const cpf = useSelector(getCpf);
+	const name = useSelector(getName);
+	const phone = useSelector(getPhone);
+	const email = useSelector(getEmail);
+	const address = useSelector(getAddress);
+	const password = useSelector(getPassword);
+	const birthDate = useSelector(getBirthDate);
+
 	return (
 		<div className='w-full mb-10'>
 			<div className='flex justify-between items-center px-32 py-10'>
@@ -15,7 +49,7 @@ export default function UserClientPage() {
 				<div className='flex justify-between items-center mb-8'>
 					<div className='flex justify-between items-center gap-4'>
 						<div className='w-10 h-10 bg-slate-800 rounded-full'></div>
-						<span className='font-bold text-xl'>Nome do Usuário</span>
+						<span className='font-bold text-xl'>{name}</span>
 					</div>
 					<ButtonSecundary text='Editar informações' />
 				</div>
@@ -33,7 +67,9 @@ export default function UserClientPage() {
 								id='name'
 								name='name'
 								type='text'
+								defaultValue={name}
 								required
+								disabled
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -55,7 +91,9 @@ export default function UserClientPage() {
 									delimiters: [".", ".", "-"],
 									blocks: [3, 3, 3, 2],
 								}}
+								value={cpf}
 								required
+								disabled
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -73,7 +111,9 @@ export default function UserClientPage() {
 								id='birthDate'
 								name='birthDate'
 								type='date'
+								defaultValue={birthDate}
 								required
+								disabled
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -91,7 +131,9 @@ export default function UserClientPage() {
 								id='address'
 								name='address'
 								type='text'
+								defaultValue={address}
 								required
+								disabled
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -109,7 +151,9 @@ export default function UserClientPage() {
 								id='phone'
 								name='phone'
 								type='text'
+								value={phone}
 								required
+								disabled
 								options={{ phone: true, phoneRegionCode: "br" }}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
@@ -129,7 +173,9 @@ export default function UserClientPage() {
 								name='email'
 								type='email'
 								autoComplete='email'
+								defaultValue={email}
 								required
+								disabled
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -151,6 +197,7 @@ export default function UserClientPage() {
 								type='password'
 								autoComplete='current-password'
 								required
+								disabled
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>

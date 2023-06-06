@@ -3,6 +3,7 @@ import ServiceCard from "../components/ServiceCard";
 import PromoCard from "../components/PromoCard";
 
 
+
 const clinicas = {
 	clinicas: [
 		{

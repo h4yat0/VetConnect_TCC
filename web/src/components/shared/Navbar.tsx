@@ -1,16 +1,12 @@
 import "../../styles/components/navbar.css";
 import ButtonPrimary from "../buttons/ButtonPrimary";
-
-import vetConnectLogo from "../../assets/svgs/vetConnectLogo.svg";
-import { Fragment, useState } from "react";
+import { useSelector } from "react-redux";
+import { getId } from "../../redux/client";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import {
-	ArrowPathIcon,
 	Bars3Icon,
 	ChartPieIcon,
-	CursorArrowRaysIcon,
-	FingerPrintIcon,
-	SquaresPlusIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -18,6 +14,8 @@ import {
 	PhoneIcon,
 	PlayCircleIcon,
 } from "@heroicons/react/20/solid";
+import vetConnectLogo from "../../assets/svgs/vetConnectLogo.svg";
+import { Link, Navigate } from "react-router-dom";
 
 const products = [
 	{
@@ -49,6 +47,12 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar() {
+	const userId = useSelector(getId);
+
+	useEffect(() => {
+		console.log("id: ", userId);
+	}, [userId]);
+
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 	return (
@@ -58,8 +62,8 @@ export default function Navbar() {
 				aria-label='Global'
 			>
 				<div className='flex lg:flex-1'>
-					<a
-						href='/'
+					<Link
+						to='/'
 						className='-m-1.5 p-1.5 flex flex-row justify-center items-center'
 					>
 						<span className='sr-only'>VetConnect</span>
@@ -69,7 +73,7 @@ export default function Navbar() {
 							alt='Logo da Empresa'
 						/>
 						<span className='font-black text-2lg'>VetConnect</span>
-					</a>
+					</Link>
 				</div>
 				<div className='flex lg:hidden'>
 					<button
@@ -82,9 +86,13 @@ export default function Navbar() {
 					</button>
 				</div>
 				<Popover.Group className='hidden lg:flex lg:gap-x-12'>
-					<a href='/' className='text-sm font-semibold leading-6 text-gray-900'>
+					<Link
+						to='/'
+						className='text-sm font-semibold leading-6 text-gray-900'
+					>
 						Página principal
-					</a>
+					</Link>
+
 					<Popover className='relative'>
 						<Popover.Button className='flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900'>
 							Agendar serviço
@@ -117,13 +125,14 @@ export default function Navbar() {
 												/>
 											</div>
 											<div className='flex-auto'>
-												<a
-													href={item.href}
+												<Link
+													to={item.href}
 													className='block font-semibold text-gray-900'
 												>
 													{item.name}
 													<span className='absolute inset-0' />
-												</a>
+												</Link>
+
 												<p className='mt-1 text-gray-600'>{item.description}</p>
 											</div>
 										</div>
@@ -147,22 +156,17 @@ export default function Navbar() {
 							</Popover.Panel>
 						</Transition>
 					</Popover>
-
-					<a
-						href='/unidades'
+					<Link
+						to='/unidades'
 						className='text-sm font-semibold leading-6 text-gray-900'
 					>
 						Unidades
-					</a>
+					</Link>
 				</Popover.Group>
 				<div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-					<a
-						href='/signin'
-						className='text-sm font-semibold leading-6 text-gray-900'
-					>
-						<ButtonPrimary text="Entrar"/>
-					</a>
-					
+					<Link to={userId == -1 ? "/signin" : "/user/client"}>
+						<ButtonPrimary text={userId == -1 ? "Entrar" : "Perfil"} />
+					</Link>
 				</div>
 			</nav>
 			<Dialog
@@ -176,7 +180,7 @@ export default function Navbar() {
 					<div className='flex items-center justify-between'>
 						<a href='#' className='-m-1.5 p-1.5'>
 							<span className='sr-only'>VetConnect</span>
-						<div className='font-black text-lg'>Menu</div>
+							<div className='font-black text-lg'>Menu</div>
 						</a>
 						<button
 							type='button'
@@ -190,14 +194,21 @@ export default function Navbar() {
 					<div className='mt-6 flow-root'>
 						<div className='-my-6 divide-y divide-gray-500/10'>
 							<div className='space-y-2 py-6'>
-								<a href='/' className='text-sm font-semibold leading-6 text-gray-900'>
+								<Link
+									to='/'
+									className='text-sm font-semibold leading-6 text-gray-900'
+								>
 									Página principal
-								</a>
-								<Disclosure as='div' className='-mx-3 text-sm font-semibold leading-6 text-gray-900'>
+								</Link>
+
+								<Disclosure
+									as='div'
+									className='-mx-3 text-sm font-semibold leading-6 text-gray-900'
+								>
 									{({ open }) => (
 										<>
 											<Disclosure.Button className='flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-sm font-semibold leading-7 hover:bg-gray-50'>
-											Agendar serviço
+												Agendar serviço
 												<ChevronDownIcon
 													className={classNames(
 														open ? "rotate-180" : "",
@@ -221,20 +232,21 @@ export default function Navbar() {
 										</>
 									)}
 								</Disclosure>
-								<a
-						href='/unidades'
-						className='text-sm font-semibold leading-6 text-gray-900'
-					>
-						Unidades
-					</a>
+
+								<Link
+									to='/unidades'
+									className='text-sm font-semibold leading-6 text-gray-900'
+								>
+									Unidades
+								</Link>
 							</div>
 							<div className='py-6'>
-								<a
-									href='/signin'
+								<Link
+									to='/signin'
 									className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
 								>
-									<ButtonPrimary text="Entrar" width="w-full"/>
-								</a>
+									<ButtonPrimary text='Entrar' width='w-full' />
+								</Link>
 							</div>
 						</div>
 					</div>
