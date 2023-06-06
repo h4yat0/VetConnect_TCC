@@ -40,6 +40,6 @@ public class ClienteEntity {
     private String senha;
 
    // @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL) se não tiver animal não tem cliente
-    @OneToMany(mappedBy = "idCliente", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
+    @OneToMany(mappedBy = "idCliente", cascade = CascadeType.ALL) //excluir todos os animais desse cliente não faz ele ser apagado
     private List<AnimalEntity> animais = new ArrayList<>();
 }
