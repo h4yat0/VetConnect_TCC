@@ -1,5 +1,6 @@
 import UnitCard from "../components/UnitCard";
 import ServiceCard from "../components/ServiceCard";
+import PromoCard from "../components/PromoCard";
 
 
 const clinicas = {
@@ -54,6 +55,8 @@ const servicos = {
 
 export default function Home() {
 	return (
+		<div>
+				<PromoCard></PromoCard>
 		<div className='p-10 font-inter '>
 			<div className='py-5'>
 				<h1 className='text-2xl font-black '>Clinicas</h1>
@@ -82,6 +85,7 @@ export default function Home() {
 					))}
 				</div>
 			</div>
+		</div>
 		</div>
 	);
 }
