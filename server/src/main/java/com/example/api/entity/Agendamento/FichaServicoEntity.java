@@ -18,7 +18,7 @@ public class FichaServicoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "id_agendamento")
     private AgendamentoEntity idAgendamento;
 

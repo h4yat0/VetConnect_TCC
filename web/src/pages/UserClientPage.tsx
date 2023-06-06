@@ -23,21 +23,68 @@ import {
 	getPhone,
 } from "../redux/client.js";
 import axios from "axios";
+import { useState } from "react";
+import ButtonDanger from "../components/buttons/ButtonDanger.js";
 
-function formatCPF(cpf: string) {
-	const cpfRegex = /^(\d{3})(\d{3})(\d{3})(\d{2})$/;
-	return cpf.replace(cpfRegex, "$1.$2.$3-$4");
+function sanitizeString(str: string): string {
+	return str.replace(/[.\-\s]/g, "");
 }
 
 export default function UserClientPage() {
-	const id = useSelector(getId);
-	const cpf = useSelector(getCpf);
-	const name = useSelector(getName);
-	const phone = useSelector(getPhone);
-	const email = useSelector(getEmail);
-	const address = useSelector(getAddress);
-	const password = useSelector(getPassword);
-	const birthDate = useSelector(getBirthDate);
+	const [editDisabled, setEditDisabled] = useState(true);
+
+	const handleSetEditEnabled = () => {
+		setEditDisabled(!editDisabled);
+	};
+
+	const [name, setName] = useState("");
+	const [cpf, setCpf] = useState("");
+	const [birthDate, setBirthDate] = useState("");
+	const [address, setAddress] = useState("");
+	const [phone, setPhone] = useState("");
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+
+	const idStore = useSelector(getId);
+	const cpfStore = useSelector(getCpf);
+	const nameStore = useSelector(getName);
+	const phoneStore = useSelector(getPhone);
+	const emailStore = useSelector(getEmail);
+	const addressStore = useSelector(getAddress);
+	const birthDateStore = useSelector(getBirthDate);
+
+	const api = axios.create({
+		baseURL: `http://localhost:9191`,
+	});
+
+	const postEditedInformation = async () => {
+		let reponse = await api
+			.put("cliente/alterar", {
+				id: idStore,
+				nome: name,
+				dataNascimento: birthDate,
+				cpf: sanitizeString(cpf),
+				endereco: address,
+				telefone: sanitizeString(phone),
+				email: email,
+				senha: password,
+			})
+			.then(function (response) {
+				console.log(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+
+				console.log("id:", idStore);
+				console.log("nome:", name);
+				console.log("dataNascimento:", birthDate);
+				console.log("cpf:", cpf);
+				console.log("endereco:", address);
+				console.log("telefone:", phone);
+				console.log("email:", email);
+				console.log("senha:", password);
+			});
+	};
 
 	return (
 		<div className='w-full mb-10'>
@@ -49,9 +96,12 @@ export default function UserClientPage() {
 				<div className='flex justify-between items-center mb-8'>
 					<div className='flex justify-between items-center gap-4'>
 						<div className='w-10 h-10 bg-slate-800 rounded-full'></div>
-						<span className='font-bold text-xl'>{name}</span>
+						<span className='font-bold text-xl'>{nameStore}</span>
 					</div>
-					<ButtonSecundary text='Editar informações' />
+					<ButtonSecundary
+						text='Editar informações'
+						onClickFunction={handleSetEditEnabled}
+					/>
 				</div>
 
 				<form className='space-y-6' action='#' method='POST'>
@@ -67,9 +117,10 @@ export default function UserClientPage() {
 								id='name'
 								name='name'
 								type='text'
-								defaultValue={name}
+								defaultValue={nameStore}
 								required
-								disabled
+								onChange={(e) => setName(e.target.value)}
+								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -91,9 +142,10 @@ export default function UserClientPage() {
 									delimiters: [".", ".", "-"],
 									blocks: [3, 3, 3, 2],
 								}}
-								value={cpf}
+								value={cpfStore}
 								required
-								disabled
+								onChange={(e) => setCpf(e.target.value)}
+								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -111,9 +163,10 @@ export default function UserClientPage() {
 								id='birthDate'
 								name='birthDate'
 								type='date'
-								defaultValue={birthDate}
+								defaultValue={birthDateStore}
 								required
-								disabled
+								onChange={(e) => setBirthDate(e.target.value)}
+								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -131,9 +184,10 @@ export default function UserClientPage() {
 								id='address'
 								name='address'
 								type='text'
-								defaultValue={address}
+								defaultValue={addressStore}
 								required
-								disabled
+								onChange={(e) => setAddress(e.target.value)}
+								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -151,9 +205,10 @@ export default function UserClientPage() {
 								id='phone'
 								name='phone'
 								type='text'
-								value={phone}
+								value={phoneStore}
 								required
-								disabled
+								onChange={(e) => setPhone(e.target.value)}
+								disabled={editDisabled}
 								options={{ phone: true, phoneRegionCode: "br" }}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
@@ -173,9 +228,10 @@ export default function UserClientPage() {
 								name='email'
 								type='email'
 								autoComplete='email'
-								defaultValue={email}
+								defaultValue={emailStore}
 								required
-								disabled
+								onChange={(e) => setEmail(e.target.value)}
+								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
@@ -197,19 +253,21 @@ export default function UserClientPage() {
 								type='password'
 								autoComplete='current-password'
 								required
-								disabled
+								onChange={(e) => setPassword(e.target.value)}
+								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
 					</div>
 
 					<div>
-						<button
-							type='submit'
-							className='flex w-full justify-center rounded-md bg-vetConnectPrimaryGreen px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-vetConnectSecundaryGreen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vetConnectPrimaryGreen'
-						>
-							Cadastrar
-						</button>
+						<ButtonPrimary
+							text='Alterar dados'
+							width='w-full'
+							disabled={editDisabled}
+							onClickFunction={postEditedInformation}
+						/>
+						<ButtonDanger text='Deletar conta' />
 					</div>
 				</form>
 			</div>

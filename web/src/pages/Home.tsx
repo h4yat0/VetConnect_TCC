@@ -1,8 +1,8 @@
 import UnitCard from "../components/UnitCard";
 import ServiceCard from "../components/ServiceCard";
 import PromoCard from "../components/PromoCard";
-
-
+import { useEffect } from "react";
+import { useSaveLocalStorageOnClientStore } from "../functions/localStorageManipulation";
 
 const clinicas = {
 	clinicas: [
@@ -58,21 +58,21 @@ const servicos = {
 export default function Home() {
 	return (
 		<div>
-				<PromoCard></PromoCard>
-		<div className='p-10 font-inter '>
-			<div className='py-5'>
-				<h1 className='text-2xl font-black '>Clinicas</h1>
-				<div className='flex flex-row gap-20 pt-5 '>
-					{clinicas.clinicas.map((clinica) => (
-						<UnitCard
-							key={clinica.id}
-							title={clinica.nome}
-							clinicId={clinica.id}
-							imgPath={"src/assets/imgs/" + clinica.imgPath}
-						/>
-					))}
+			<PromoCard></PromoCard>
+			<div className='p-10 font-inter '>
+				<div className='py-5'>
+					<h1 className='text-2xl font-black '>Clinicas</h1>
+					<div className='flex flex-row gap-20 pt-5 '>
+						{clinicas.clinicas.map((clinica) => (
+							<UnitCard
+								key={clinica.id}
+								title={clinica.nome}
+								clinicId={clinica.id}
+								imgPath={"src/assets/imgs/" + clinica.imgPath}
+							/>
+						))}
+					</div>
 				</div>
-			</div>
 
 			<div className='py-5'>
 				<h1 className='text-2xl font-black '>Últimos serviços utilizados</h1>
