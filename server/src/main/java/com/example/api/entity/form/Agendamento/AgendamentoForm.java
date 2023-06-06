@@ -12,4 +12,9 @@ public class AgendamentoForm {
     private Long idCliente;
     private Long idAnimal;
     private Long idServico;
+    private Long idUnidade;
+    private String dataAgendada;
+    private String horaAgendada;
+    private String valorAgendado;
+
 }
