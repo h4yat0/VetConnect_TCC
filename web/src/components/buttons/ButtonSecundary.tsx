@@ -10,15 +10,14 @@ export default function ButtonSecundary(props: buttonSecundaryProps) {
             text-white 
             py-2 
             px-4 
-            rounded-full 
+            rounded-sm 
             text-sm 
             font-bold
             cursor-pointer 
             transition-all 
             duration-200 
             ease-in-out 
-            hover:bg-vetConnectSecundaryGreen 
-            hover:text-vetConnectGray
+            hover:bg-gray-700 
             transform 
             hover:scale-105 
             focus:outline-none'

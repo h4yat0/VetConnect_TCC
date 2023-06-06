@@ -1,16 +1,12 @@
 import "../../styles/components/navbar.css";
-import ButtonPrimary from "../buttons/ButtonSecundary";
-
-import vetConnectLogo from "../../assets/svgs/vetConnectLogo.svg";
-import { Fragment, useState } from "react";
+import ButtonPrimary from "../buttons/ButtonPrimary";
+import { useSelector } from "react-redux";
+import { getId } from "../../redux/client";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 import {
-	ArrowPathIcon,
 	Bars3Icon,
 	ChartPieIcon,
-	CursorArrowRaysIcon,
-	FingerPrintIcon,
-	SquaresPlusIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -18,37 +14,27 @@ import {
 	PhoneIcon,
 	PlayCircleIcon,
 } from "@heroicons/react/20/solid";
+import vetConnectLogo from "../../assets/svgs/vetConnectLogo.svg";
+import { Link, Navigate } from "react-router-dom";
 
 const products = [
 	{
-		name: "Analytics",
-		description: "Get a better understanding of your traffic",
+		name: "Banho",
+		description: "Deixe seu pet limpo e cheiroso",
 		href: "#",
 		icon: ChartPieIcon,
 	},
 	{
-		name: "Engagement",
-		description: "Speak directly to your customers",
+		name: "Tosa",
+		description: "Estilize o pelo do seu pet",
 		href: "#",
-		icon: CursorArrowRaysIcon,
+		icon: ChartPieIcon,
 	},
 	{
-		name: "Security",
-		description: "Your customers’ data will be safe and secure",
+		name: "Veterinário",
+		description: "Cuide da saúde do seu pet",
 		href: "#",
-		icon: FingerPrintIcon,
-	},
-	{
-		name: "Integrations",
-		description: "Connect with third-party tools",
-		href: "#",
-		icon: SquaresPlusIcon,
-	},
-	{
-		name: "Automations",
-		description: "Build strategic funnels that will convert",
-		href: "#",
-		icon: ArrowPathIcon,
+		icon: ChartPieIcon,
 	},
 ];
 const callsToAction = [
@@ -61,6 +47,12 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navbar() {
+	const userId = useSelector(getId);
+
+	useEffect(() => {
+		console.log("id: ", userId);
+	}, [userId]);
+
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 	return (
@@ -70,18 +62,18 @@ export default function Navbar() {
 				aria-label='Global'
 			>
 				<div className='flex lg:flex-1'>
-					<a
-						href='/'
+					<Link
+						to='/'
 						className='-m-1.5 p-1.5 flex flex-row justify-center items-center'
 					>
-						<span className='sr-only'>Your Company</span>
+						<span className='sr-only'>VetConnect</span>
 						<img
 							className='h-14 w-auto'
 							src={vetConnectLogo}
 							alt='Logo da Empresa'
 						/>
 						<span className='font-black text-2lg'>VetConnect</span>
-					</a>
+					</Link>
 				</div>
 				<div className='flex lg:hidden'>
 					<button
@@ -94,9 +86,16 @@ export default function Navbar() {
 					</button>
 				</div>
 				<Popover.Group className='hidden lg:flex lg:gap-x-12'>
+					<Link
+						to='/'
+						className='text-sm font-semibold leading-6 text-gray-900'
+					>
+						Página principal
+					</Link>
+
 					<Popover className='relative'>
 						<Popover.Button className='flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900'>
-							Product
+							Agendar serviço
 							<ChevronDownIcon
 								className='h-5 w-5 flex-none text-gray-400'
 								aria-hidden='true'
@@ -126,13 +125,14 @@ export default function Navbar() {
 												/>
 											</div>
 											<div className='flex-auto'>
-												<a
-													href={item.href}
+												<Link
+													to={item.href}
 													className='block font-semibold text-gray-900'
 												>
 													{item.name}
 													<span className='absolute inset-0' />
-												</a>
+												</Link>
+
 												<p className='mt-1 text-gray-600'>{item.description}</p>
 											</div>
 										</div>
@@ -156,21 +156,17 @@ export default function Navbar() {
 							</Popover.Panel>
 						</Transition>
 					</Popover>
-
-					<a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
-						Features
-					</a>
-					<a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
-						Marketplace
-					</a>
-					<a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
-						Company
-					</a>
+					<Link
+						to='/unidades'
+						className='text-sm font-semibold leading-6 text-gray-900'
+					>
+						Unidades
+					</Link>
 				</Popover.Group>
 				<div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-					<a href='#' className='text-sm font-semibold leading-6 text-gray-900'>
-						Log in <span aria-hidden='true'>&rarr;</span>
-					</a>
+					<Link to={userId == -1 ? "/signin" : "/user/client"}>
+						<ButtonPrimary text={userId == -1 ? "Entrar" : "Perfil"} />
+					</Link>
 				</div>
 			</nav>
 			<Dialog
@@ -183,12 +179,8 @@ export default function Navbar() {
 				<Dialog.Panel className='fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10'>
 					<div className='flex items-center justify-between'>
 						<a href='#' className='-m-1.5 p-1.5'>
-							<span className='sr-only'>Your Company</span>
-							<img
-								className='h-8 w-auto'
-								src='https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600'
-								alt=''
-							/>
+							<span className='sr-only'>VetConnect</span>
+							<div className='font-black text-lg'>Menu</div>
 						</a>
 						<button
 							type='button'
@@ -202,11 +194,21 @@ export default function Navbar() {
 					<div className='mt-6 flow-root'>
 						<div className='-my-6 divide-y divide-gray-500/10'>
 							<div className='space-y-2 py-6'>
-								<Disclosure as='div' className='-mx-3'>
+								<Link
+									to='/'
+									className='text-sm font-semibold leading-6 text-gray-900'
+								>
+									Página principal
+								</Link>
+
+								<Disclosure
+									as='div'
+									className='-mx-3 text-sm font-semibold leading-6 text-gray-900'
+								>
 									{({ open }) => (
 										<>
-											<Disclosure.Button className='flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 hover:bg-gray-50'>
-												Product
+											<Disclosure.Button className='flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-sm font-semibold leading-7 hover:bg-gray-50'>
+												Agendar serviço
 												<ChevronDownIcon
 													className={classNames(
 														open ? "rotate-180" : "",
@@ -230,32 +232,21 @@ export default function Navbar() {
 										</>
 									)}
 								</Disclosure>
-								<a
-									href='#'
-									className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
+
+								<Link
+									to='/unidades'
+									className='text-sm font-semibold leading-6 text-gray-900'
 								>
-									Features
-								</a>
-								<a
-									href='#'
-									className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
-								>
-									Marketplace
-								</a>
-								<a
-									href='#'
-									className='-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
-								>
-									Company
-								</a>
+									Unidades
+								</Link>
 							</div>
 							<div className='py-6'>
-								<a
-									href='#'
+								<Link
+									to='/signin'
 									className='-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50'
 								>
-									Log in
-								</a>
+									<ButtonPrimary text='Entrar' width='w-full' />
+								</Link>
 							</div>
 						</div>
 					</div>
