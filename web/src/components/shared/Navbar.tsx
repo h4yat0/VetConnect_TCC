@@ -1,4 +1,4 @@
-import "../../styles/components/navbar.css";
+//import "../../styles/components/navbar.css";
 import ButtonPrimary from "../buttons/ButtonPrimary";
 import { useSelector } from "react-redux";
 import { getId } from "../../redux/client";
@@ -255,4 +255,3 @@ export default function Navbar() {
 		</header>
 	);
 }
-
