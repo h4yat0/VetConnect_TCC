@@ -1,8 +1,11 @@
 interface buttonSecundaryProps {
 	text: string;
+	onClickFunction?: () => void;
 }
 
 export default function ButtonSecundary(props: buttonSecundaryProps) {
+	const { text, onClickFunction } = props;
+
 	return (
 		<button
 			className='mx-8 
@@ -20,9 +23,13 @@ export default function ButtonSecundary(props: buttonSecundaryProps) {
             hover:bg-gray-700 
             transform 
             hover:scale-105 
-            focus:outline-none'
+            focus:outline-none
+            disabled:opacity-75
+            disabled:hover:static
+            '
+			onClick={onClickFunction}
 		>
-			{props.text}
+			{text}
 		</button>
 	);
 }

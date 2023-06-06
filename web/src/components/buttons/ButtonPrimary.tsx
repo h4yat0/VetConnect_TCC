@@ -1,14 +1,13 @@
-import { MouseEventHandler } from "react";
-
 interface buttonPrimaryProps {
 	text: string;
 	type?: "button" | "submit" | "reset";
 	width?: "w-full";
 	onClickFunction?: () => void;
+	disabled?: boolean;
 }
 
 export default function buttonPrimary(props: buttonPrimaryProps) {
-	const { type = "button", text, width, onClickFunction } = props;
+	const { type = "button", text, width, onClickFunction, disabled } = props;
 
 	const buttonClassName = `
         ${width}
@@ -28,10 +27,17 @@ export default function buttonPrimary(props: buttonPrimaryProps) {
         transform 
         hover:scale-105 
         focus:outline-none
+        disabled:opacity-75
+        disabled:pointer-events-none
     `;
 
 	return (
-		<button type={type} className={buttonClassName} onClick={onClickFunction}>
+		<button
+			type={type}
+			className={buttonClassName}
+			onClick={onClickFunction}
+			disabled={disabled}
+		>
 			{text}
 		</button>
 	);

@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
+import { saveDataToLocalStorage } from "../functions/localStorageManipulation";
 
 export default function SignIn() {
 	const dispatch = useDispatch();
@@ -40,6 +41,7 @@ export default function SignIn() {
 				dispatch(updateBirthDate(data.dataNascimento));
 				dispatch(updateAddress(data.endereco));
 				dispatch(updatePhone(data.telefone));
+				saveDataToLocalStorage(data);
 
 				navigate("/");
 			})
@@ -47,18 +49,7 @@ export default function SignIn() {
 				console.log(error);
 			});
 	};
-	/*
-	useEffect(() => {
-		console.log("id:", id);
-		console.log("name:", name);
-		console.log("cpf:", cpf);
-		console.log("birthDate:", birthDate);
-		console.log("address:", address);
-		console.log("phone:", phone);
-		console.log("email:", emailstore);
-		console.log("password:", passwordstore);
-	}, [id, nome, cpf, birthDate, address, phone, emailstore, passwordstore]);
-	*/
+
 	return (
 		<div
 			className='min-h-screen flex flex-col flex-1 justify-center items-center'
@@ -129,7 +120,7 @@ export default function SignIn() {
 
 						<div>
 							<ButtonPrimary
-								text='Cadastrar'
+								text='Entrar'
 								width='w-full'
 								onClickFunction={postSignIn}
 							/>
