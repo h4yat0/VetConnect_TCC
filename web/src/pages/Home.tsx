@@ -57,21 +57,21 @@ const servicos = {
 
 export default function Home() {
 	return (
-		<div>
-			<PromoCard />
-			<div className='p-10 font-inter '>
-				<div className='py-8'>
-					<h1 className='text-2xl font-black '>Últimos serviços utilizados</h1>
-					<div className='flex flex-row gap-20 pt-5 '>
-						{servicos.servicos.map((servicos) => (
-							<ServiceCard
-								key={servicos.id}
-								title={servicos.nome}
-								serviceId={servicos.id}
-								iconName={"src/assets/imgs/" + servicos.iconName}
-							/>
-						))}
-					</div>
+	<div>
+		<div className='p-10 font-inter '>
+		<PromoCard></PromoCard>
+
+			<div className='py-8'>
+				<h1 className='text-2xl font-black '>Últimos serviços utilizados</h1>
+				<div className='flex flex-row gap-20 pt-5 '>
+					{servicos.servicos.map((servicos) => (
+						<ServiceCard
+							key={servicos.id}
+							title={servicos.nome}
+							serviceId={servicos.id}
+							iconName={"src/assets/imgs/" + servicos.iconName}
+						/>
+					))}
 				</div>
 
 				<div className='py-8'>
@@ -89,5 +89,6 @@ export default function Home() {
 				</div>
 			</div>
 		</div>
+	</div>
 	);
 }
