@@ -57,24 +57,12 @@ const servicos = {
 
 export default function Home() {
 	return (
-		<div>
-			<PromoCard></PromoCard>
-			<div className='p-10 font-inter '>
-				<div className='py-5'>
-					<h1 className='text-2xl font-black '>Clinicas</h1>
-					<div className='flex flex-row gap-20 pt-5 '>
-						{clinicas.clinicas.map((clinica) => (
-							<UnitCard
-								key={clinica.id}
-								title={clinica.nome}
-								clinicId={clinica.id}
-								imgPath={"src/assets/imgs/" + clinica.imgPath}
-							/>
-						))}
-					</div>
-				</div>
+	<div>
+		<PromoCard></PromoCard>
+		<div className='p-10 font-inter '>
+				
 
-			<div className='py-5'>
+			<div className='py-8'>
 				<h1 className='text-2xl font-black '>Últimos serviços utilizados</h1>
 				<div className='flex flex-row gap-20 pt-5 '>
 					{servicos.servicos.map((servicos) => (
@@ -87,6 +75,21 @@ export default function Home() {
 					))}
 				</div>
 			</div>
+
+			<div className='py-8'>
+				<h1 className='text-2xl font-black '>Clinicas</h1>
+				<div className='flex flex-row gap-20 pt-5 '>
+						{clinicas.clinicas.map((clinica) => (
+							<UnitCard
+								key={clinica.id}
+								title={clinica.nome}
+								clinicId={clinica.id}
+								imgPath={"src/assets/imgs/" + clinica.imgPath}
+							/>
+						))}
+				</div>
+			</div>
+
 		</div>
 	</div>
 	);

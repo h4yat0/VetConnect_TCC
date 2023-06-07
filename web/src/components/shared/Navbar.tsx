@@ -4,6 +4,14 @@ import { useSelector } from "react-redux";
 import { getId } from "../../redux/client";
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
+
+//Icons
+import { TbVaccine } from 'react-icons/tb';
+import { MdPets } from 'react-icons/md';
+import {FaShower} from 'react-icons/fa';
+import {IoCutSharp} from 'react-icons/io5';
+import {FaPhone} from 'react-icons/fa';
+
 import {
 	Bars3Icon,
 	ChartPieIcon,
@@ -22,24 +30,29 @@ const products = [
 		name: "Banho",
 		description: "Deixe seu pet limpo e cheiroso",
 		href: "#",
-		icon: ChartPieIcon,
+		icon: FaShower,
 	},
 	{
 		name: "Tosa",
 		description: "Estilize o pelo do seu pet",
 		href: "#",
-		icon: ChartPieIcon,
+		icon: IoCutSharp,
 	},
 	{
-		name: "Veterinário",
-		description: "Cuide da saúde do seu pet",
+		name: "Castração",
+		description: "Castre seu Animal",
 		href: "#",
-		icon: ChartPieIcon,
+		icon: MdPets,
+	},
+	{
+		name: "Vacinação",
+		description: "Vacine seu pet",
+		href: "#",
+		icon: TbVaccine,
 	},
 ];
 const callsToAction = [
-	{ name: "Watch demo", href: "#", icon: PlayCircleIcon },
-	{ name: "Contact sales", href: "#", icon: PhoneIcon },
+	{ name: "Entre em Contato", href: "#", icon: FaPhone },
 ];
 
 function classNames(...classes: string[]) {
@@ -138,12 +151,12 @@ export default function Navbar() {
 										</div>
 									))}
 								</div>
-								<div className='grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50'>
+								<div className='grid  items-center divide-x divide-gray-900/5 bg-gray-50'>
 									{callsToAction.map((item) => (
 										<a
 											key={item.name}
 											href={item.href}
-											className='flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100'
+											className='flex text-center items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100'
 										>
 											<item.icon
 												className='h-5 w-5 flex-none text-gray-400'

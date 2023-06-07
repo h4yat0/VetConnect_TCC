@@ -32,7 +32,7 @@ export default function ServiceCard(props: ServiceCardProps) {
 			
 			</div>
 			<div className="w-[365px]">
-			<div className="absolute left-1/4 w-0.5 h-3/4 bg-gray-600"></div>
+			<div className="absolute left-1/4 mt-1 w-0.5 h-3/4 bg-gray-600"></div>
 			<h1 className="mt-4 ml-2 p-2 text-center text-xl font-bold text-gray-700 mb-4">{title}</h1>
 				</div>
 		  </div>
