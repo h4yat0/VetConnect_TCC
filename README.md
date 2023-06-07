@@ -1,5 +1,4 @@
-
-![Logo](link Do logo)
+![alt text](https://github.com/h4yat0/VetConnect_TCC/blob/main/web/src/assets/imgs/BannerPromo.png?raw=true)
 
 # VET CONNECT
 
