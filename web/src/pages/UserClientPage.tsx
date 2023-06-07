@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Cleave from "cleave.js/react";
 import "../modules/cleave-phone.br.js";
 
@@ -23,14 +24,17 @@ import {
 	getPhone,
 } from "../redux/client.js";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonDanger from "../components/buttons/ButtonDanger.js";
+import { Link, Navigate } from "react-router-dom";
 
 function sanitizeString(str: string): string {
 	return str.replace(/[.\-\s]/g, "");
 }
 
 export default function UserClientPage() {
+	const navigate = useNavigate();
+
 	const [editDisabled, setEditDisabled] = useState(true);
 
 	const handleSetEditEnabled = () => {
@@ -46,46 +50,58 @@ export default function UserClientPage() {
 	const [password, setPassword] = useState("");
 
 	const idStore = useSelector(getId);
-	const cpfStore = useSelector(getCpf);
 	const nameStore = useSelector(getName);
+	const cpfStore = useSelector(getCpf);
 	const phoneStore = useSelector(getPhone);
 	const emailStore = useSelector(getEmail);
 	const addressStore = useSelector(getAddress);
 	const birthDateStore = useSelector(getBirthDate);
+	const passwordStore = useSelector(getPassword);
 
 	const api = axios.create({
 		baseURL: `http://localhost:9191`,
 	});
 
+	function isEmptyString(str: string) {
+		return str.trim() === "";
+	}
+
 	const postEditedInformation = async () => {
 		let reponse = await api
 			.put("cliente/alterar", {
 				id: idStore,
-				nome: name,
-				dataNascimento: birthDate,
-				cpf: sanitizeString(cpf),
-				endereco: address,
-				telefone: sanitizeString(phone),
-				email: email,
-				senha: password,
+				nome: isEmptyString(name) ? nameStore : name,
+				dataNascimento: isEmptyString(birthDate) ? birthDateStore : birthDate,
+				cpf: isEmptyString(sanitizeString(cpf))
+					? cpfStore
+					: sanitizeString(cpf),
+				endereco: isEmptyString(address) ? addressStore : address,
+				telefone: isEmptyString(sanitizeString(phone))
+					? phoneStore
+					: sanitizeString(phone),
+				email: isEmptyString(email) ? emailStore : email,
+				senha: isEmptyString(password) ? passwordStore : password,
 			})
 			.then(function (response) {
 				console.log(response);
+				navigate("/");
 			})
 			.catch(function (error) {
 				console.log(error);
-
-				console.log("id:", idStore);
-				console.log("nome:", name);
-				console.log("dataNascimento:", birthDate);
-				console.log("cpf:", cpf);
-				console.log("endereco:", address);
-				console.log("telefone:", phone);
-				console.log("email:", email);
-				console.log("senha:", password);
 			});
 	};
 
+	const deleteAccount = async () => {
+		let reponse = await api
+			.delete(`/cliente/delete/${idStore}`)
+			.then(function (response) {
+				console.log(response);
+				navigate("/");
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
+	};
 	return (
 		<div className='w-full mb-10'>
 			<div className='flex justify-between items-center px-32 py-10'>
@@ -117,8 +133,8 @@ export default function UserClientPage() {
 								id='name'
 								name='name'
 								type='text'
-								defaultValue={nameStore}
 								required
+								value={name}
 								onChange={(e) => setName(e.target.value)}
 								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
@@ -142,8 +158,8 @@ export default function UserClientPage() {
 									delimiters: [".", ".", "-"],
 									blocks: [3, 3, 3, 2],
 								}}
-								value={cpfStore}
 								required
+								value={cpf}
 								onChange={(e) => setCpf(e.target.value)}
 								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
@@ -163,8 +179,8 @@ export default function UserClientPage() {
 								id='birthDate'
 								name='birthDate'
 								type='date'
-								defaultValue={birthDateStore}
 								required
+								value={birthDate}
 								onChange={(e) => setBirthDate(e.target.value)}
 								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
@@ -184,8 +200,8 @@ export default function UserClientPage() {
 								id='address'
 								name='address'
 								type='text'
-								defaultValue={addressStore}
 								required
+								value={address}
 								onChange={(e) => setAddress(e.target.value)}
 								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
@@ -205,8 +221,8 @@ export default function UserClientPage() {
 								id='phone'
 								name='phone'
 								type='text'
-								value={phoneStore}
 								required
+								value={phone}
 								onChange={(e) => setPhone(e.target.value)}
 								disabled={editDisabled}
 								options={{ phone: true, phoneRegionCode: "br" }}
@@ -228,8 +244,8 @@ export default function UserClientPage() {
 								name='email'
 								type='email'
 								autoComplete='email'
-								defaultValue={emailStore}
 								required
+								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
@@ -253,13 +269,13 @@ export default function UserClientPage() {
 								type='password'
 								autoComplete='current-password'
 								required
+								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								disabled={editDisabled}
 								className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6'
 							/>
 						</div>
 					</div>
-
 					<div>
 						<ButtonPrimary
 							text='Alterar dados'
@@ -267,10 +283,19 @@ export default function UserClientPage() {
 							disabled={editDisabled}
 							onClickFunction={postEditedInformation}
 						/>
-						<ButtonDanger text='Deletar conta' />
+					</div>
+					<div>
+						<ButtonDanger
+							text='Deletar conta'
+							disabled={editDisabled}
+							onClickFunction={deleteAccount}
+						/>
 					</div>
 				</form>
 			</div>
 		</div>
 	);
+}
+function naviagate(arg0: string) {
+	throw new Error("Function not implemented.");
 }

@@ -9,6 +9,7 @@ import {
 	updateName,
 	updatePhone,
 	updateId,
+	updatePassword,
 } from "../redux/client";
 import axios from "axios";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
@@ -41,6 +42,7 @@ export default function SignIn() {
 				dispatch(updateBirthDate(data.dataNascimento));
 				dispatch(updateAddress(data.endereco));
 				dispatch(updatePhone(data.telefone));
+				dispatch(updatePassword(data.senha));
 				saveDataToLocalStorage(data);
 
 				navigate("/");
