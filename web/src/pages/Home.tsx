@@ -60,19 +60,7 @@ export default function Home() {
 	<div>
 		<PromoCard></PromoCard>
 		<div className='p-10 font-inter '>
-				<div className='py-8'>
-					<h1 className='text-2xl font-black '>Clinicas</h1>
-					<div className='flex flex-row gap-20 pt-5 '>
-						{clinicas.clinicas.map((clinica) => (
-							<UnitCard
-								key={clinica.id}
-								title={clinica.nome}
-								clinicId={clinica.id}
-								imgPath={"src/assets/imgs/" + clinica.imgPath}
-							/>
-						))}
-					</div>
-				</div>
+				
 
 			<div className='py-8'>
 				<h1 className='text-2xl font-black '>Últimos serviços utilizados</h1>
@@ -87,6 +75,21 @@ export default function Home() {
 					))}
 				</div>
 			</div>
+
+			<div className='py-8'>
+				<h1 className='text-2xl font-black '>Clinicas</h1>
+				<div className='flex flex-row gap-20 pt-5 '>
+						{clinicas.clinicas.map((clinica) => (
+							<UnitCard
+								key={clinica.id}
+								title={clinica.nome}
+								clinicId={clinica.id}
+								imgPath={"src/assets/imgs/" + clinica.imgPath}
+							/>
+						))}
+				</div>
+			</div>
+
 		</div>
 	</div>
 	);
