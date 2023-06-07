@@ -96,6 +96,8 @@ export default function UserClientPage() {
 			.delete(`/cliente/delete/${idStore}`)
 			.then(function (response) {
 				console.log(response);
+				updateId(-1);
+				window.location.href = "/";
 				navigate("/");
 			})
 			.catch(function (error) {
@@ -295,7 +297,4 @@ export default function UserClientPage() {
 			</div>
 		</div>
 	);
-}
-function naviagate(arg0: string) {
-	throw new Error("Function not implemented.");
 }
