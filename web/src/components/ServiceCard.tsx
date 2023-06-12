@@ -24,15 +24,14 @@ export default function ServiceCard(props: ServiceCardProps) {
 	
 
 	return (
-		<div className="w-[365px] bg-gray-100 grid items-center justify-center">
-		  <div className="w-[365px] p-4 bg-white flex  space-x-4 rounded-lg shadow-md hover:scale-105 transition transform duration-500 cursor-pointer">
+		<div className="w-full grid items-center justify-center">
+		  <div className="w-full min-w-100 p-4 bg-white flex space-x-4 rounded-lg shadow-md hover:scale-105 transition transform duration-500 cursor-pointer">
 			<div className="mt-4 ml-2">
 			
 			{iconSelect(title)} 
 			
 			</div>
-			<div className="w-[365px]">
-			<div className="absolute left-1/4 mt-1 w-0.5 h-3/4 bg-gray-600"></div>
+			<div className="w-full">
 			<h1 className="mt-4 ml-2 p-2 text-center text-xl font-bold text-gray-700 mb-4">{title}</h1>
 				</div>
 		  </div>

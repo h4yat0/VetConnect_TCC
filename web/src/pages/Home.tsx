@@ -57,8 +57,8 @@ const servicos = {
 
 export default function Home() {
 	return (
-	<div>
-		<div className='p-10 font-inter '>
+	<div className="w-full">
+		<div className='p-0 font-inter '>
 		<PromoCard></PromoCard>
 
 			<div className='py-8'>

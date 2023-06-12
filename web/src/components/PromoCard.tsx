@@ -4,12 +4,12 @@ export default function PromoCard() {
 	
 
 	return (
-    <div className="border border-white bg-white">
+    <div className="border align-center border-white bg-white">
       <div className="w-full  bg-white grid place-items-center background-size:cover;">
         <img
           src={vetConnectLogo}
           alt="tailwind logo"
-          className="rounded-xl w-full"
+          className="rounded-xl w-screen"
         />
       </div>
     </div>
