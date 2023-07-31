@@ -1,8 +1,10 @@
-package com.example.api.entity.form.Agendamento;
+package com.example.api.form.Agendamento;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +17,6 @@ public class AgendamentoForm {
     private Long idUnidade;
     private String dataAgendada;
     private String horaAgendada;
-    private String valorAgendado;
+    private BigDecimal valorAgendado;
 
 }

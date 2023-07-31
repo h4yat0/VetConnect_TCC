@@ -1,4 +1,4 @@
-package com.example.api.entity.form.Agendamento;
+package com.example.api.form.Agendamento;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
