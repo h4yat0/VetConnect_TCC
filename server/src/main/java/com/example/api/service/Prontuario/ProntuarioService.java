@@ -3,7 +3,7 @@ package com.example.api.service.Prontuario;
 import com.example.api.entity.AnimalEntity;
 import com.example.api.entity.Prontuario.ProntuarioEntity;
 import com.example.api.entity.Prontuario.VacinaEntity;
-import com.example.api.entity.form.Prontuario.ProntuarioForm;
+import com.example.api.form.Prontuario.ProntuarioForm;
 import com.example.api.repository.AnimalRepository;
 import com.example.api.repository.Prontuario.ProntuarioRepository;
 import com.example.api.repository.Prontuario.VacinaRepository;

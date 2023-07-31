@@ -3,7 +3,7 @@ package com.example.api.service.Prontuario;
 
 import com.example.api.entity.Prontuario.ProntuarioEntity;
 import com.example.api.entity.Prontuario.VacinaEntity;
-import com.example.api.entity.form.Prontuario.VacinaForm;
+import com.example.api.form.Prontuario.VacinaForm;
 import com.example.api.repository.Prontuario.ProntuarioRepository;
 import com.example.api.repository.Prontuario.VacinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
