@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface ServicoRepository extends JpaRepository<ServicoEntity, Long> {
 
 
-    @Query(value = "SELECT * from tb_servico where id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * from servico where id = ?1", nativeQuery = true)
     ServicoEntity buscarServico(Long id);
 }
