@@ -6,11 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_ficha_servico")
+@Table(name = "ficha_servico")
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class FichaServicoEntity {
@@ -26,8 +28,8 @@ public class FichaServicoEntity {
 
     @Column( name = "observacao_servico")
     private String observacaoServico;
-    @Column(nullable = false, name = "valor_ficha_servico")
-    private String valorFichaServico;
+    @Column(nullable = false, name = "valor_ficha_servico", precision = 10, scale = 2)
+    private BigDecimal valorFichaServico;
     @Column(nullable = false, name = "servico_realizado")
     private String servicoRealizado;
     @Column(nullable = false, name = "nome_funcionario")

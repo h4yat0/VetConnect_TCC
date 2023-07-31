@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_vacina")
+@Table(name = "vacina")
 @Entity
 public class VacinaEntity {
     @Id

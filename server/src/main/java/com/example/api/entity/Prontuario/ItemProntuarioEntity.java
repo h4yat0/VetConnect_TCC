@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_item_prontuario")
+@Table(name = "item_prontuario")
 @Entity
 public class ItemProntuarioEntity {
     @Id

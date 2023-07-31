@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_exame")
+@Table(name = "exame")
 @Entity
 public class ExameEntity {
     @Id

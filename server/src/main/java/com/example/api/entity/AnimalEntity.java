@@ -18,7 +18,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_animal")
+@Table(name = "animal")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "prontuario", "agendamentoEntityList"}) // anotação adicionada aqui
 @Entity
 public class AnimalEntity {

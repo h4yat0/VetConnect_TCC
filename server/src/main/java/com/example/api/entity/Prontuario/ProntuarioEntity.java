@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tb_prontuario")
+@Table(name = "prontuario")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "exames"}) // anotação adicionada aqui
 
 @Entity
