@@ -3,7 +3,7 @@ package com.example.api.service;
 
 import com.example.api.entity.AnimalEntity;
 import com.example.api.entity.ClienteEntity;
-import com.example.api.entity.form.AnimalForm;
+import com.example.api.form.Animal.AnimalFormCreate;
 import com.example.api.repository.AnimalRepository;
 import com.example.api.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,8 @@ public class AnimalService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    public AnimalEntity saveAnimal(AnimalForm animal) {
-        ClienteEntity cliente = clienteRepository.burcarPorId(animal.getIdCliente());
+    public AnimalEntity saveAnimal(AnimalFormCreate animal) {
+        ClienteEntity cliente = clienteRepository.buscarPorId(animal.getIdCliente());
         if(cliente == null){
             return null;
         }else {
