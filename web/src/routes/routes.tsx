@@ -9,6 +9,8 @@ import SignUp from "../pages/SignUp";
 import UnitPage from "../pages/UnitPage";
 import UnitListPage from "../pages/UnitListPage";
 import UserClientPage from "../pages/UserClientPage";
+import Animals from "../pages/Animals";
+import Prontuario from "../pages/Prontuario";
 
 export const router = createBrowserRouter([
 	{
@@ -31,6 +33,14 @@ export const router = createBrowserRouter([
 			{
 				path: "user/client",
 				element: <UserClientPage />,
+			},
+			{
+				path: "animal",
+				element: <Animals />,
+			},
+			{
+				path: "animal",
+				element: <Prontuario />,
 			},
 		],
 	},
