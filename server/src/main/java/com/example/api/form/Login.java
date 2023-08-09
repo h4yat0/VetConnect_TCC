@@ -1,4 +1,4 @@
-package com.example.api.entity.form;
+package com.example.api.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

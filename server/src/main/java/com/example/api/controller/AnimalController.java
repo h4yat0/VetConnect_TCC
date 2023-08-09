@@ -2,11 +2,10 @@ package com.example.api.controller;
 
 
 import com.example.api.entity.AnimalEntity;
-import com.example.api.entity.ClienteEntity;
-import com.example.api.entity.form.AnimalForm;
+import com.example.api.form.Animal.AnimalFormCreate;
 import com.example.api.service.AnimalService;
-import com.example.api.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class AnimalController {
 
 
     @PostMapping("/cadastro")
-    public AnimalForm cadastroAnimal(@RequestBody AnimalForm animal){
+    public AnimalFormCreate cadastroAnimal(@RequestBody AnimalFormCreate animal){
         if(animalService.saveAnimal(animal) == null){
             return null;
         }else{

@@ -1,4 +1,4 @@
-package com.example.api.entity.form.Prontuario;
+package com.example.api.form.Prontuario;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -11,6 +11,6 @@ import java.util.List;
 public interface AgendamentoRepository extends JpaRepository<AgendamentoEntity, Long> {
 
 
-    @Query(value = "SELECT * FROM tb_agendamento WHERE id_cliente = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM agendamento WHERE id_cliente = ?1", nativeQuery = true)
     List<AgendamentoEntity> buscarAgendamentos(Long id);
 }

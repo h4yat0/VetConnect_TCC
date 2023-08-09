@@ -5,7 +5,7 @@ import com.example.api.entity.Agendamento.ServicoEntity;
 import com.example.api.entity.Agendamento.UnidadeEntity;
 import com.example.api.entity.AnimalEntity;
 import com.example.api.entity.ClienteEntity;
-import com.example.api.entity.form.Agendamento.AgendamentoForm;
+import com.example.api.form.Agendamento.AgendamentoForm;
 import com.example.api.repository.Agendamento.AgendamentoRepository;
 import com.example.api.repository.Agendamento.ServicoRepository;
 import com.example.api.repository.Agendamento.UnidadeRepository;
@@ -38,7 +38,7 @@ public class AgendamentoService {
     public AgendamentoEntity cadastrarAgendamento(AgendamentoForm form){
         UnidadeEntity unidadeEntity = unidadeRepository.buscarUnidade(form.getIdUnidade());
         AnimalEntity animalEntity = animalRepository.buscarAnimal(form.getIdAnimal());
-        ClienteEntity clienteEntity = clienteRepository.burcarPorId(form.getIdCliente());
+        ClienteEntity clienteEntity = clienteRepository.buscarPorId(form.getIdCliente());
         ServicoEntity servicoEntity = servicoRepository.buscarServico(form.getIdServico());
 
         AgendamentoEntity entity = new AgendamentoEntity();

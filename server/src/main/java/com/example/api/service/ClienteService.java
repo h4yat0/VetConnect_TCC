@@ -1,12 +1,12 @@
 package com.example.api.service;
 
 import com.example.api.entity.ClienteEntity;
-import com.example.api.entity.form.ClienteForm;
+import com.example.api.form.Cliente.ClienteFormCreate;
+import com.example.api.form.Cliente.ClienteFormReturn;
+import com.example.api.mapper.ClienteMapper;
 import com.example.api.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -15,42 +15,79 @@ public class ClienteService {
     @Autowired
     private ClienteRepository repository;
 
-    public ClienteEntity getClienteByEmailSenha(String email, String senha){
-        Optional<ClienteEntity> entityOptional = Optional.ofNullable(repository.buscarPorEmailSenha(email, senha));
-        return entityOptional.orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+    @Autowired
+    private ClienteMapper mapper;
+
+    public ClienteFormReturn getClienteByEmailSenha(String email, String senha){
+        var clienteForm = mapper.convertEntityToForm(repository.buscarPorEmailSenha(email, senha));
+        return clienteForm;
     }
 
-
-
-    public ClienteEntity saveCliente(ClienteForm cliente){
-
-        System.out.println(cliente);
-        if(repository.buscarCpf(cliente.getCpf()) != null || repository.buscarEmail(cliente.getEmail()) != null) {
+    public ClienteFormReturn getClienteByIdCpfEmail(Long id, String email, String cpf){
+        ClienteEntity result = repository.buscarPorIdEmailCpf(id, email, cpf);
+        if(result == null){
             return null;
-        }else {
-            ClienteEntity entity = new ClienteEntity();
-            entity.setNome(cliente.getNome());
-            entity.setDataNascimento(cliente.getDataNascimento());
-            entity.setCpf(cliente.getCpf());
-            entity.setEndereco(cliente.getEndereco());
-            entity.setEmail(cliente.getEmail());
-            entity.setSenha(cliente.getSenha());
-            if(cliente.getTelefone() != null){
-                entity.setTelefone(cliente.getTelefone());
-            }
-            System.out.println("criou objeto");
-            return repository.save(entity);
+        }else{
+        ClienteFormReturn clienteForm = mapper.convertEntityToForm(result);
+        return clienteForm;
         }
     }
 
-    public ClienteEntity getById(Long idCliente) {
-        return repository.burcarPorId(idCliente);
+    public ClienteFormReturn getClientById(Long id){
+        ClienteEntity result = repository.buscarPorId(id);
+        if(result == null){
+            return null;
+        }else{
+            return mapper.convertEntityToForm(result);
+        }
     }
 
-    public ClienteEntity alteararCliente(ClienteEntity cliente){
-        return repository.save(cliente);
+    public ClienteFormReturn getClienteByEmail(String email){
+        ClienteEntity result = repository.buscarPorEmail(email);
+        if(result == null){
+            return null;
+        }else {
+            ClienteFormReturn clienteFormReturn = mapper.convertEntityToForm(repository.buscarPorEmail(email));
+            return clienteFormReturn;
+        }
+    }
+
+    public ClienteFormReturn getClienteByCpf(String cpf){
+        ClienteEntity result = repository.buscarPorCpf(cpf);
+        if(result == null){
+            return null;
+        }else{
+        ClienteFormReturn clienteFormReturn = mapper.convertEntityToForm(repository.buscarPorCpf(cpf));
+        return clienteFormReturn;
+        }
+    }
+
+
+
+    public ClienteFormReturn saveCliente(ClienteFormCreate cliente){
+        var entity = mapper.convertFormToEntity(cliente);
+        var clienteForm = mapper.convertEntityToForm(repository.save(entity));
+        return clienteForm;
+    }
+
+
+    public ClienteFormReturn alteararCliente(ClienteFormCreate cliente, Long id){
+        var entity = mapper.convertFormToEntity(cliente, id);
+        var form = mapper.convertEntityToForm(repository.save(entity));
+        return form;
     }
 
     public void delete(Long id){repository.deleteById(id);}
+
+    public String buscarCpf(String cpf){
+        String cpfBuscado = repository.buscarCpf(cpf);
+        return cpfBuscado;
+    }
+
+    public String buscarEmail(String email){
+        String emailBuscado = repository.buscarEmail(email);
+        return emailBuscado;
+    }
+
 
 }

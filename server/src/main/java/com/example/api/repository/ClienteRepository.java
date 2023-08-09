@@ -9,17 +9,25 @@ import org.springframework.stereotype.Repository;
 public interface ClienteRepository extends JpaRepository<ClienteEntity, Long> {
 
 
-    @Query(value = "SELECT * FROM tb_cliente WHERE email = ?1 AND senha = ?2", nativeQuery = true)
+    @Query(value = "SELECT * FROM cliente WHERE email = ?1 AND senha = ?2", nativeQuery = true)
     ClienteEntity buscarPorEmailSenha(String email, String senha);
 
+    @Query(value = "SELECT * FROM cliente WHERE id = ?1 ", nativeQuery = true)
+    ClienteEntity buscarPorId(Long id);
 
-    @Query(value = "SELECT * FROM tb_cliente WHERE id = ?1", nativeQuery = true)
-    ClienteEntity burcarPorId(Long id);
+    @Query(value = "SELECT * FROM cliente WHERE id = ?1 AND email = ?2 AND senha = ?3", nativeQuery = true)
+    ClienteEntity buscarPorIdEmailCpf(Long id, String email, String senha);
 
-    @Query(value = "SELECT cpf FROM tb_cliente WHERE cpf =?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM cliente WHERE cpf =?1", nativeQuery = true)
+    ClienteEntity buscarPorCpf(String cpf);
+
+    @Query(value = "SELECT * FROM cliente WHERE email =?1", nativeQuery = true)
+    ClienteEntity buscarPorEmail(String cpf);
+
+    @Query(value = "SELECT cpf FROM cliente WHERE cpf =?1", nativeQuery = true)
     String buscarCpf(String cpf);
 
-    @Query(value = "SELECT email FROM tb_cliente WHERE email =?1", nativeQuery = true)
+    @Query(value = "SELECT email FROM cliente WHERE email =?1", nativeQuery = true)
     String buscarEmail(String cpf);
 
 }

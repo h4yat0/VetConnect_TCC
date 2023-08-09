@@ -1,6 +1,6 @@
 package com.example.api.entity.Agendamento;
 
-import com.example.api.entity.Prontuario.ProntuarioEntity;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_unidade")
+@Table(name = "unidade")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "servicos"}) // anotação adicionada aqui
 @Entity
 public class UnidadeEntity {

@@ -2,7 +2,7 @@ package com.example.api.controller.Prontuario;
 
 
 import com.example.api.entity.Prontuario.ProntuarioEntity;
-import com.example.api.entity.form.Prontuario.ProntuarioForm;
+import com.example.api.form.Prontuario.ProntuarioForm;
 import com.example.api.service.Prontuario.ProntuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

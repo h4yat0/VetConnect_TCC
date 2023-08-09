@@ -2,7 +2,7 @@ package com.example.api.entity.Agendamento;
 
 import com.example.api.entity.AnimalEntity;
 import com.example.api.entity.ClienteEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fichaServico"})
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_agendamento")
+@Table(name = "agendamento")
 @Entity
 public class AgendamentoEntity {
     @Id
@@ -39,8 +41,8 @@ public class AgendamentoEntity {
     @Column(nullable = false, name = "hora_agendada")
     private String horaAgendada;
 
-    @Column(nullable = false, name = "valor_agendado")
-    private String valorAgendado;
+    @Column(nullable = false, name = "valor_agendado", precision = 10, scale = 2)
+    private BigDecimal valorAgendado;
 
 
     @OneToOne(mappedBy = "idAgendamento",cascade = CascadeType.ALL)
