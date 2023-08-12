@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
-@CrossOrigin
+
 @RestController
 @RequestMapping("/cliente")
 @Tag(name = "Cliente", description = "end points relacionados ao cliente")
