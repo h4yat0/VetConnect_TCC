@@ -1,6 +1,12 @@
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
+import api from "../api/axios";
+
+import ButtonPrimary from "../components/buttons/ButtonPrimary";
+import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
+import Alert from "../components/shared/Alert";
+import { saveDataToLocalStorage } from "../functions/localStorageManipulation";
 import {
 	updateAddress,
 	updateBirthDate,
@@ -10,31 +16,45 @@ import {
 	updatePhone,
 	updateId,
 	updatePassword,
+	updateAccessToken,
 } from "../redux/client";
-import axios from "axios";
-import ButtonPrimary from "../components/buttons/ButtonPrimary";
-import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
-import { saveDataToLocalStorage } from "../functions/localStorageManipulation";
+
+const LOGIN_URL = "/cliente/login";
 
 export default function SignIn() {
+	const userRef = useRef<HTMLInputElement | null>(null);
+	const errRef = useRef<HTMLInputElement | null>(null);
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 
-	const api = axios.create({
-		baseURL: `http://localhost:9191`,
-	});
+	useEffect(() => {
+		if (userRef.current) userRef.current.focus();
+	}, []);
 
-	const postSignIn = async () => {
+	useEffect(() => {
+		setErrorMessage("");
+	}, [email, password]);
+
+	useEffect(() => {}, [errorMessage]);
+
+	const postSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 		let reponse = await api
-			.post("/cliente/login", {
+			.post(LOGIN_URL, {
 				email: email,
 				senha: password,
 			})
 			.then(function (response) {
 				let data = response.data;
+
+				const accessToken = data?.accessToken;
+				const roles = data?.roles; // PRECISA SER REVISTO
+
 				dispatch(updateId(data.id));
 				dispatch(updateName(data.nome));
 				dispatch(updateCpf(data.cpf));
@@ -43,12 +63,21 @@ export default function SignIn() {
 				dispatch(updateAddress(data.endereco));
 				dispatch(updatePhone(data.telefone));
 				dispatch(updatePassword(data.senha));
+				dispatch(updateAccessToken(data.accessToken));
+
 				saveDataToLocalStorage(data);
 
 				navigate("/");
 			})
 			.catch(function (error) {
 				console.log(error);
+				if (!error?.message) {
+					setErrorMessage("No server response");
+				} else {
+					setErrorMessage("Email ou senha incorreto(s)");
+				}
+
+				errRef.current?.focus();
 			});
 	};
 
@@ -75,7 +104,12 @@ export default function SignIn() {
 				</div>
 
 				<div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
-					<form className='space-y-6' action='#' method='POST'>
+					{errorMessage ? (
+						<Alert title={errorMessage} description='' type='danger' />
+					) : (
+						""
+					)}
+					<form className='space-y-6' onSubmit={postSignIn} method='POST'>
 						<div>
 							<label
 								htmlFor='email'
@@ -87,6 +121,7 @@ export default function SignIn() {
 								<input
 									id='email'
 									name='email'
+									ref={userRef}
 									type='email'
 									autoComplete='email'
 									required
@@ -111,7 +146,7 @@ export default function SignIn() {
 									id='password'
 									name='password'
 									type='password'
-									autoComplete='current-password'
+									autoComplete='off'
 									required
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
@@ -121,11 +156,7 @@ export default function SignIn() {
 						</div>
 
 						<div>
-							<ButtonPrimary
-								text='Entrar'
-								width='w-full'
-								onClickFunction={postSignIn}
-							/>
+							<ButtonPrimary text='Entrar' width='w-full' type='submit' />
 						</div>
 					</form>
 

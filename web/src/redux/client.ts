@@ -9,6 +9,7 @@ interface ClientState {
 	phone: string;
 	email: string;
 	password: string;
+	accessToken: string;
 }
 
 const initialState: ClientState = {
@@ -20,6 +21,7 @@ const initialState: ClientState = {
 	phone: "",
 	email: "",
 	password: "",
+	accessToken: "",
 };
 
 const clientSlice = createSlice({
@@ -50,6 +52,9 @@ const clientSlice = createSlice({
 		updatePassword: (state, action: PayloadAction<string>) => {
 			state.password = action.payload;
 		},
+		updateAccessToken: (state, action: PayloadAction<string>) => {
+			state.accessToken = action.payload;
+		},
 	},
 });
 
@@ -62,6 +67,7 @@ export const {
 	updatePhone,
 	updateEmail,
 	updatePassword,
+	updateAccessToken,
 } = clientSlice.actions;
 
 export const getId = (state: { client: ClientState }) => state.client.id;
@@ -75,5 +81,7 @@ export const getAddress = (state: { client: ClientState }) =>
 	state.client.address;
 export const getPassword = (state: { client: ClientState }) =>
 	state.client.password;
+export const getAccessToken = (state: { client: ClientState }) =>
+	state.client.accessToken;
 
 export default clientSlice.reducer;
