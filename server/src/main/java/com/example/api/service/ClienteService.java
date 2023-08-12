@@ -1,15 +1,21 @@
 package com.example.api.service;
 
+import com.example.api.controller.ClienteController;
 import com.example.api.entity.ClienteEntity;
 import com.example.api.form.Cliente.ClienteFormCreate;
 import com.example.api.form.Cliente.ClienteFormReturn;
+import com.example.api.form.Login;
 import com.example.api.mapper.ClienteMapper;
+import com.example.api.mapper.LoginMapper;
 import com.example.api.repository.ClienteRepository;
+import com.example.api.utils.MetodosAuxiliares;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @Service
-public class ClienteService {
+public class ClienteService extends MetodosAuxiliares {
 
 
     @Autowired
@@ -18,9 +24,20 @@ public class ClienteService {
     @Autowired
     private ClienteMapper mapper;
 
-    public ClienteFormReturn getClienteByEmailSenha(String email, String senha){
-        var clienteForm = mapper.convertEntityToForm(repository.buscarPorEmailSenha(email, senha));
-        return clienteForm;
+    @Autowired
+    private LoginMapper loginMapper;
+
+    public ClienteFormReturn getClienteByEmailSenha(Login login){
+        ClienteEntity entity = repository.buscarPorEmailSenha(login.getEmail(),login.getSenha());
+        if(entity == null){
+            return null;
+        }else{
+            ClienteFormReturn clienteForm = mapper.convertEntityToForm(entity);
+
+            clienteForm.add(linkTo(methodOn(ClienteController.class).getLogin(login)).withSelfRel());
+            return clienteForm;
+        }
+
     }
 
     public ClienteFormReturn getClienteByIdCpfEmail(Long id, String email, String cpf){
@@ -28,8 +45,7 @@ public class ClienteService {
         if(result == null){
             return null;
         }else{
-        ClienteFormReturn clienteForm = mapper.convertEntityToForm(result);
-        return clienteForm;
+            return mapper.convertEntityToForm(result);
         }
     }
 
@@ -47,8 +63,7 @@ public class ClienteService {
         if(result == null){
             return null;
         }else {
-            ClienteFormReturn clienteFormReturn = mapper.convertEntityToForm(repository.buscarPorEmail(email));
-            return clienteFormReturn;
+            return mapper.convertEntityToForm(repository.buscarPorEmail(email));
         }
     }
 
@@ -57,36 +72,53 @@ public class ClienteService {
         if(result == null){
             return null;
         }else{
-        ClienteFormReturn clienteFormReturn = mapper.convertEntityToForm(repository.buscarPorCpf(cpf));
-        return clienteFormReturn;
+            return mapper.convertEntityToForm(repository.buscarPorCpf(cpf));
         }
     }
 
 
 
     public ClienteFormReturn saveCliente(ClienteFormCreate cliente){
-        var entity = mapper.convertFormToEntity(cliente);
-        var clienteForm = mapper.convertEntityToForm(repository.save(entity));
-        return clienteForm;
+        if(buscarCpf(cliente.getCpf()) != null || buscarEmail(cliente.getEmail()) != null ||
+                idadeUsuario(cliente.getDataNascimento()) < 18 || cliente.getCpf().length() > 11){
+            return null;
+        }else{
+            var entity = mapper.convertFormToEntity(cliente);
+            var clienteForm = mapper.convertEntityToForm(repository.save(entity));
+            clienteForm.add(linkTo(methodOn(ClienteController.class).postCliente(cliente)).withSelfRel() );
+            return clienteForm;
+        }
+
     }
 
 
     public ClienteFormReturn alteararCliente(ClienteFormCreate cliente, Long id){
-        var entity = mapper.convertFormToEntity(cliente, id);
-        var form = mapper.convertEntityToForm(repository.save(entity));
-        return form;
+        ClienteFormReturn clienteFormReturn = getClientById(id);
+        ClienteFormReturn clienteReturnCpf = getClienteByCpf(cliente.getCpf());
+        ClienteFormReturn clienteReturnEmail = getClienteByEmail(cliente.getEmail());
+
+        if(cliente.getCpf().length() >11 || clienteFormReturn == null || (clienteReturnCpf != null && !clienteReturnCpf.getId().equals(id)) ||
+                (clienteReturnEmail != null && !clienteReturnEmail.getId().equals(id))){
+            return null;
+        }else{
+            var entity = mapper.convertFormToEntity(cliente, id);
+            var form = mapper.convertEntityToForm(repository.save(entity));
+            form.add(linkTo(methodOn(ClienteController.class).putCliente(id, cliente)).withSelfRel() );
+            return form;
+        }
+
+
+
     }
 
     public void delete(Long id){repository.deleteById(id);}
 
     public String buscarCpf(String cpf){
-        String cpfBuscado = repository.buscarCpf(cpf);
-        return cpfBuscado;
+        return repository.buscarCpf(cpf);
     }
 
     public String buscarEmail(String email){
-        String emailBuscado = repository.buscarEmail(email);
-        return emailBuscado;
+        return repository.buscarEmail(email);
     }
 
 
