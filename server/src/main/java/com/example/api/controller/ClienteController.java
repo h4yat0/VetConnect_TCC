@@ -1,12 +1,19 @@
 package com.example.api.controller;
 
 
+
 import com.example.api.form.Cliente.ClienteFormCreate;
 import com.example.api.form.Cliente.ClienteFormReturn;
 import com.example.api.form.Login;
 import com.example.api.service.ClienteService;
 import com.example.api.utils.MetodosAuxiliares;
 import exceptions.ExceptionResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,15 +25,24 @@ import java.util.Date;
 @CrossOrigin
 @RestController
 @RequestMapping("/cliente")
+@Tag(name = "Cliente", description = "end points relacionados ao cliente")
 public class ClienteController extends MetodosAuxiliares {
 
     @Autowired
     private ClienteService service;
 
 
-    @PostMapping("/login")
-    public ResponseEntity<?> getLogin(@RequestBody Login login) {
-        ClienteFormReturn entity = service.getClienteByEmailSenha(login.getEmail(), login.getSenha());
+    @PostMapping("v1/login")
+    @Operation(summary = "endPoint para buscar um cliente", description = "endPoint para buscar um cliente",
+            tags = {"Cliente"}, responses = {
+                @ApiResponse(description = "Sucesso", responseCode = "200", content = {
+                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ClienteFormReturn.class)))
+                    }),
+                @ApiResponse(description = "Não foi possivel encontrar esse cliente", responseCode = "400", content = @Content),
+                @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
+            })
+        public ResponseEntity<?> getLogin(@RequestBody Login login) {
+        ClienteFormReturn entity = service.getClienteByEmailSenha(login);
         if (entity == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(new Date(), HttpStatus.NOT_FOUND, "Cliente não foi encontrado"));
         } else {
@@ -34,55 +50,56 @@ public class ClienteController extends MetodosAuxiliares {
         }
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> postCliente(@RequestBody @Valid ClienteFormCreate cliente) {
-//        if (service.buscarCpf(cliente.getCpf()) != null || service.buscarEmail(cliente.getEmail()) != null) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(new Date(), HttpStatus.CONFLICT, "Cpf ou email ja cadastrados"));
-//        } else if (idadeUsuario(cliente.getDataNascimento()) < 18) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(new Date(), HttpStatus.CONFLICT, "Cliente com menos de 18 anos"));
-//        } else if (cliente.getCpf().length() > 11) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(new Date(), HttpStatus.BAD_REQUEST, "Cpf invalido"));
-//        } else {
-//            ClienteFormReturn clienteFormReturn = service.saveCliente(cliente);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(clienteFormReturn);
-//        }
 
-        if (service.buscarCpf(cliente.getCpf()) != null || service.buscarEmail(cliente.getEmail()) != null ||
-                idadeUsuario(cliente.getDataNascimento()) < 18 || cliente.getCpf().length() > 11) {
+
+    @PostMapping("v1/register")
+    @Operation(summary = "endPoint para registrar um cliente", description = "endPoint para registrar um cliente",
+            tags = {"Cliente"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ClienteFormReturn.class)))
+            }),
+            @ApiResponse(description = "Não foi possivel registrar esse cliente", responseCode = "400", content = @Content),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
+    })
+    public ResponseEntity<?> postCliente(@RequestBody @Valid ClienteFormCreate cliente) {
+
+        ClienteFormReturn clienteFormReturn = service.saveCliente(cliente);
+        if (clienteFormReturn == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(new Date(), HttpStatus.BAD_REQUEST, "Não foi possivel cadastrar esse usuario"));
         }  else {
-            ClienteFormReturn clienteFormReturn = service.saveCliente(cliente);
             return ResponseEntity.status(HttpStatus.CREATED).body(clienteFormReturn);
         }
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("v1/update/{id}")
+    @Operation(summary = "endPoint para alterar um cliente", description = "endPoint para alterar um cliente",
+            tags = {"Cliente"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ClienteFormReturn.class)))
+            }),
+            @ApiResponse(description = "Não foi possivel alterar esse cliente", responseCode = "400", content = @Content),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
+    })
     public ResponseEntity<?> putCliente(@PathVariable Long id, @RequestBody ClienteFormCreate cliente) {
-        ClienteFormReturn clienteFormReturn = service.getClientById(id);
-        ClienteFormReturn clienteReturnCpf = service.getClienteByCpf(cliente.getCpf());
-        ClienteFormReturn clienteReturnEmail = service.getClienteByEmail(cliente.getEmail());
 
-//        if (cliente.getCpf().length() > 11) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(new Date(), HttpStatus.BAD_REQUEST, "Cpf invalido"));
-//        } else if (clienteFormReturn == null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(new Date(), HttpStatus.BAD_REQUEST, "Cliente não encontrado"));
-//        } else if (clienteReturnCpf != null && !clienteReturnCpf.getId().equals(id)) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(new Date(), HttpStatus.CONFLICT, "Cpf ou email ja cadastrados"));
-//        } else if (clienteReturnEmail != null && !clienteReturnEmail.getId().equals(id)) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(new Date(), HttpStatus.CONFLICT, "Cpf ou email ja cadastrados"));
-//        }else{
-//            return ResponseEntity.ok().body(service.alteararCliente(cliente, id));
-//        }
 
-        if(cliente.getCpf().length() >11 || clienteFormReturn == null || (clienteReturnCpf != null && !clienteReturnCpf.getId().equals(id)) ||
-                (clienteReturnEmail != null && clienteReturnEmail.getId().equals(id)) ){
+        ClienteFormReturn clienteForm = service.alteararCliente(cliente, id);
+        if(clienteForm == null ){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(new Date(), HttpStatus.BAD_REQUEST, "Não foi possivel alterar esse usuario"));
         }else{
-            return ResponseEntity.ok().body(service.alteararCliente(cliente, id));
+            return ResponseEntity.ok().body(clienteForm);
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("v1/delete/{id}")
+    @Operation(summary = "endPoint para deletar um cliente", description = "endPoint para deletar um cliente",
+            tags = {"Cliente"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ClienteFormReturn.class)))
+            }),
+            @ApiResponse(description = "Não foi possivel deletar esse cliente", responseCode = "400", content = @Content),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
+    })
     public ResponseEntity<?> deleteCliente(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
