@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 import Cleave from "cleave.js/react";
 import "../modules/cleave-phone.br.js";
+import Alert from "../components/shared/Alert";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
 
@@ -10,7 +11,11 @@ function sanitizeString(str: string): string {
 	return str.replace(/[.\-\s]/g, "");
 }
 
+const SIGNUP_URL = "cliente/v1/register";
+
 export default function SignUp() {
+	const errRef = useRef<HTMLInputElement | null>(null);
+
 	const [name, setName] = useState("");
 	const [cpf, setCpf] = useState("");
 	const [birthDate, setBirthDate] = useState("");
@@ -18,16 +23,16 @@ export default function SignUp() {
 	const [phone, setPhone] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
+
+	useEffect(() => {}, [errorMessage]);
 
 	const navigate = useNavigate();
 
-	const api = axios.create({
-		baseURL: `http://localhost:9191`,
-	});
-
-	const postSignUp = async () => {
+	const postSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 		let reponse = await api
-			.post("/cliente/cadastro", {
+			.post(SIGNUP_URL, {
 				nome: name,
 				dataNascimento: birthDate,
 				cpf: sanitizeString(cpf),
@@ -42,6 +47,13 @@ export default function SignUp() {
 			})
 			.catch(function (error) {
 				console.log(error);
+				if (!error?.message) {
+					setErrorMessage("No server response");
+				} else {
+					setErrorMessage(error.message);
+				}
+
+				errRef.current?.focus();
 			});
 	};
 
@@ -68,7 +80,12 @@ export default function SignUp() {
 				</div>
 
 				<div className='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
-					<form className='space-y-6' action='#' method='POST'>
+					{errorMessage ? (
+						<Alert title={errorMessage} description='' type='danger' />
+					) : (
+						""
+					)}
+					<form className='space-y-6' onSubmit={postSignUp} method='POST'>
 						<div>
 							<label
 								htmlFor='name'
@@ -219,11 +236,7 @@ export default function SignUp() {
 						</div>
 
 						<div>
-							<ButtonPrimary
-								text='Cadastrar'
-								width='w-full'
-								onClickFunction={postSignUp}
-							/>
+							<ButtonPrimary text='Cadastrar' width='w-full' type='submit' />
 						</div>
 					</form>
 
