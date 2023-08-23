@@ -12,7 +12,7 @@ import UserClientPage from "../pages/UserClientPage";
 import Animals from "../pages/Animals";
 import Unauthorized from "../pages/Unauthorized";
 import Prontuario from "../pages/Prontuario";
-import RequireAuthorization from "../components/RequireAuthorization";
+import RequireAuthorization from "../components/security/RequireAuthorization";
 
 export const router = createBrowserRouter([
   {
