@@ -7,7 +7,6 @@ import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
 import Alert from "../components/shared/Alert";
 
-import { saveDataToLocalStorage } from "../functions/localStorageManipulation";
 import {
   updateAddress,
   updateBirthDate,
@@ -69,8 +68,6 @@ export default function SignIn() {
         dispatch(updatePassword(data.senha));
         dispatch(updateAccessToken(data.accessToken));
         dispatch(updateRoles([0]));
-
-        saveDataToLocalStorage(data);
 
         navigate(from, { replace: true });
       })
