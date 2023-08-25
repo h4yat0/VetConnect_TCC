@@ -55,6 +55,32 @@ const servicos = {
 	],
 };
 
+const Agendamentos = {
+	servicos: [
+		{
+			id: 1,
+			nome: "Banho",
+			iconName: "ClínicaPetVet-Centro.jpg",
+		},
+		{
+			id: 2,
+			nome: "Tosa",
+			iconName: "Clínica PetVet - Zona Oeste.jpg",
+		},
+		{
+			id: 3,
+			nome: "Castração",
+			iconName: "Clínica PetVet - Zona Leste.jpg",
+		},
+		{
+			id: 4,
+			nome: "Vacinação",
+			iconName: "Clínica PetVet - Zona Norte.jpg",
+		},
+	
+	],
+};
+
 export default function Home() {
 	return (
 	<div className="w-full">
@@ -62,6 +88,20 @@ export default function Home() {
 		<PromoCard></PromoCard>
 
 			<div className='py-8'>
+
+				<h1 className='text-2xl font-black '>Agendamentos</h1>
+				<div className='flex flex-row gap-20 pt-5 '>
+					{servicos.servicos.map((servicos) => (
+						<ServiceCard
+							key={servicos.id}
+							title={servicos.nome}
+							serviceId={servicos.id}
+							iconName={"src/assets/imgs/" + servicos.iconName}
+						/>
+					))}
+				</div>
+
+
 				<h1 className='text-2xl font-black '>Últimos serviços utilizados</h1>
 				<div className='flex flex-row gap-20 pt-5 '>
 					{servicos.servicos.map((servicos) => (
