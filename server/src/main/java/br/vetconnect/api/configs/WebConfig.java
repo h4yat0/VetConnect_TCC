@@ -1,4 +1,4 @@
-package  com.example.api.configs;
+package br.vetconnect.api.configs;
 
 import java.util.List;
 

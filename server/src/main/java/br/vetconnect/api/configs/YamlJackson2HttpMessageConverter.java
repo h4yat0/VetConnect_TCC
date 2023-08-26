@@ -1,4 +1,4 @@
-package com.example.api.configs;
+package br.vetconnect.api.configs;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;

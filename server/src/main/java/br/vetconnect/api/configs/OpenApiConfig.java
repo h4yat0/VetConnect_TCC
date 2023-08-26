@@ -1,4 +1,4 @@
-package com.example.api.configs;
+package br.vetconnect.api.configs;
 
 
 import io.swagger.v3.oas.models.OpenAPI;
