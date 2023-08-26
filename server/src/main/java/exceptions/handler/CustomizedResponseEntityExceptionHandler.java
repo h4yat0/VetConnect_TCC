@@ -3,6 +3,7 @@ package exceptions.handler;
 
 
 import exceptions.ExceptionResponse;
+import exceptions.InvalidJwtAuthenticationException;
 import exceptions.ResourceNotFoundExcepction;
 
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,16 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
                 request.getDescription(false));
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    public final ResponseEntity<ExceptionResponse> handleForbiddenExceptions(Exception ex, WebRequest request){
+
+        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
+                request.getDescription(false));
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.FORBIDDEN);
     }
 
 
