@@ -1,18 +1,21 @@
 package br.vetconnect.api.form.Animal;
 
+import br.vetconnect.api.form.Cliente.ClienteFormReturn;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
+
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnimalFormCreate {
+public class AnimalFormCreate extends RepresentationModel<ClienteFormReturn> implements Serializable {
 
-    @Valid
-    @NotBlank
+
     private Long idCliente;
     @Valid
     @NotBlank
