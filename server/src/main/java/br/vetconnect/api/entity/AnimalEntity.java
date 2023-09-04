@@ -12,6 +12,7 @@ import org.hibernate.annotations.Check;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +37,10 @@ public class AnimalEntity {
     private String raca;
     @Column(nullable = false, name = "data_nascimento")
     private String dataNascimento;
-    @Column(nullable = false)
-    private String peso;
-    @Column(nullable = false)
-    private String tamanho;
+    @Column(nullable = false, columnDefinition = "decimal(6,3)")
+    private BigDecimal peso;
+    @Column(nullable = false, columnDefinition = "decimal(6,3)")
+    private BigDecimal tamanho;
     @Column(nullable = false)
     private String especie;
     @Column(nullable = false, name = "sexo", length = 1)

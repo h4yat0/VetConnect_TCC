@@ -38,7 +38,7 @@ public class ClienteController extends MetodosAuxiliares {
                 @ApiResponse(description = "Sucesso", responseCode = "200", content = {
                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ClienteFormReturn.class)))
                     }),
-                @ApiResponse(description = "Não foi possivel encontrar esse cliente", responseCode = "400", content = @Content),
+                @ApiResponse(description = "Não foi possivel encontrar esse cliente", responseCode = "404", content = @Content),
                 @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
             })
         public ResponseEntity<?> getLogin(@RequestBody Login login) {

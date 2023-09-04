@@ -56,7 +56,7 @@ public class SecurityConfig {
                                         "/v3/api-docs/**",
                                         "api/cliente/v1/register"
                                 ).permitAll()
-                                .requestMatchers("/api/**").authenticated()
+                                .requestMatchers("api/**").authenticated()
                                 .requestMatchers("/users").denyAll()
                 )
                 .cors()
