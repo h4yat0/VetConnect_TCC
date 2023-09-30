@@ -57,6 +57,8 @@ public class AnimalService {
     public AnimalFormReturn alterarAnimal(AnimalFormCreate animal, long id) {
         ClienteEntity cliente = clienteRepository.buscarPorId(animal.getIdCliente());
         AnimalEntity animalEntity = animalMapper.formCreateToEntity(animal, id, cliente);
-        return  animalMapper.entityToFormReturn(animalRepository.save(animalEntity));
+        AnimalFormReturn animalFormReturn = animalMapper.entityToFormReturn(animalRepository.save(animalEntity));
+        animalFormReturn.add(linkTo(methodOn(AnimalController.class).alterarAnimal(animal, id)).withSelfRel());
+        return  animalFormReturn;
     }
 }
