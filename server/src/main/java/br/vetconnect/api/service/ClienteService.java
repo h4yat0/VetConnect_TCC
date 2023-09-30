@@ -10,6 +10,9 @@ import br.vetconnect.api.mapper.ClienteMapper;
 import br.vetconnect.api.repository.ClienteRepository;
 import br.vetconnect.api.service.security.AuthService;
 import br.vetconnect.api.utils.MetodosAuxiliares;
+import exceptions.ExecptionNovos;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +33,8 @@ public class ClienteService extends MetodosAuxiliares {
 
     @Autowired
     private AuthService authService;
+
+    private static Logger logger = LoggerFactory.getLogger(ClienteService.class);
 
     public ClienteFormReturn getClienteByEmailSenha(Login login){
         ClienteEntity entity = repository.buscarPorEmailSenha(login.getEmail(),login.getSenha());
@@ -82,18 +87,23 @@ public class ClienteService extends MetodosAuxiliares {
 
 
 
-    public ClienteFormReturn saveCliente(ClienteFormCreate cliente){
-        if(buscarCpf(cliente.getCpf()) != null || buscarEmail(cliente.getEmail()) != null ||
-                idadeUsuario(cliente.getDataNascimento()) < 18 || cliente.getCpf().length() > 11){
-            return null;
-        }else{
-            var entity = mapper.convertFormToEntity(cliente);
-            var clienteForm = mapper.convertEntityToForm(repository.save(entity));
-            clienteForm.add(linkTo(methodOn(ClienteController.class).postCliente(cliente)).withSelfRel() );
+    public ClienteFormReturn saveCliente(ClienteFormCreate cliente)  {
+        try{
+            if(buscarCpf(cliente.getCpf()) != null || buscarEmail(cliente.getEmail()) != null ||
+                    idadeUsuario(cliente.getDataNascimento()) < 18 || cliente.getCpf().length() > 11){
+                return null;
+            }else{
+                var entity = mapper.convertFormToEntity(cliente);
+                var clienteForm = mapper.convertEntityToForm(repository.save(entity));
+                clienteForm.add(linkTo(methodOn(ClienteController.class).postCliente(cliente)).withSelfRel() );
 
-            authService.createUserCliente(cliente.getEmail(), cliente.getSenha(), clienteForm.getId());
+                authService.createUserCliente(cliente.getEmail(), cliente.getSenha(), clienteForm.getId());
 
-            return clienteForm;
+                return clienteForm;
+            }
+        }catch (Exception e){
+             logger.error(e.getMessage());
+             return null;
         }
 
     }
