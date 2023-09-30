@@ -12,7 +12,8 @@ import UserClientPage from "../pages/UserClientPage";
 import Animals from "../pages/Animals";
 import Unauthorized from "../pages/Unauthorized";
 import Prontuario from "../pages/Prontuario";
-import RequireAuthorization from "../components/RequireAuthorization";
+import RequireAuthorization from "../components/security/RequireAuthorization";
+import PersistLogin from "../components/security/PersistLogin";
 
 export const router = createBrowserRouter([
   {
@@ -21,19 +22,24 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        element: <RequireAuthorization allowedRoles={[0]} />,
+        element: <PersistLogin />,
         children: [
           {
-            path: "user/client",
-            element: <UserClientPage />,
-          },
-          {
-            path: "animal",
-            element: <Animals />,
-          },
-          {
-            path: "animal",
-            element: <Prontuario />,
+            element: <RequireAuthorization allowedRoles={['Cliente']} />,
+            children: [
+              {
+                path: "user/client",
+                element: <UserClientPage />,
+              },
+              {
+                path: "animal",
+                element: <Animals />,
+              },
+              {
+                path: "animal",
+                element: <Prontuario />,
+              },
+            ],
           },
         ],
       },
