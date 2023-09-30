@@ -5,6 +5,8 @@ import br.vetconnect.api.form.Cliente.ClienteFormReturn;
 import br.vetconnect.api.form.Cliente.ClienteFormCreate;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
+
 @Service
 public class ClienteMapper {
 
@@ -15,9 +17,18 @@ public class ClienteMapper {
         clienteForm.setEmail(entity.getEmail());
         clienteForm.setSenha(entity.getSenha());
         clienteForm.setTelefone(entity.getTelefone());
-        clienteForm.setEndereco(entity.getEndereco());
+
         clienteForm.setDataNascimento(entity.getDataNascimento());
         clienteForm.setNome(entity.getNome());
+
+        clienteForm.setRua(entity.getRua());
+        clienteForm.setBairro(entity.getBairro());
+        clienteForm.setCidade(entity.getCidade());
+        clienteForm.setEstado(entity.getEstado());
+        clienteForm.setNumero(entity.getNumero());
+        clienteForm.setCep(entity.getCep());
+
+        clienteForm.setImagem(entity.getImagem());
         return clienteForm;
     }
 
@@ -27,9 +38,17 @@ public class ClienteMapper {
         clienteEntity.setEmail(form.getEmail());
         clienteEntity.setSenha(form.getSenha());
         clienteEntity.setTelefone(form.getTelefone());
-        clienteEntity.setEndereco(form.getEndereco());
+        clienteEntity.setBairro(form.getBairro());
+        clienteEntity.setRua(form.getRua());
+        clienteEntity.setCidade(form.getCidade());
+        clienteEntity.setEstado(form.getEstado());
+        clienteEntity.setCep(form.getCep());
+        clienteEntity.setComplemento(form.getComplemento());
+        clienteEntity.setNumero(form.getNumero());
+
         clienteEntity.setDataNascimento(form.getDataNascimento());
         clienteEntity.setNome(form.getNome());
+        clienteEntity.setImagem(Base64.getDecoder().decode(form.getImagem()));
         return clienteEntity;
     }
 
@@ -40,9 +59,10 @@ public class ClienteMapper {
         clienteEntity.setEmail(form.getEmail());
         clienteEntity.setSenha(form.getSenha());
         clienteEntity.setTelefone(form.getTelefone());
-        clienteEntity.setEndereco(form.getEndereco());
+
         clienteEntity.setDataNascimento(form.getDataNascimento());
         clienteEntity.setNome(form.getNome());
+        clienteEntity.setImagem(Base64.getDecoder().decode(form.getImagem().toString()));
         return clienteEntity;
     }
 }
