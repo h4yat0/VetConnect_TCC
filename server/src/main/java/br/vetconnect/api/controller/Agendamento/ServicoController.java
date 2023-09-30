@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @CrossOrigin
 @RestController
-@RequestMapping("/servico")
+@RequestMapping("api/servico")
 public class ServicoController {
 
     @Autowired
     private ServicoService service;
 
-    @GetMapping("/all")
+    @GetMapping("/v1/all")
     public List<ServicoEntity> getAll(){
         return service.getAll();
     }
