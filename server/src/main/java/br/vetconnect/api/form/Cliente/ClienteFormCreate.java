@@ -37,6 +37,14 @@ public class ClienteFormCreate extends RepresentationModel<ClienteFormCreate> im
     @Email
     private String email;
     private String senha;
+    private String imagem;
+    private String rua;
+    private String bairro;
+    private String cidade;
+    private String estado;
+    private String complemento;
+    private Integer numero;
+    private String cep;
 
     private List<AnimalFormCreate> animalFormCreateList = new ArrayList<>();
 }

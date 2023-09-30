@@ -23,10 +23,18 @@ public class ClienteFormReturn extends RepresentationModel<ClienteFormReturn> im
     private String nome;
     private String dataNascimento;
     private String cpf;
-    private String endereco;
     private String telefone;
     private String email;
     private String senha;
+    private byte[] imagem;
+
+    private String rua;
+    private String bairro;
+    private String cidade;
+    private String estado;
+    private String complemento;
+    private Integer numero;
+    private String cep;
 
     private List<AnimalFormCreate> animalFormCreateList = new ArrayList<>();
 }
