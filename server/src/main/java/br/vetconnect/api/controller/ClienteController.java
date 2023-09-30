@@ -94,9 +94,7 @@ public class ClienteController extends MetodosAuxiliares {
     @DeleteMapping("v1/delete/{id}")
     @Operation(summary = "endPoint para deletar um cliente", description = "endPoint para deletar um cliente",
             tags = {"Cliente"}, responses = {
-            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
-                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ClienteFormReturn.class)))
-            }),
+            @ApiResponse(description = "Sucesso", responseCode = "204"),
             @ApiResponse(description = "Não foi possivel deletar esse cliente", responseCode = "400", content = @Content),
             @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
     })
