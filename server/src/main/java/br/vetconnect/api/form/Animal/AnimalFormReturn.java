@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnimalFormReturn extends RepresentationModel<ClienteFormCreate> implements Serializable {
+public class AnimalFormReturn extends RepresentationModel<AnimalFormReturn> implements Serializable {
     private Long id;
     private Long idCliente;
     private String nome;
