@@ -3,6 +3,7 @@ package exceptions.handler;
 
 
 import exceptions.ExceptionResponse;
+import exceptions.ExecptionNovos;
 import exceptions.InvalidJwtAuthenticationException;
 import exceptions.ResourceNotFoundExcepction;
 
@@ -21,7 +22,7 @@ import java.util.Date;
 @RestController
 public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(ExecptionNovos.class)
     public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception ex, WebRequest request){
         ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(),
                 request.getDescription(false));
