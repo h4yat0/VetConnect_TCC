@@ -20,9 +20,6 @@ function iconSelect(title:string): any{
 	
 export default function ServiceCard(props: ServiceCardProps) {
 	const { title, iconName, serviceId } = props;
-
-	
-
 	return (
 		<div className="w-full grid items-center justify-center">
 		  <div className="w-full min-w-100 p-4 bg-white flex space-x-4 rounded-lg shadow-md hover:scale-105 transition transform duration-500 cursor-pointer">

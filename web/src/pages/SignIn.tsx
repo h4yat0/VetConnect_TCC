@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+
 import api from "../api/axios";
+
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
@@ -18,15 +20,19 @@ import {
   updatePassword,
   updateAccessToken,
   updateRoles,
+  getAccessToken,
 } from "../redux/client";
+import jwt from "jwt-decode";
 
-const LOGIN_URL = "cliente/v1/login";
+const LOGIN_URL = "api/cliente/v1/login";
+const TOKEN_URL = "auth/signin";
 
 export default function SignIn() {
   const userRef = useRef<HTMLInputElement | null>(null);
   const errRef = useRef<HTMLInputElement | null>(null);
 
   const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -35,28 +41,61 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const accessToken = useSelector(getAccessToken);
+
   useEffect(() => {
     if (userRef.current) userRef.current.focus();
   }, []);
 
-  useEffect(() => {
-    setErrorMessage("");
-  }, [email, password]);
+  useEffect(() => {setErrorMessage("")}, [email, password]);
 
   useEffect(() => {}, [errorMessage]);
 
-  const postSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() =>
+    {
+      if(accessToken) {
+        postLogin();
+      }
+    },
+    [accessToken]
+  );
+
+
+  const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let reponse = await api
-      .post(LOGIN_URL, {
+    let token = await api
+      .post(TOKEN_URL, {
         email: email,
         senha: password,
       })
+      .then(function (token) {
+        let data = token.data;        
+        let roles = jwt(data.accessToken) as { roles: string[] };    
+          
+        dispatch(updateRoles(roles.roles));
+        dispatch(updateAccessToken(data.accessToken));      
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const postLogin = async () => {
+    let response = await api
+      .post(
+        LOGIN_URL,
+        {
+          email: email,
+          senha: password,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then(function (response) {
         let data = response.data;
-
-        const accessToken = data?.accessToken;
-        const roles = data?.roles; // PRECISA SER REVISTO
 
         dispatch(updateId(data.id));
         dispatch(updateName(data.nome));
@@ -66,9 +105,7 @@ export default function SignIn() {
         dispatch(updateAddress(data.endereco));
         dispatch(updatePhone(data.telefone));
         dispatch(updatePassword(data.senha));
-        dispatch(updateAccessToken(data.accessToken));
-        dispatch(updateRoles([0]));
-
+      
         navigate(from, { replace: true });
       })
       .catch(function (error) {
@@ -111,7 +148,7 @@ export default function SignIn() {
           ) : (
             ""
           )}
-          <form className="space-y-6" onSubmit={postSignIn} method="POST">
+          <form className="space-y-6" onSubmit={login} method="POST">
             <div>
               <label
                 htmlFor="email"

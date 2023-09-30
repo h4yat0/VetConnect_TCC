@@ -11,7 +11,7 @@ function sanitizeString(str: string): string {
 	return str.replace(/[.\-\s]/g, "");
 }
 
-const SIGNUP_URL = "cliente/v1/register";
+const SIGNUP_URL = "api/cliente/v1/register";
 
 export default function SignUp() {
 	const errRef = useRef<HTMLInputElement | null>(null);

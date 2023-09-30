@@ -46,6 +46,7 @@ const products = [
     icon: TbVaccine,
   },
 ];
+
 const callsToAction = [{ name: "Entre em Contato", href: "#", icon: FaPhone }];
 
 function classNames(...classes: string[]) {
@@ -55,9 +56,7 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
   const userId = useSelector(getId);
 
-  useEffect(() => {
-    console.log("id: ", userId);
-  }, [userId]);
+  useEffect(() => {}, [userId]);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -251,11 +250,14 @@ export default function Navbar() {
               </div>
               <div className="py-6">
                 <Link
-                  to="/signin"
+                  to={userId == -1 ? "/signin" : "/user/client"}
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  <ButtonPrimary text="Entrar" width="w-full" />
-                </Link>
+                  <ButtonPrimary
+                    text={userId == -1 ? "Entrar" : "Perfil"}
+                    width="w-full"
+                  />
+                </Link>                
               </div>
             </div>
           </div>

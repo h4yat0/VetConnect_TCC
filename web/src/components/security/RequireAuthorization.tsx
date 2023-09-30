@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { getRoles, getName } from "../../redux/client";
 
 interface RequireAuthorizationProps {
-  allowedRoles: number[];
+  allowedRoles: string[];
 }
 
 const RequireAuthorization = (props: RequireAuthorizationProps) => {
