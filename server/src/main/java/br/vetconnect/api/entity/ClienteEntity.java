@@ -30,14 +30,32 @@ public class ClienteEntity {
 
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
+
     @Column(nullable = false)
-    private String endereco;
+    private String cep;
+
+    @Column(nullable = false)
+    private String rua;
+    @Column(nullable = false)
+    private Integer numero;
+    private String complemento;
+    @Column(nullable = false)
+    private String bairro;
+    @Column(nullable = false)
+    private String estado;
+    @Column(nullable = false)
+    private String cidade;
+
+
     private String telefone;
 
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
     private String senha;
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] imagem;
 
    // @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL) se não tiver animal não tem cliente
     @OneToMany(mappedBy = "idCliente", cascade = CascadeType.ALL) //excluir todos os animais desse cliente não faz ele ser apagado
