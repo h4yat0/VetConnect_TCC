@@ -28,7 +28,13 @@ public class ClienteMapper {
         clienteForm.setNumero(entity.getNumero());
         clienteForm.setCep(entity.getCep());
 
-        clienteForm.setImagem(entity.getImagem());
+        if(entity.getComplemento() !=null){
+            clienteForm.setComplemento(entity.getComplemento());
+        }
+        if(entity.getImagem() != null){
+            clienteForm.setImagem(entity.getImagem());
+        }
+
         return clienteForm;
     }
 
@@ -43,12 +49,19 @@ public class ClienteMapper {
         clienteEntity.setCidade(form.getCidade());
         clienteEntity.setEstado(form.getEstado());
         clienteEntity.setCep(form.getCep());
-        clienteEntity.setComplemento(form.getComplemento());
+
         clienteEntity.setNumero(form.getNumero());
 
         clienteEntity.setDataNascimento(form.getDataNascimento());
         clienteEntity.setNome(form.getNome());
-        clienteEntity.setImagem(Base64.getDecoder().decode(form.getImagem()));
+
+        if(form.getComplemento() != null){
+            clienteEntity.setComplemento(form.getComplemento());
+        }
+        if(form.getImagem() != null){
+            clienteEntity.setImagem(Base64.getDecoder().decode(form.getImagem()));
+        }
+
         return clienteEntity;
     }
 
@@ -59,10 +72,23 @@ public class ClienteMapper {
         clienteEntity.setEmail(form.getEmail());
         clienteEntity.setSenha(form.getSenha());
         clienteEntity.setTelefone(form.getTelefone());
-
-        clienteEntity.setDataNascimento(form.getDataNascimento());
         clienteEntity.setNome(form.getNome());
-        clienteEntity.setImagem(Base64.getDecoder().decode(form.getImagem().toString()));
+        clienteEntity.setDataNascimento(form.getDataNascimento());
+
+        clienteEntity.setBairro(form.getBairro());
+        clienteEntity.setRua(form.getRua());
+        clienteEntity.setCidade(form.getCidade());
+        clienteEntity.setEstado(form.getEstado());
+        clienteEntity.setCep(form.getCep());
+        clienteEntity.setNumero(form.getNumero());
+
+        if(form.getComplemento() != null){
+            clienteEntity.setComplemento(form.getComplemento());
+        }
+        if(form.getImagem() != null){
+            clienteEntity.setImagem(Base64.getDecoder().decode(form.getImagem()));
+        }
+
         return clienteEntity;
     }
 }

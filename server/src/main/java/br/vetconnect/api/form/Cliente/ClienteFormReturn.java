@@ -4,6 +4,7 @@ import br.vetconnect.api.form.Animal.AnimalFormCreate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,7 +34,7 @@ public class ClienteFormReturn extends RepresentationModel<ClienteFormReturn> im
     private String cidade;
     private String estado;
     private String complemento;
-    private Integer numero;
+    private String numero;
     private String cep;
 
     private List<AnimalFormCreate> animalFormCreateList = new ArrayList<>();

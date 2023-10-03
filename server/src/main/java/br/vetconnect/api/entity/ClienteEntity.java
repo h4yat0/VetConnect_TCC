@@ -37,7 +37,7 @@ public class ClienteEntity {
     @Column(nullable = false)
     private String rua;
     @Column(nullable = false)
-    private Integer numero;
+    private String numero;
     private String complemento;
     @Column(nullable = false)
     private String bairro;
@@ -46,7 +46,7 @@ public class ClienteEntity {
     @Column(nullable = false)
     private String cidade;
 
-
+    @Column(nullable = false, unique = true)
     private String telefone;
 
     @Column(nullable = false, unique = true)
