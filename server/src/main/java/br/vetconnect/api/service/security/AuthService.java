@@ -115,7 +115,7 @@ public class AuthService {
     }
 
 
-    private String createPassword(String senha){
+    public String createPassword(String senha){
         Map<String, PasswordEncoder> encoders = new HashMap<>();
 
         Pbkdf2PasswordEncoder pbkdf2Encoder =

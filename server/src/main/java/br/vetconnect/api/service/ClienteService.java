@@ -14,6 +14,7 @@ import exceptions.ExecptionNovos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -34,13 +35,21 @@ public class ClienteService extends MetodosAuxiliares {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private  PasswordEncoder encoder;
+
+
     private static Logger logger = LoggerFactory.getLogger(ClienteService.class);
 
+
     public ClienteFormReturn getClienteByEmailSenha(Login login){
-        ClienteEntity entity = repository.buscarPorEmailSenha(login.getEmail(),login.getSenha());
-        if(entity == null){
+        String password = repository.buscarSenha(login.getEmail());
+        boolean valid = encoder.matches(login.getSenha(), password);
+
+        if(!valid || password == null){
             return null;
         }else{
+            ClienteEntity entity = repository.buscarPorEmailSenha(login.getEmail(), password);
             ClienteFormReturn clienteForm = mapper.convertEntityToForm(entity);
 
             clienteForm.add(linkTo(methodOn(ClienteController.class).getLogin(login)).withSelfRel());
@@ -94,6 +103,8 @@ public class ClienteService extends MetodosAuxiliares {
                 return null;
             }else{
                 var entity = mapper.convertFormToEntity(cliente);
+                String senhaEnconder = authService.createPassword(entity.getSenha());
+                entity.setSenha(senhaEnconder);
                 var clienteForm = mapper.convertEntityToForm(repository.save(entity));
                 clienteForm.add(linkTo(methodOn(ClienteController.class).postCliente(cliente)).withSelfRel() );
 
