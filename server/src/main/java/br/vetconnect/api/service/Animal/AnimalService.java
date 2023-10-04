@@ -1,4 +1,4 @@
-package br.vetconnect.api.service;
+package br.vetconnect.api.service.Animal;
 
 
 import br.vetconnect.api.controller.AnimalController;
@@ -30,14 +30,22 @@ public class AnimalService {
     @Autowired
     private AnimalMapper animalMapper;
 
+    @Autowired
+    private ImagemAnimalService imagemService;
+
     public AnimalFormReturn saveAnimal(AnimalFormCreate animal) {
         ClienteEntity cliente = clienteRepository.buscarPorId(animal.getIdCliente());
         if(cliente == null){
             return null;
         }else {
             AnimalEntity animalEntity = animalMapper.formCreateToEntity(animal, cliente);
-            AnimalFormReturn animalFormReturn = animalMapper.entityToFormReturn(animalRepository.save(animalEntity));
+            animalEntity = animalRepository.save(animalEntity);
+            AnimalFormReturn animalFormReturn = animalMapper.entityToFormReturn(animalEntity);
             animalFormReturn.add(linkTo(methodOn(AnimalController.class).cadastroAnimal(animal)).withSelfRel());
+            if(animal.getImagens() != null && !animal.getImagens().isEmpty()){
+                imagemService.salvarImagemAnimal(animal.getImagens(), animalEntity);
+            }
+
             return animalFormReturn;
         }
     }
@@ -59,6 +67,9 @@ public class AnimalService {
         AnimalEntity animalEntity = animalMapper.formCreateToEntity(animal, id, cliente);
         AnimalFormReturn animalFormReturn = animalMapper.entityToFormReturn(animalRepository.save(animalEntity));
         animalFormReturn.add(linkTo(methodOn(AnimalController.class).alterarAnimal(animal, id)).withSelfRel());
+        if(animal.getImagens() != null && !animal.getImagens().isEmpty()){
+            imagemService.alterarImagem(animal.getImagens(), animalEntity);
+        }
         return  animalFormReturn;
     }
 }

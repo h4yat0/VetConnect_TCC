@@ -1,11 +1,9 @@
 package br.vetconnect.api.controller;
 
 
-import br.vetconnect.api.entity.AnimalEntity;
 import br.vetconnect.api.form.Animal.AnimalFormCreate;
 import br.vetconnect.api.form.Animal.AnimalFormReturn;
-import br.vetconnect.api.form.Cliente.ClienteFormReturn;
-import br.vetconnect.api.service.AnimalService;
+import br.vetconnect.api.service.Animal.AnimalService;
 import exceptions.ExceptionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

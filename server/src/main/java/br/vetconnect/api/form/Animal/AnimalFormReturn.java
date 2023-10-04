@@ -3,11 +3,14 @@ package br.vetconnect.api.form.Animal;
 import br.vetconnect.api.form.Cliente.ClienteFormCreate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 
+
+@EqualsAndHashCode(callSuper = false)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
