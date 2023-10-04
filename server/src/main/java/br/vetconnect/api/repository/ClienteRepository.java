@@ -30,4 +30,6 @@ public interface ClienteRepository extends JpaRepository<ClienteEntity, Long> {
     @Query(value = "SELECT email FROM cliente WHERE email =?1", nativeQuery = true)
     String buscarEmail(String cpf);
 
+    @Query(value = "SELECT senha FROM cliente WHERE email = ?1", nativeQuery = true)
+    String buscarSenha(String email);
 }
