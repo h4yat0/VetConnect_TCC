@@ -8,6 +8,7 @@ import br.vetconnect.api.form.Cliente.ClienteFormReturn;
 import br.vetconnect.api.form.Login;
 import br.vetconnect.api.mapper.ClienteMapper;
 import br.vetconnect.api.repository.ClienteRepository;
+import br.vetconnect.api.service.Animal.AnimalService;
 import br.vetconnect.api.service.security.AuthService;
 import br.vetconnect.api.utils.MetodosAuxiliares;
 import exceptions.ExecptionNovos;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -38,6 +41,11 @@ public class ClienteService extends MetodosAuxiliares {
     @Autowired
     private  PasswordEncoder encoder;
 
+    @Autowired
+    private AnimalService service;
+
+
+
 
     private static Logger logger = LoggerFactory.getLogger(ClienteService.class);
 
@@ -53,6 +61,9 @@ public class ClienteService extends MetodosAuxiliares {
             ClienteFormReturn clienteForm = mapper.convertEntityToForm(entity);
 
             clienteForm.add(linkTo(methodOn(ClienteController.class).getLogin(login)).withSelfRel());
+
+            clienteForm.setAnimalFormReturnList(service.buscarAnimal(entity.getId()));
+
             return clienteForm;
         }
 

@@ -1,6 +1,7 @@
 package br.vetconnect.api.form.Cliente;
 
 import br.vetconnect.api.form.Animal.AnimalFormCreate;
+import br.vetconnect.api.form.Animal.AnimalFormReturn;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,5 +38,5 @@ public class ClienteFormReturn extends RepresentationModel<ClienteFormReturn> im
     private String numero;
     private String cep;
 
-    private List<AnimalFormCreate> animalFormCreateList = new ArrayList<>();
+    private List<AnimalFormReturn> animalFormReturnList = new ArrayList<>();
 }

@@ -6,9 +6,12 @@ import br.vetconnect.api.entity.imagens.AnimalImagensEntity;
 import br.vetconnect.api.mapper.Animal.ImagemAnimalMapper;
 import br.vetconnect.api.repository.Imagens.AnimalImagensRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
+@Service
 public class ImagemAnimalService {
 
     @Autowired
