@@ -32,9 +32,6 @@ public class ClienteFormCreate extends RepresentationModel<ClienteFormCreate> im
     private String cpf;
     @Valid
     @NotBlank
-    private String endereco;
-    @Valid
-    @NotBlank
     private String telefone;
     @Email
     private String email;

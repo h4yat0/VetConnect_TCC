@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonPropertyOrder({"id", "nome", "cpf", "dataNascimento", "endereco", "telefone", "email", "senha"})
+@JsonPropertyOrder({"id", "nome", "cpf", "dataNascimento", "telefone", "email", "senha"})
 public class ClienteFormReturn extends RepresentationModel<ClienteFormReturn> implements Serializable {
 
     private Long id;
