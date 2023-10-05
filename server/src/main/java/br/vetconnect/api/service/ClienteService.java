@@ -140,7 +140,8 @@ public class ClienteService extends MetodosAuxiliares {
                 (clienteReturnEmail != null && !clienteReturnEmail.getId().equals(id))){
             return null;
         }else{
-            var entity = mapper.convertFormToEntity(cliente, id);
+            String senha = repository.buscarSenha(cliente.getEmail());
+            var entity = mapper.convertFormToEntity(cliente, id, senha);
             var form = mapper.convertEntityToForm(repository.save(entity));
             form.add(linkTo(methodOn(ClienteController.class).putCliente(id, cliente)).withSelfRel() );
 
