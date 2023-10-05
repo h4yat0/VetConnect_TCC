@@ -35,6 +35,7 @@ public class ClienteFormCreate extends RepresentationModel<ClienteFormCreate> im
     private String telefone;
     @Email
     private String email;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String senha;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String imagem;
