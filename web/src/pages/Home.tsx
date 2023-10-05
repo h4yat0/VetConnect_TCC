@@ -2,7 +2,7 @@ import UnitCard from "../components/UnitCard";
 import ServiceCard from "../components/ServiceCard";
 import PromoCard from "../components/PromoCard";
 import { useEffect } from "react";
-import { useSaveLocalStorageOnClientStore } from "../functions/localStorageManipulation";
+import HistoryCard from "../components/HistoryCard";
 
 const clinicas = {
 	clinicas: [
@@ -55,6 +55,39 @@ const servicos = {
 	],
 };
 
+const HistoryServices = {
+	history: [
+		{
+			clinicId: 1,
+			nome: "Banho",
+			dateService: "24/02/2023",
+		},
+		{
+			clinicId: 2,
+			nome: "Tosa",
+			dateService: "24/01/2023",
+		},
+		{
+			clinicId: 3,
+			nome: "Castração",
+			dateService: "24/01/2023",
+		},
+		{
+			clinicId: 4,
+			nome: "Vacinação",
+			dateService: "24/01/2022",
+			
+		},
+		{
+			clinicId: 5,
+			nome: "Vacinação",
+			dateService: "24/01/2022",
+			
+		},
+	
+	],
+};
+
 const Agendamentos = {
 	servicos: [
 		{
@@ -85,12 +118,13 @@ export default function Home() {
 	return (
 	<div className="w-full">
 		<div className='p-0 font-inter '>
+		
 		<PromoCard></PromoCard>
 
 			<div className='py-8'>
 
 				<h1 className='text-2xl font-black '>Agendamentos</h1>
-				<div className='flex flex-row gap-20 pt-5 '>
+				<div className='flex flex-row gap-20 pt-2 pb-6'>
 					{servicos.servicos.map((servicos) => (
 						<ServiceCard
 							key={servicos.id}
@@ -103,20 +137,19 @@ export default function Home() {
 
 
 				<h1 className='text-2xl font-black '>Últimos serviços utilizados</h1>
-				<div className='flex flex-row gap-20 pt-5 '>
-					{servicos.servicos.map((servicos) => (
-						<ServiceCard
-							key={servicos.id}
-							title={servicos.nome}
-							serviceId={servicos.id}
-							iconName={"src/assets/imgs/" + servicos.iconName}
+				<div className='flex flex-row gap-20 pt-2 pb-6'>
+					{HistoryServices.history.map((history) => (
+						<HistoryCard
+							nome={history.nome}
+							clinicId={history.clinicId}
+							dateService={history.dateService}
 						/>
 					))}
 				</div>
 
 				<div className='py-8'>
 					<h1 className='text-2xl font-black '>Clinicas</h1>
-					<div className='flex flex-row gap-20 pt-5 '>
+					<div className='flex flex-row gap-20 pt-2'>
 						{clinicas.clinicas.map((clinica) => (
 							<UnitCard
 								key={clinica.id}
