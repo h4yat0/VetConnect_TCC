@@ -65,12 +65,12 @@ public class ClienteMapper {
         return clienteEntity;
     }
 
-    public ClienteEntity convertFormToEntity(ClienteFormCreate form, Long id){
+    public ClienteEntity convertFormToEntity(ClienteFormCreate form, Long id, String senha){
         ClienteEntity clienteEntity = new ClienteEntity();
         clienteEntity.setId(id);
         clienteEntity.setCpf(form.getCpf());
         clienteEntity.setEmail(form.getEmail());
-        clienteEntity.setSenha(form.getSenha());
+        clienteEntity.setSenha(senha);
         clienteEntity.setTelefone(form.getTelefone());
         clienteEntity.setNome(form.getNome());
         clienteEntity.setDataNascimento(form.getDataNascimento());
