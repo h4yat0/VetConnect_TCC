@@ -1,7 +1,9 @@
 import Cachorro from "../assets/imgs/Cachorro.jpg";
+import AgendamentoModal from "../components/AgendamentoModal";
 export default function Animals() {
   return (
     <div className="pt-4 font-inter rounded-xl px-10">
+      {/* <AgendamentoModal /> */}
       <h1 className="font-bold my-2">Rex - Labrador (12 Anos)</h1>
 
       <div className="grid gap-4 grid-cols-3  " style={{ maxHeight: 400 }}>

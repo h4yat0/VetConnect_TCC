@@ -10,7 +10,6 @@ import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
 import Alert from "../components/shared/Alert";
 
 import {
-  updateAddress,
   updateBirthDate,
   updateCpf,
   updateEmail,
@@ -21,6 +20,13 @@ import {
   updateAccessToken,
   updateRoles,
   getAccessToken,
+  updatestreetName,
+  updateBairro,
+  updateCity,
+  updateEstado,
+  updateComplemento,
+  updateStreetNumber,
+  updateCep,
 } from "../redux/client";
 import jwt from "jwt-decode";
 
@@ -47,19 +53,17 @@ export default function SignIn() {
     if (userRef.current) userRef.current.focus();
   }, []);
 
-  useEffect(() => {setErrorMessage("")}, [email, password]);
+  useEffect(() => {
+    setErrorMessage("");
+  }, [email, password]);
 
   useEffect(() => {}, [errorMessage]);
 
-  useEffect(() =>
-    {
-      if(accessToken) {
-        postLogin();
-      }
-    },
-    [accessToken]
-  );
-
+  useEffect(() => {
+    if (accessToken) {
+      postLogin();
+    }
+  }, [accessToken]);
 
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,11 +73,11 @@ export default function SignIn() {
         senha: password,
       })
       .then(function (token) {
-        let data = token.data;        
-        let roles = jwt(data.accessToken) as { roles: string[] };    
-          
+        let data = token.data;
+        let roles = jwt(data.accessToken) as { roles: string[] };
+
         dispatch(updateRoles(roles.roles));
-        dispatch(updateAccessToken(data.accessToken));      
+        dispatch(updateAccessToken(data.accessToken));
       })
       .catch(function (error) {
         console.log(error);
@@ -97,15 +101,26 @@ export default function SignIn() {
       .then(function (response) {
         let data = response.data;
 
+        console.log(data.animalFormCreateList);
+        console.log(data);
+
         dispatch(updateId(data.id));
         dispatch(updateName(data.nome));
         dispatch(updateCpf(data.cpf));
         dispatch(updateEmail(data.email));
         dispatch(updateBirthDate(data.dataNascimento));
-        dispatch(updateAddress(data.endereco));
+
+        dispatch(updatestreetName(data.rua));
+        dispatch(updateBairro(data.bairro));
+        dispatch(updateCity(data.cidade));
+        dispatch(updateEstado(data.estado));
+        dispatch(updateComplemento(data.complemento));
+        dispatch(updateStreetNumber(data.numero));
+        dispatch(updateCep(data.cep));
+
         dispatch(updatePhone(data.telefone));
         dispatch(updatePassword(data.senha));
-      
+
         navigate(from, { replace: true });
       })
       .catch(function (error) {
