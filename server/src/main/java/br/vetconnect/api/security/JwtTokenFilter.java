@@ -42,10 +42,16 @@ public class JwtTokenFilter extends GenericFilterBean {
             e.printStackTrace();
 
             HttpServletResponse response = (HttpServletResponse) servletResponse;
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Define o código de status 500
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+            if(e.getMessage().contains("The Token has expired")){
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }else{
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
 
 
-            ExceptionResponse errorResponse = new ExceptionResponse(new Date(), HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+            ExceptionResponse errorResponse = new ExceptionResponse(new Date(), HttpStatus.UNAUTHORIZED, e.getMessage());
             String jsonResponse = new ObjectMapper().writeValueAsString(errorResponse);
 
             response.setContentType("application/json");
