@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AgendamentoForm {
+public class AgendamentoFormCreate {
 
     private Long idCliente;
     private Long idAnimal;
@@ -18,5 +18,6 @@ public class AgendamentoForm {
     private String dataAgendada;
     private String horaAgendada;
     private BigDecimal valorAgendado;
+    private String observacao;
 
 }

@@ -44,6 +44,11 @@ public class AgendamentoEntity {
     @Column(nullable = false, name = "valor_agendado", precision = 10, scale = 2)
     private BigDecimal valorAgendado;
 
+    private String observacao;
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private Boolean cancelado;
+
 
     @OneToOne(mappedBy = "idAgendamento",cascade = CascadeType.ALL)
     private FichaServicoEntity fichaServico;
