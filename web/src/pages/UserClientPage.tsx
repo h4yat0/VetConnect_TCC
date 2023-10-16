@@ -43,7 +43,7 @@ import api from "../api/axios.js";
 import { useEffect, useState, Fragment } from "react";
 import ButtonDanger from "../components/buttons/ButtonDanger.js";
 import { Link, Navigate } from "react-router-dom";
-import RegisterAnimalModal from "../components/RegisterAnimalModal.js";
+import RegisterAnimalModal from "../components/AnimalModal.js";
 
 function sanitizeString(str: string): string {
   return str.replace(/[.\-\s]/g, "");
@@ -184,6 +184,7 @@ export default function UserClientPage() {
   };
   return (
     <>
+      <RegisterAnimalModal type="register" isOpen={isOpen} setIsOpen={setIsOpen} />
       <div className="w-full mb-10">
         <div className="flex justify-between items-center px-32 py-10">
           <span className="font-bold text-2xl">Perfil</span>
@@ -477,26 +478,30 @@ export default function UserClientPage() {
               </div>
             </div> */}
 
-
-            <div>
-              <ButtonPrimary
-                text="Alterar dados"
-                width="w-full"
-                disabled={editDisabled}
-                onClickFunction={postEditedInformation}
-              />
-            </div>
-            <div>
-              <ButtonDanger
-                text="Deletar conta"
-                disabled={editDisabled}
-                onClickFunction={deleteAccount}
-              />
-            </div>
+            {!editDisabled ? (
+              <>
+                <div>
+                  <ButtonPrimary
+                    text="Alterar dados"
+                    width="w-full"
+                    disabled={editDisabled}
+                    onClickFunction={postEditedInformation}
+                  />
+                </div>
+                <div>
+                  <ButtonDanger
+                    text="Deletar conta"
+                    disabled={editDisabled}
+                    onClickFunction={deleteAccount}
+                  />
+                </div>
+              </>
+            ) : (
+              ""
+            )}
           </form>
         </div>
       </div>
-      <RegisterAnimalModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 }
