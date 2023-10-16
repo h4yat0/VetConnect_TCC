@@ -1,4 +1,3 @@
-import Cleave from "cleave.js";
 import { useEffect, useState, Fragment } from "react";
 import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
@@ -8,32 +7,21 @@ import { getAccessToken, getId, getName } from "../redux/client";
 import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import api from "../api/axios";
+import AlertModal from "./shared/AlertModal";
 
-interface RegisterAnimalModalProps {
+interface AnimalModalProps {
+  type: "register" | "update";
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 
 const ANIMALRECORD_URL = "api/animal/v1/cadastro";
 
-export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnimalModalProps) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const [editDisabled, setEditDisabled] = useState(false);
-
-  const handleSetEditEnabled = () => {
-    setEditDisabled(!editDisabled);
-  };
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
-  }
-
+export default function RegisterAnimalModal({
+  type,
+  isOpen,
+  setIsOpen,
+}: AnimalModalProps) {
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [color, setColor] = useState("");
@@ -47,7 +35,7 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
   const nameStore = useSelector(getName);
   const accessToken = useSelector(getAccessToken);
 
-  const postAnimalRecord = async (e: React.FormEvent<HTMLFormElement>) => {
+  const postAnimal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let reponse = await api
       .post(
@@ -86,6 +74,7 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
 
   return (
     <>
+      <AlertModal />
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -120,14 +109,18 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900 hidden"
                   >
-                    Cadastre seu animalzinho
+                    {type == "register"
+                      ? "Cadastre seu animalzinho"
+                      : "Edite as informações do seu animalzinho"}
                   </Dialog.Title>
-                  <div className="mx-4  px-2 py-10 border-2 rounded-lg ">
+                  <div className="px-2 py-10 border-2 rounded-lg ">
                     <h1 className="font-inter font-black text-2xl w-full text-center pb-5 uppercase">
-                      Cadastre seu animalzinho
+                      {type == "register"
+                        ? "Cadastre seu animalzinho"
+                        : "Edite as informações do seu animalzinho"}
                     </h1>
 
-                    {false ? (
+                    {/* {type == "update" ? (
                       <div className="flex justify-between items-center mb-8">
                         <div className="flex justify-between items-center gap-4">
                           <div className="w-10 h-10 bg-slate-800 rounded-full"></div>
@@ -140,11 +133,11 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                       </div>
                     ) : (
                       <></>
-                    )}
+                    )} */}
 
                     <form
                       className="space-y-6"
-                      onSubmit={postAnimalRecord}
+                      onSubmit={postAnimal}
                       method="POST"
                     >
                       <div>
@@ -162,7 +155,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -183,7 +175,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={birthDate}
                             onChange={(e) => setBirthDate(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -204,7 +195,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={specie}
                             onChange={(e) => setSpecie(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -226,7 +216,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={race}
                             onChange={(e) => setRace(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -247,7 +236,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={color}
                             onChange={(e) => setColor(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -269,7 +257,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={weigth}
                             onChange={(e) => setWeigth(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -291,7 +278,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={size}
                             onChange={(e) => setSize(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -312,26 +298,25 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={sex}
                             onChange={(e) => setSex(e.target.value)}
-                            disabled={editDisabled}
                             maxLength={1}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
                       </div>
-                      {false ? (
+                      {type == "update" ? (
                         <>
                           <div>
                             <ButtonPrimary
                               text="Alterar dados"
                               width="w-full"
-                              disabled={editDisabled}
+
                               // onClickFunction={postEditedInformation}
                             />
                           </div>
                           <div>
                             <ButtonDanger
                               text="Deletar conta"
-                              disabled={editDisabled}
+
                               // onClickFunction={deleteAccount}
                             />
                           </div>
