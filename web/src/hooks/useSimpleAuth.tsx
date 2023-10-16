@@ -1,9 +1,12 @@
 import { useSelector } from "react-redux";
-import { getAccessToken, getId } from "../redux/client";
+import { getId } from "../redux/client";
 
 const useSimpleAuth = () => {
-  const accessToken = useSelector(getId);
-  const loggedIn = accessToken ? true : false;
+  const id = useSelector(getId);
+  const loggedIn = id != -1 ? true : false;
+
+  console.log(id)
+  console.log(loggedIn)
 
   return loggedIn;
 };
