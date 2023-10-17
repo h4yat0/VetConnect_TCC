@@ -15,7 +15,7 @@ import br.vetconnect.api.repository.Agendamento.ServicoRepository;
 import br.vetconnect.api.repository.Agendamento.UnidadeRepository;
 import br.vetconnect.api.repository.AnimalRepository;
 import br.vetconnect.api.repository.ClienteRepository;
-import br.vetconnect.api.service.AssociacaoService;
+//import br.vetconnect.api.service.AssociacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,8 +45,8 @@ public class AgendamentoService {
     @Autowired
     private AgendamentoMapper mapper;
 
-    @Autowired
-    private AssociacaoService associacaoService;
+//    @Autowired
+//    private AssociacaoService associacaoService;
 
 
     public AgendamentoFormReturn cadastrarAgendamento(AgendamentoFormCreate form, String token){
@@ -111,4 +111,8 @@ public class AgendamentoService {
         entity.setCancelado(true);
         repository.save(entity);
     }
+
+//    public List<AgendamentoEntity> buscarAgendamentos() {
+//        return repository.buscarAgendamentos();
+//    }
 }
