@@ -21,10 +21,6 @@ echo Servidor instalado com sucesso.
 
 cd target
 
-echo Iniciando servidor.
-
-start cmd /K "call java -jar api-0.0.1-SNAPSHOT.jar"
-
 echo Servido inciado com suceso.
 
 echo Inciando intalação do servidor de desenvolvimento front-end.
@@ -35,8 +31,6 @@ cd ../web
 call npm install
 
 echo Servidor de desenvolvimento intalado com sucesso.
-echo Iniciando servidor
-start cmd /K "call npm start"
 
 echo Pressione qualquer tecla para fechar esta janela.
 pause > nul
