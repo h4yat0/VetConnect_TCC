@@ -3,16 +3,38 @@ import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import ButtonSecundary from "./buttons/ButtonSecundary";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccessToken, getId, getName } from "../redux/client";
+import {
+  getAccessToken,
+  getAnimals,
+  getId,
+  getName,
+  updateAnimals,
+} from "../redux/client";
 import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import api from "../api/axios";
 import AlertModal from "./shared/AlertModal";
+import { router } from "../routes/routes";
 
 interface AnimalModalProps {
   type: "register" | "update";
   isOpen: boolean;
+  animalsStore: Animal[];
+  animalId: number;
   setIsOpen: (isOpen: boolean) => void;
+}
+
+interface Animal {
+  id: number
+  clientId: number;
+  name: string;
+  color: string;
+  race: string;
+  birthDate: string;
+  weigth: string;
+  size: string;
+  specie: string;
+  sex: string;
 }
 
 const ANIMALRECORD_URL = "api/animal/v1/cadastro";
@@ -20,8 +42,14 @@ const ANIMALRECORD_URL = "api/animal/v1/cadastro";
 export default function RegisterAnimalModal({
   type,
   isOpen,
+  animalsStore,
+  animalId,
   setIsOpen,
 }: AnimalModalProps) {
+  const dispatch = useDispatch();
+
+  let animals = [...animalsStore]
+
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [color, setColor] = useState("");
@@ -34,6 +62,13 @@ export default function RegisterAnimalModal({
   const idStore = useSelector(getId);
   const nameStore = useSelector(getName);
   const accessToken = useSelector(getAccessToken);
+
+  function isEmptyString(str: string) {
+    return str.trim() === "";
+  }
+function removeAnimalById(animals: Animal[], idToRemove: number): Animal[] {
+  return animals.filter((animal) => animal.id !== idToRemove);
+}
 
   const postAnimal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -72,9 +107,81 @@ export default function RegisterAnimalModal({
       });
   };
 
+  const postEditedInformation = async (e?: React.FormEvent<HTMLFormElement>) => {
+    if (e) {
+      e.preventDefault();
+    }
+    let reponse = await api
+      .put(
+        `api/animal/v1/alterar/${animalId}`,
+        {
+          idCliente: idStore,
+          nome: isEmptyString(name) ? animals[animalId]?.name : name,
+          cor: isEmptyString(color) ? animals[animalId]?.color : color,
+          raca: isEmptyString(race) ? animals[animalId]?.race : race,
+          dataNascimento: isEmptyString(birthDate)
+            ? animals[animalId]?.birthDate
+            : birthDate,
+          peso: isEmptyString(weigth) ? animals[animalId]?.weigth : weigth,
+          tamanho: isEmptyString(size) ? animals[animalId]?.size : size,
+          especie: isEmptyString(specie) ? animals[animalId]?.specie : specie,
+          sexo: isEmptyString(sex) ? animals[animalId]?.sex : sex,
+          imagens: [""],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then(function (response) {
+        let data = response.data;
+
+        animals[animalId] = {
+          id: data.id,
+          clientId: data.idCliente,
+          name: data.nome,
+          color: data.cor,
+          race: data.raca,
+          birthDate: data.dataNascimento,
+          weigth: data.peso,
+          size: data.tamanho,
+          specie: data.especie,
+          sex: data.sexo,
+        };
+        dispatch(updateAnimals(animals));
+
+        router.push({pathname: ''})
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const deleteAnimal = async (e?: React.FormEvent<HTMLFormElement>) => {
+    if (e) {
+      e.preventDefault();
+    }
+    let reponse = await api
+      .delete(`api/animal/v1/delete/${animalId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(function (response) {
+        removeAnimalById(animals, animalId);
+        dispatch(updateAnimals(animals))
+        
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <>
-      <AlertModal />
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -135,11 +242,7 @@ export default function RegisterAnimalModal({
                       <></>
                     )} */}
 
-                    <form
-                      className="space-y-6"
-                      onSubmit={postAnimal}
-                      method="POST"
-                    >
+                    <form className="space-y-6" onSubmit={postAnimal} method="POST">
                       <div>
                         <label
                           htmlFor="animalName"
@@ -309,15 +412,13 @@ export default function RegisterAnimalModal({
                             <ButtonPrimary
                               text="Alterar dados"
                               width="w-full"
-
-                              // onClickFunction={postEditedInformation}
+                              onClickFunction={postEditedInformation}
                             />
                           </div>
                           <div>
                             <ButtonDanger
                               text="Deletar conta"
-
-                              // onClickFunction={deleteAccount}
+                              onClickFunction={deleteAnimal}
                             />
                           </div>
                         </>
