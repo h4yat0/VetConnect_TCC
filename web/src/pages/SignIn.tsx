@@ -1,13 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-
-import api from "../api/axios";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
-import ButtonPrimary from "../components/buttons/ButtonPrimary";
-import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
-import Alert from "../components/shared/Alert";
 
 import {
   updateBirthDate,
@@ -27,11 +20,46 @@ import {
   updateComplemento,
   updateStreetNumber,
   updateCep,
+  getId,
+  updateAnimals,
 } from "../redux/client";
+
+import api from "../api/axios";
 import jwt from "jwt-decode";
+
+import ButtonPrimary from "../components/buttons/ButtonPrimary";
+import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
+import Alert from "../components/shared/Alert";
 
 const LOGIN_URL = "api/cliente/v1/login";
 const TOKEN_URL = "auth/signin";
+const ANIMALS_URL = "/api/animal/v1/buscar/";
+
+interface ApiAnimal {
+  id: number;
+  idCliente: number;
+  nome: string;
+  cor: string;
+  raca: string;
+  dataNascimento: string;
+  peso: string;
+  tamanho: string;
+  especie: string;
+  sexo: string;
+}
+
+interface Animal {
+  id: number;
+  clientId: number;
+  name: string;
+  color: string;
+  race: string;
+  birthDate: string;
+  weigth: string;
+  size: string;
+  specie: string;
+  sex: string;
+}
 
 export default function SignIn() {
   const userRef = useRef<HTMLInputElement | null>(null);
@@ -48,6 +76,19 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const accessToken = useSelector(getAccessToken);
+  const id = useSelector(getId);
+
+  useEffect(() => {
+    if (id != -1) {
+      getAnimals();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (accessToken) {
+      postLogin();
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     if (userRef.current) userRef.current.focus();
@@ -58,12 +99,6 @@ export default function SignIn() {
   }, [email, password]);
 
   useEffect(() => {}, [errorMessage]);
-
-  useEffect(() => {
-    if (accessToken) {
-      postLogin();
-    }
-  }, [accessToken]);
 
   const login = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -101,9 +136,6 @@ export default function SignIn() {
       .then(function (response) {
         let data = response.data;
 
-        console.log(data.animalFormCreateList);
-        console.log(data);
-
         dispatch(updateId(data.id));
         dispatch(updateName(data.nome));
         dispatch(updateCpf(data.cpf));
@@ -119,7 +151,7 @@ export default function SignIn() {
         dispatch(updateCep(data.cep));
 
         dispatch(updatePhone(data.telefone));
-        dispatch(updatePassword(data.senha));
+        dispatch(updatePassword(data.senha)); 
 
         navigate(from, { replace: true });
       })
@@ -132,6 +164,39 @@ export default function SignIn() {
         }
 
         errRef.current?.focus();
+      });
+  };
+  
+  function mapApiDataToModel(apiData: ApiAnimal[]): Animal[] {
+  return apiData.map((apiAnimal) => {
+    return {
+      id : apiAnimal.id,
+      clientId: apiAnimal.idCliente,
+      name: apiAnimal.nome,
+      color: apiAnimal.cor,
+      race: apiAnimal.raca,
+      birthDate: apiAnimal.dataNascimento,
+      weigth: apiAnimal.peso,
+      size: apiAnimal.tamanho,
+      specie: apiAnimal.especie,
+      sex: apiAnimal.sexo,
+    };
+  });
+}
+
+  const getAnimals = async () => {
+    let response = await api
+      .get(ANIMALS_URL + id, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(function (response) {
+        let data = response.data;
+        dispatch(updateAnimals(mapApiDataToModel(data)));
+      })
+      .catch(function (error) {
+        console.log(error);
       });
   };
 

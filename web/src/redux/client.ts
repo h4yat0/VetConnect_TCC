@@ -21,11 +21,12 @@ interface ClientState {
 }
 
 interface Animal {
+  id: number,
   clientId: number;
   name: string;
   color: string;
   race: string;
-  BirthDate: string;
+  birthDate: string;
   weigth: string;
   size: string;
   specie: string;
@@ -51,11 +52,12 @@ const initialState: ClientState = {
   roles: [],
   animals: [
     {
+      id: -1,
       clientId: -1,
       name: "",
       color: "",
       race: "",
-      BirthDate: "",
+      birthDate: "",
       weigth: "",
       size: "",
       specie: "",
@@ -128,20 +130,20 @@ export const {
   updateName,
   updateBirthDate,
   updateCpf,
-    updatestreetName,
-    updateBairro,
-    updateCity,
-    updateEstado,
-    updateComplemento,
-    updateStreetNumber,
-    updateCep,
+  updatestreetName,
+  updateBairro,
+  updateCity,
+  updateEstado,
+  updateComplemento,
+  updateStreetNumber,
+  updateCep,
   updatePhone,
   updateEmail,
   updatePassword,
   updateAccessToken,
   updateRoles,
+  updateAnimals,
 } = clientSlice.actions;
-
 
 export const getId = (state: { client: ClientState }) => state.client.id;
 export const getName = (state: { client: ClientState }) => state.client.name;
@@ -151,12 +153,13 @@ export const getCpf = (state: { client: ClientState }) => state.client.cpf;
 export const getBirthDate = (state: { client: ClientState }) =>
   state.client.birthDate;
 
-
-export const getStreetName = (state: { client: ClientState }) => state.client.streetName;
+export const getStreetName = (state: { client: ClientState }) =>
+  state.client.streetName;
 export const getBairro = (state: { client: ClientState }) => state.client.bairro;
 export const getCity = (state: { client: ClientState }) => state.client.city;
 export const getEstado = (state: { client: ClientState }) => state.client.estado;
-export const getComplemento = (state: { client: ClientState }) => state.client.complemento;
+export const getComplemento = (state: { client: ClientState }) =>
+  state.client.complemento;
 export const getStreetNumber = (state: { client: ClientState }) =>
   state.client.streetNumber;
 export const getCep = (state: { client: ClientState }) => state.client.cep;

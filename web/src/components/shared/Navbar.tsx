@@ -19,6 +19,7 @@ import {
 
 import vetConnectLogo from "../../assets/svgs/vetConnectLogo.svg";
 import { Link, Navigate } from "react-router-dom";
+import useSimpleAuth from "../../hooks/useSimpleAuth";
 
 const products = [
   {
@@ -55,6 +56,7 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const userId = useSelector(getId);
+  const auth = useSimpleAuth();
 
   useEffect(() => {}, [userId]);
 
@@ -164,15 +166,20 @@ export default function Navbar() {
           >
             Unidades
           </Link>
-          <Link
-            to="/animal"
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Meus Pets
-          </Link>
+
+          {auth ? (
+            <Link
+              to="/animal"
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              Meus Pets
+            </Link>
+          ) : (
+            ""
+          )}
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link to={userId == -1 ? "/signin" : "/user/client"}>
+          <Link to={auth ? "/user/client" : "/signin"}>
             <ButtonPrimary text={userId == -1 ? "Entrar" : "Perfil"} />
           </Link>
         </div>
@@ -250,14 +257,11 @@ export default function Navbar() {
               </div>
               <div className="py-6">
                 <Link
-                  to={userId == -1 ? "/signin" : "/user/client"}
+                  to={auth ? "/user/client" : "/signin"}
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  <ButtonPrimary
-                    text={userId == -1 ? "Entrar" : "Perfil"}
-                    width="w-full"
-                  />
-                </Link>                
+                  <ButtonPrimary text={auth ? "Perfil" : "Entrar"} width="w-full" />
+                </Link>
               </div>
             </div>
           </div>

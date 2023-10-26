@@ -1,38 +1,54 @@
-import Cleave from "cleave.js";
 import { useEffect, useState, Fragment } from "react";
 import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import ButtonSecundary from "./buttons/ButtonSecundary";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccessToken, getId, getName } from "../redux/client";
+import {
+  getAccessToken,
+  getAnimals,
+  getId,
+  getName,
+  updateAnimals,
+} from "../redux/client";
 import { useNavigate } from "react-router-dom";
 import { Dialog, Transition } from "@headlessui/react";
 import api from "../api/axios";
+import AlertModal from "./shared/AlertModal";
+import { router } from "../routes/routes";
 
-interface RegisterAnimalModalProps {
+interface AnimalModalProps {
+  type: "register" | "update";
   isOpen: boolean;
+  animalsStore: Animal[];
+  animalId: number;
   setIsOpen: (isOpen: boolean) => void;
+}
+
+interface Animal {
+  id: number
+  clientId: number;
+  name: string;
+  color: string;
+  race: string;
+  birthDate: string;
+  weigth: string;
+  size: string;
+  specie: string;
+  sex: string;
 }
 
 const ANIMALRECORD_URL = "api/animal/v1/cadastro";
 
-export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnimalModalProps) {
+export default function RegisterAnimalModal({
+  type,
+  isOpen,
+  animalsStore,
+  animalId,
+  setIsOpen,
+}: AnimalModalProps) {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const [editDisabled, setEditDisabled] = useState(false);
-
-  const handleSetEditEnabled = () => {
-    setEditDisabled(!editDisabled);
-  };
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
-  }
+  let animals = [...animalsStore]
 
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -47,7 +63,14 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
   const nameStore = useSelector(getName);
   const accessToken = useSelector(getAccessToken);
 
-  const postAnimalRecord = async (e: React.FormEvent<HTMLFormElement>) => {
+  function isEmptyString(str: string) {
+    return str.trim() === "";
+  }
+function removeAnimalById(animals: Animal[], idToRemove: number): Animal[] {
+  return animals.filter((animal) => animal.id !== idToRemove);
+}
+
+  const postAnimal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let reponse = await api
       .post(
@@ -81,6 +104,79 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
           // setErrorMessage(error.message);
         }
         // errRef.current?.focus();
+      });
+  };
+
+  const postEditedInformation = async (e?: React.FormEvent<HTMLFormElement>) => {
+    if (e) {
+      e.preventDefault();
+    }
+    let reponse = await api
+      .put(
+        `api/animal/v1/alterar/${animalId}`,
+        {
+          idCliente: idStore,
+          nome: isEmptyString(name) ? animals[animalId]?.name : name,
+          cor: isEmptyString(color) ? animals[animalId]?.color : color,
+          raca: isEmptyString(race) ? animals[animalId]?.race : race,
+          dataNascimento: isEmptyString(birthDate)
+            ? animals[animalId]?.birthDate
+            : birthDate,
+          peso: isEmptyString(weigth) ? animals[animalId]?.weigth : weigth,
+          tamanho: isEmptyString(size) ? animals[animalId]?.size : size,
+          especie: isEmptyString(specie) ? animals[animalId]?.specie : specie,
+          sexo: isEmptyString(sex) ? animals[animalId]?.sex : sex,
+          imagens: [""],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then(function (response) {
+        let data = response.data;
+
+        animals[animalId] = {
+          id: data.id,
+          clientId: data.idCliente,
+          name: data.nome,
+          color: data.cor,
+          race: data.raca,
+          birthDate: data.dataNascimento,
+          weigth: data.peso,
+          size: data.tamanho,
+          specie: data.especie,
+          sex: data.sexo,
+        };
+        dispatch(updateAnimals(animals));
+
+        router.push({pathname: ''})
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const deleteAnimal = async (e?: React.FormEvent<HTMLFormElement>) => {
+    if (e) {
+      e.preventDefault();
+    }
+    let reponse = await api
+      .delete(`api/animal/v1/delete/${animalId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(function (response) {
+        removeAnimalById(animals, animalId);
+        dispatch(updateAnimals(animals))
+        
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
       });
   };
 
@@ -120,14 +216,18 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900 hidden"
                   >
-                    Cadastre seu animalzinho
+                    {type == "register"
+                      ? "Cadastre seu animalzinho"
+                      : "Edite as informações do seu animalzinho"}
                   </Dialog.Title>
-                  <div className="mx-4  px-2 py-10 border-2 rounded-lg ">
+                  <div className="px-2 py-10 border-2 rounded-lg ">
                     <h1 className="font-inter font-black text-2xl w-full text-center pb-5 uppercase">
-                      Cadastre seu animalzinho
+                      {type == "register"
+                        ? "Cadastre seu animalzinho"
+                        : "Edite as informações do seu animalzinho"}
                     </h1>
 
-                    {false ? (
+                    {/* {type == "update" ? (
                       <div className="flex justify-between items-center mb-8">
                         <div className="flex justify-between items-center gap-4">
                           <div className="w-10 h-10 bg-slate-800 rounded-full"></div>
@@ -140,13 +240,9 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                       </div>
                     ) : (
                       <></>
-                    )}
+                    )} */}
 
-                    <form
-                      className="space-y-6"
-                      onSubmit={postAnimalRecord}
-                      method="POST"
-                    >
+                    <form className="space-y-6" onSubmit={postAnimal} method="POST">
                       <div>
                         <label
                           htmlFor="animalName"
@@ -162,7 +258,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -183,7 +278,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={birthDate}
                             onChange={(e) => setBirthDate(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -204,7 +298,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={specie}
                             onChange={(e) => setSpecie(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -226,7 +319,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={race}
                             onChange={(e) => setRace(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -247,7 +339,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={color}
                             onChange={(e) => setColor(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -269,7 +360,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={weigth}
                             onChange={(e) => setWeigth(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -291,7 +381,6 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={size}
                             onChange={(e) => setSize(e.target.value)}
-                            disabled={editDisabled}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -312,27 +401,24 @@ export default function RegisterAnimalModal({ isOpen, setIsOpen }: RegisterAnima
                             required
                             value={sex}
                             onChange={(e) => setSex(e.target.value)}
-                            disabled={editDisabled}
                             maxLength={1}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
                       </div>
-                      {false ? (
+                      {type == "update" ? (
                         <>
                           <div>
                             <ButtonPrimary
                               text="Alterar dados"
                               width="w-full"
-                              disabled={editDisabled}
-                              // onClickFunction={postEditedInformation}
+                              onClickFunction={postEditedInformation}
                             />
                           </div>
                           <div>
                             <ButtonDanger
                               text="Deletar conta"
-                              disabled={editDisabled}
-                              // onClickFunction={deleteAccount}
+                              onClickFunction={deleteAnimal}
                             />
                           </div>
                         </>

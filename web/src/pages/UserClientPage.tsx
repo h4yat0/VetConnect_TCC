@@ -36,6 +36,7 @@ import {
   updateEstado,
   updateStreetNumber,
   updateCep,
+  getAnimals,
 } from "../redux/client.js";
 
 import api from "../api/axios.js";
@@ -43,7 +44,7 @@ import api from "../api/axios.js";
 import { useEffect, useState, Fragment } from "react";
 import ButtonDanger from "../components/buttons/ButtonDanger.js";
 import { Link, Navigate } from "react-router-dom";
-import RegisterAnimalModal from "../components/RegisterAnimalModal.js";
+import RegisterAnimalModal from "../components/AnimalModal.js";
 
 function sanitizeString(str: string): string {
   return str.replace(/[.\-\s]/g, "");
@@ -89,7 +90,8 @@ export default function UserClientPage() {
   const birthDateStore = useSelector(getBirthDate);
   const passwordStore = useSelector(getPassword);
   const accessToken = useSelector(getAccessToken);
-  
+  const animals = useSelector(getAnimals);
+
   useEffect(() => {
     setName(nameStore);
     setCpf(cpfStore);
@@ -103,7 +105,7 @@ export default function UserClientPage() {
     setEstado(estadoStore);
     setComplemento(complementoStore);
     setCep(cepStore);
-  }, []);  
+  }, []);
 
   function isEmptyString(str: string) {
     return str.trim() === "";
@@ -118,13 +120,13 @@ export default function UserClientPage() {
           dataNascimento: isEmptyString(birthDate) ? birthDateStore : birthDate,
           cpf: isEmptyString(sanitizeString(cpf)) ? cpfStore : sanitizeString(cpf),
 
-          rua:         isEmptyString(streetName) ? streetNameStore : streetName,
-          bairro:      isEmptyString(bairro) ? bairroStore : bairro,
-          cidade:      isEmptyString(city) ? cityStore : city,
-          estado:      isEmptyString(estado) ? estadoStore : estado,
+          rua: isEmptyString(streetName) ? streetNameStore : streetName,
+          bairro: isEmptyString(bairro) ? bairroStore : bairro,
+          cidade: isEmptyString(city) ? cityStore : city,
+          estado: isEmptyString(estado) ? estadoStore : estado,
           complemento: isEmptyString(complemento) ? complementoStore : complemento,
-          numero:      isEmptyString(streetNumber) ? streetNumberStore : streetNumber,
-          cep:         isEmptyString(cep) ? cepStore : cep,
+          numero: isEmptyString(streetNumber) ? streetNumberStore : streetNumber,
+          cep: isEmptyString(cep) ? cepStore : cep,
 
           telefone: isEmptyString(sanitizeString(phone))
             ? phoneStore
@@ -182,8 +184,16 @@ export default function UserClientPage() {
         console.log(error);
       });
   };
+
   return (
     <>
+      <RegisterAnimalModal
+        type="register"
+        animalsStore={animals}
+        animalId={0}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
       <div className="w-full mb-10">
         <div className="flex justify-between items-center px-32 py-10">
           <span className="font-bold text-2xl">Perfil</span>
@@ -477,26 +487,30 @@ export default function UserClientPage() {
               </div>
             </div> */}
 
-
-            <div>
-              <ButtonPrimary
-                text="Alterar dados"
-                width="w-full"
-                disabled={editDisabled}
-                onClickFunction={postEditedInformation}
-              />
-            </div>
-            <div>
-              <ButtonDanger
-                text="Deletar conta"
-                disabled={editDisabled}
-                onClickFunction={deleteAccount}
-              />
-            </div>
+            {!editDisabled ? (
+              <>
+                <div>
+                  <ButtonPrimary
+                    text="Alterar dados"
+                    width="w-full"
+                    disabled={editDisabled}
+                    onClickFunction={postEditedInformation}
+                  />
+                </div>
+                <div>
+                  <ButtonDanger
+                    text="Deletar conta"
+                    disabled={editDisabled}
+                    onClickFunction={deleteAccount}
+                  />
+                </div>
+              </>
+            ) : (
+              ""
+            )}
           </form>
         </div>
       </div>
-      <RegisterAnimalModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 }
