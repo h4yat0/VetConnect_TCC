@@ -58,7 +58,7 @@ public class AnimalController {
     @GetMapping("v1/buscar/{id}")
     public ResponseEntity<?> buscarAnimais(@PathVariable Long id){
         List<AnimalFormReturn> animais = animalService.buscarAnimal(id);
-        if(animais.size() ==0){
+        if(animais == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(new Date(), HttpStatus.NOT_FOUND, "Esse cliente não contem animais"));
         }else{
             return ResponseEntity.ok().body(animais);
