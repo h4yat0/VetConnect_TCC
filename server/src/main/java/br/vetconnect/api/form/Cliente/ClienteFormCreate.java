@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ClienteFormCreate extends RepresentationModel<ClienteFormCreate> implements Serializable {
+public class ClienteFormCreate  {
 
     @Valid
     @NotBlank
@@ -47,5 +47,5 @@ public class ClienteFormCreate extends RepresentationModel<ClienteFormCreate> im
     private String numero;
     private String cep;
 
-    private List<AnimalFormCreate> animalFormCreateList = new ArrayList<>();
+
 }

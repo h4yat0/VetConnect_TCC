@@ -27,7 +27,6 @@ public class ClienteFormReturn extends RepresentationModel<ClienteFormReturn> im
     private String cpf;
     private String telefone;
     private String email;
-    private String senha;
     private byte[] imagem;
 
     private String rua;
