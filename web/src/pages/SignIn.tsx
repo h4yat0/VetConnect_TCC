@@ -78,6 +78,15 @@ export default function SignIn() {
   const accessToken = useSelector(getAccessToken);
   const id = useSelector(getId);
 
+  function errorHandling(error: { message: any }) {
+    console.log(error);
+    if (!error?.message) {
+      setErrorMessage("No server response");
+    } else {
+      setErrorMessage("Email ou senha incorreto(s)");
+    }
+  }
+
   useEffect(() => {
     if (id != -1) {
       getAnimals();
@@ -115,7 +124,7 @@ export default function SignIn() {
         dispatch(updateAccessToken(data.accessToken));
       })
       .catch(function (error) {
-        console.log(error);
+        errorHandling(error);
       });
   };
 
@@ -151,38 +160,34 @@ export default function SignIn() {
         dispatch(updateCep(data.cep));
 
         dispatch(updatePhone(data.telefone));
-        dispatch(updatePassword(data.senha)); 
+        dispatch(updatePassword(data.senha));
 
         navigate(from, { replace: true });
       })
       .catch(function (error) {
         console.log(error);
-        if (!error?.message) {
-          setErrorMessage("No server response");
-        } else {
-          setErrorMessage("Email ou senha incorreto(s)");
-        }
+        errorHandling(error)
 
         errRef.current?.focus();
       });
   };
-  
+
   function mapApiDataToModel(apiData: ApiAnimal[]): Animal[] {
-  return apiData.map((apiAnimal) => {
-    return {
-      id : apiAnimal.id,
-      clientId: apiAnimal.idCliente,
-      name: apiAnimal.nome,
-      color: apiAnimal.cor,
-      race: apiAnimal.raca,
-      birthDate: apiAnimal.dataNascimento,
-      weigth: apiAnimal.peso,
-      size: apiAnimal.tamanho,
-      specie: apiAnimal.especie,
-      sex: apiAnimal.sexo,
-    };
-  });
-}
+    return apiData.map((apiAnimal) => {
+      return {
+        id: apiAnimal.id,
+        clientId: apiAnimal.idCliente,
+        name: apiAnimal.nome,
+        color: apiAnimal.cor,
+        race: apiAnimal.raca,
+        birthDate: apiAnimal.dataNascimento,
+        weigth: apiAnimal.peso,
+        size: apiAnimal.tamanho,
+        specie: apiAnimal.especie,
+        sex: apiAnimal.sexo,
+      };
+    });
+  }
 
   const getAnimals = async () => {
     let response = await api
