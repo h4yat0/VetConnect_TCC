@@ -107,10 +107,9 @@ public class AuthService {
 
     }
 
-    public void updateUser(String email, String senha, Long id) {
+    public void updateUser(String email, Long id) {
         UsersEntity entity = repository.findByTipoEId(id);
         entity.setUserName(email);
-        entity.setPassword(createPassword(senha));
         repository.save(entity);
     }
 
@@ -128,5 +127,11 @@ public class AuthService {
         passwordEncoder.setDefaultPasswordEncoderForMatches(pbkdf2Encoder);
 
         return passwordEncoder.encode(senha).replace("{pbkdf2}","");
+    }
+
+    public void updatePasswordUser(String senhaNova, Long id) {
+        UsersEntity entity = repository.findByTipoEId(id);
+        entity.setPassword(senhaNova);
+        repository.save(entity);
     }
 }
