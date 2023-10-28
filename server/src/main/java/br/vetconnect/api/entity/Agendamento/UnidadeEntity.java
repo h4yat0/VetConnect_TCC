@@ -38,7 +38,7 @@ public class UnidadeEntity {
     @Column(nullable = false)
     private String rua;
     @Column(nullable = false)
-    private Integer numero;
+    private String numero;
     private String complemento;
     @Column(nullable = false)
     private String bairro;

@@ -51,7 +51,7 @@ public class UnidadeFormCreate {
     @NotBlank
     private String cnpj;
 
-    private Integer numero;
+    private String numero;
 
     private List<String> imagem;
 

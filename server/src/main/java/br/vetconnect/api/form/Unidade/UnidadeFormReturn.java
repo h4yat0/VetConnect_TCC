@@ -7,12 +7,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,7 +32,7 @@ public class UnidadeFormReturn extends RepresentationModel<UnidadeFormReturn> im
     private String cidade;
     private String estado;
     private String complemento;
-    private Integer numero;
+    private String numero;
     private String cnpj;
     private String rua;
     private List<byte[]> imagem;
