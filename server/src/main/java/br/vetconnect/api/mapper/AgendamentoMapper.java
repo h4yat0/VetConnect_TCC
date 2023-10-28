@@ -25,6 +25,7 @@ public class AgendamentoMapper {
         entity.setDataAgendada(form.getDataAgendada());
         entity.setHoraAgendada(form.getHoraAgendada());
         entity.setValorAgendado(form.getValorAgendado());
+        entity.setCancelado(false);
         if(form.getObservacao() !=null){
             entity.setObservacao(form.getObservacao());
         }
