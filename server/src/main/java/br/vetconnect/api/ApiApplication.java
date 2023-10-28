@@ -1,5 +1,7 @@
 package br.vetconnect.api;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootApplication
+@OpenAPIDefinition(info = @Info(title = "Api VetConnect", version = "1.0", description = "Api que fara a comunicação entre a pagina web e o banco de dados."))
 public class ApiApplication {
 
 	public static void main(String[] args) {
