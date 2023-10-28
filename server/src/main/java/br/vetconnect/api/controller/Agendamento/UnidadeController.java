@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/unidade")
 @Tag(name = "Unidade", description = "end points relacionados as unidades")
+@SecurityRequirement(name = "bearerAuth")
 public class UnidadeController {
 
     @Autowired
@@ -85,8 +87,8 @@ public class UnidadeController {
 
     @Operation(summary = "endPoint para cadastrar uma unidade no sistema", description = "endPoint para cadastrar uma unidade no sistema",
             tags = {"Unidade"}, responses = {
-            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
-                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UnidadeFormReturn.class)))
+            @ApiResponse(description = "Sucesso", responseCode = "201", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = UnidadeFormReturn.class))
             }),
             @ApiResponse(description = "Ja tem uma unidade cadastrada com esse cnpj", responseCode = "409", content = @Content),
             @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
@@ -103,7 +105,7 @@ public class UnidadeController {
 
     @Operation(summary = "endPoint para cadastrar imagens de unidade no sistema", description = "endPoint para cadastrar imagens de unidade no sistema",
             tags = {"Unidade"}, responses = {
-            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
+            @ApiResponse(description = "Sucesso", responseCode = "201", content = {
                     @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UnidadeFormReturn.class)))
             }),
             @ApiResponse(description = "Ja tem uma unidade cadastrada com esse cnpj", responseCode = "409", content = @Content),
@@ -115,6 +117,14 @@ public class UnidadeController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "endPoint para editar imagens de unidade no sistema", description = "endPoint para editar imagens de unidade no sistema",
+            tags = {"Unidade"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UnidadeFormReturn.class)))
+            }),
+            @ApiResponse(description = "Ja tem uma unidade cadastrada com esse cnpj", responseCode = "409", content = @Content),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
+    })
     @PutMapping("v1/alterar-imagem/{id}")
     public ResponseEntity<?> alterarImagem(@RequestBody List<String> imagens, @PathVariable Long id){
         service.alterarImagemUnidade(imagens, id);
@@ -123,7 +133,14 @@ public class UnidadeController {
 
 
 
-
+    @Operation(summary = "endPoint para editar uma unidade no sistema", description = "endPoint para editar uma unidade no sistema",
+            tags = {"Unidade"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = UnidadeFormReturn.class))
+            }),
+            @ApiResponse(description = "Ja tem uma unidade cadastrada com esse cnpj", responseCode = "409", content = @Content),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
+    })
     @PutMapping("v1/alterar/{id}")
     public ResponseEntity<?> alterarUnidade(@RequestBody UnidadeFormCreate formCreate, @PathVariable  long id){
         UnidadeFormReturn unidadeReturn = service.alterarUnidade(formCreate, id);
@@ -134,6 +151,13 @@ public class UnidadeController {
         }
     }
 
+    @Operation(summary = "endPoint para deletar uma unidade no sistema", description = "endPoint para deletar uma unidade no sistema",
+              tags = {"Unidade"}, responses = {
+        @ApiResponse(description = "Sucesso", responseCode = "204", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UnidadeFormReturn.class))
+        }),
+        @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
+    })
     @DeleteMapping("v1/deletar")
     public ResponseEntity<?> deletar(@PathVariable long id){
         service.deletar(id);

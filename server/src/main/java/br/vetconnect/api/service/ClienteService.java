@@ -11,14 +11,11 @@ import br.vetconnect.api.repository.ClienteRepository;
 import br.vetconnect.api.service.Animal.AnimalService;
 import br.vetconnect.api.service.security.AuthService;
 import br.vetconnect.api.utils.MetodosAuxiliares;
-import exceptions.ExecptionNovos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLException;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -87,7 +84,7 @@ public class ClienteService extends MetodosAuxiliares {
         }
     }
 
-    public ClienteFormReturn getClienteByEmail(String email){
+    public ClienteFormReturn buscarPorEmail(String email){
         ClienteEntity result = repository.buscarPorEmail(email);
         if(result == null){
             return null;
@@ -134,7 +131,7 @@ public class ClienteService extends MetodosAuxiliares {
     public ClienteFormReturn alteararCliente(ClienteFormCreate cliente, Long id){
         ClienteFormReturn clienteFormReturn = getClientById(id);
         ClienteFormReturn clienteReturnCpf = getClienteByCpf(cliente.getCpf());
-        ClienteFormReturn clienteReturnEmail = getClienteByEmail(cliente.getEmail());
+        ClienteFormReturn clienteReturnEmail = buscarPorEmail(cliente.getEmail());
 
         if(cliente.getCpf().length() >11 || clienteFormReturn == null || (clienteReturnCpf != null && !clienteReturnCpf.getId().equals(id)) ||
                 (clienteReturnEmail != null && !clienteReturnEmail.getId().equals(id))){
@@ -145,7 +142,7 @@ public class ClienteService extends MetodosAuxiliares {
             var form = mapper.convertEntityToForm(repository.save(entity));
             form.add(linkTo(methodOn(ClienteController.class).putCliente(id, cliente)).withSelfRel() );
 
-            authService.updateUser(form.getEmail(), form.getSenha(), id);
+            authService.updateUser(form.getEmail(), id);
 
             return form;
         }
@@ -165,4 +162,11 @@ public class ClienteService extends MetodosAuxiliares {
     }
 
 
+    public void updatePassword(String email, String senha) {
+        ClienteEntity entity = repository.buscarPorEmail(email);
+        String senhaNova = authService.createPassword(senha);
+        entity.setSenha(senhaNova);
+        repository.save(entity);
+        authService.updatePasswordUser(senhaNova, entity.getId());
+    }
 }

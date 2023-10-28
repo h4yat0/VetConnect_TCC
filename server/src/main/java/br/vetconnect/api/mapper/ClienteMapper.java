@@ -15,7 +15,6 @@ public class ClienteMapper {
         clienteForm.setId(entity.getId());
         clienteForm.setCpf(entity.getCpf());
         clienteForm.setEmail(entity.getEmail());
-        clienteForm.setSenha(entity.getSenha());
         clienteForm.setTelefone(entity.getTelefone());
 
         clienteForm.setDataNascimento(entity.getDataNascimento());

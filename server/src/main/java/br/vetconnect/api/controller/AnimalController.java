@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/animal")
 @Tag(name = "Animal", description = "end points relacionados aos animais")
+@SecurityRequirement(name = "bearerAuth")
 public class AnimalController {
 
     @Autowired
@@ -31,8 +33,8 @@ public class AnimalController {
 
     @Operation(summary = "endPoint para cadastrar um animal", description = "endPoint para cadastrar um animal",
             tags = {"Animal"}, responses = {
-            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
-                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AnimalFormReturn.class)))
+            @ApiResponse(description = "Sucesso", responseCode = "201", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = AnimalFormReturn.class))
             }),
             @ApiResponse(description = "Não foi possivel cadastrar esse animal", responseCode = "400", content = @Content),
             @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
@@ -47,7 +49,7 @@ public class AnimalController {
         }
     }
 
-    @Operation(summary = "endPoint para buscar os aniamis do cliente", description = "endPoint para buscar os aniamis do cliente",
+    @Operation(summary = "endPoint para buscar os animais do cliente", description = "endPoint para buscar os animais do cliente",
             tags = {"Animal"}, responses = {
             @ApiResponse(description = "Sucesso", responseCode = "200", content = {
                     @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AnimalFormReturn.class)))
@@ -58,7 +60,7 @@ public class AnimalController {
     @GetMapping("v1/buscar/{id}")
     public ResponseEntity<?> buscarAnimais(@PathVariable Long id){
         List<AnimalFormReturn> animais = animalService.buscarAnimal(id);
-        if(animais.size() ==0){
+        if(animais == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(new Date(), HttpStatus.NOT_FOUND, "Esse cliente não contem animais"));
         }else{
             return ResponseEntity.ok().body(animais);
@@ -68,7 +70,7 @@ public class AnimalController {
     @Operation(summary = "endPoint para alterar um animal do cliente", description = "endPoint para alterar um animal do cliente",
             tags = {"Animal"}, responses = {
             @ApiResponse(description = "Sucesso", responseCode = "200", content = {
-                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AnimalFormReturn.class)))
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = AnimalFormReturn.class))
             }),
             @ApiResponse(description = "Não foi possivel alterar esse animal", responseCode = "400", content = @Content),
             @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
@@ -86,9 +88,7 @@ public class AnimalController {
 
     @Operation(summary = "endPoint para deletar um animal", description = "endPoint para deletar um animal",
             tags = {"Animal"}, responses = {
-            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
-                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AnimalFormReturn.class)))
-            }),
+            @ApiResponse(description = "Sucesso", responseCode = "204"),
             @ApiResponse(description = "Não foi possivel deletar esse animal", responseCode = "400", content = @Content),
             @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
     })
