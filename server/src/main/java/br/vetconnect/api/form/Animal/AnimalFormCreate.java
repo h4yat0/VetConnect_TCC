@@ -19,7 +19,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnimalFormCreate extends RepresentationModel<ClienteFormReturn> implements Serializable {
+public class AnimalFormCreate  {
 
 
     private Long idCliente;
