@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "unidade")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) // anotação adicionada aqui
-@Entity
+@Entity(name = "unidade")
 public class UnidadeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +28,10 @@ public class UnidadeEntity {
 
     @Column(nullable = false)
     private String especialidade;
-    @Column(name = "horario_funcionamento", nullable = false)
-    private String horarioFuncionamento;
+    @Column(name = "horario_abertura", nullable = false)
+    private String horarioAbertura;
+    @Column(name = "horario_fechamento", nullable = false)
+    private String horarioFechamento;
     @Column(nullable = false)
     private String contato;
     @Column(nullable = false, length = 8)
