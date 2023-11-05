@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "agendamento")
-@Entity
+@Entity(name = "agendamento")
 public class AgendamentoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class AgendamentoEntity {
 
     private String observacao;
 
-    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    @Column(columnDefinition = "boolean DEFAULT false")
     private Boolean cancelado;
 
 

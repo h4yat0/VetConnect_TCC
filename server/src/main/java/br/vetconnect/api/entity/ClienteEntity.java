@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "cliente")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "animais"}) // anotação adicionada aqui
-@Entity
+@Entity(name = "cliente")
 public class ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
