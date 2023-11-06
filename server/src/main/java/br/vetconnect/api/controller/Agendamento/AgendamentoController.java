@@ -42,7 +42,7 @@ public class AgendamentoController {
     public ResponseEntity<?> cadastroAgendamento(@RequestBody AgendamentoFormCreate form){
         AgendamentoFormReturn formReturn = service.cadastrarAgendamento(form);
         if(formReturn == null ){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(new Date(), HttpStatus.BAD_REQUEST, "Não foi possivel realizar o agendamento"));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(new Date(), HttpStatus.CONFLICT, "Não foi possivel realizar o agendamento"));
         }else{
             return ResponseEntity.ok().body(formReturn);
         }

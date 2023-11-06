@@ -112,7 +112,5 @@ public class AgendamentoService {
         repository.save(entity);
     }
 
-//    public List<AgendamentoEntity> buscarAgendamentos() {
-//        return repository.buscarAgendamentos();
-//    }
+
 }
