@@ -52,7 +52,4 @@ public class AgendamentoEntity {
 
     @OneToOne(mappedBy = "idAgendamento",cascade = CascadeType.ALL)
     private FichaServicoEntity fichaServico;
-
-    @OneToOne(mappedBy = "idAgendamento", cascade = CascadeType.ALL)
-    private FilaEsperaEntity filaEspera;
 }
