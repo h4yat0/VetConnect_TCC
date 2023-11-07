@@ -27,7 +27,8 @@ public class UnidadeMapper {
                 formReturn.setNome(unidade.getNome());
                 formReturn.setContato(unidade.getContato());
                 formReturn.setEspecialidade(unidade.getEspecialidade());
-                formReturn.setHorarioFuncionamento(unidade.getHorarioFuncionamento());
+                formReturn.setHorarioAbertura(unidade.getHorarioAbertura());
+                formReturn.setHorarioFechamento(unidade.getHorarioFechamento());
                 formReturn.setCnpj(unidade.getCnpj());
 
                 formReturn.setCep(unidade.getCep());
@@ -64,7 +65,8 @@ public class UnidadeMapper {
                 formReturn.setCnpj(unidade.getCnpj());
 
                 formReturn.setEspecialidade(unidade.getEspecialidade());
-                formReturn.setHorarioFuncionamento(unidade.getHorarioFuncionamento());
+                formReturn.setHorarioAbertura(unidade.getHorarioAbertura());
+                formReturn.setHorarioFechamento(unidade.getHorarioFechamento());
                 formReturn.setServicos(unidade.getServicos());
 
                 formReturn.setCep(unidade.getCep());
@@ -91,7 +93,8 @@ public class UnidadeMapper {
             entity.setCnpj(formCreate.getCnpj());
 
             entity.setNome(formCreate.getNome());
-            entity.setHorarioFuncionamento(formCreate.getHorarioFuncionamento());
+            entity.setHorarioAbertura(formCreate.getHorarioAbertura());
+            entity.setHorarioFechamento(formCreate.getHorarioFechamento());
 
             entity.setCep(formCreate.getCep().replace("-", ""));
             entity.setRua(formCreate.getRua());
@@ -112,7 +115,8 @@ public class UnidadeMapper {
         formReturn.setContato(unidade.getContato());
         formReturn.setCnpj(unidade.getCnpj());
         formReturn.setEspecialidade(unidade.getEspecialidade());
-        formReturn.setHorarioFuncionamento(unidade.getHorarioFuncionamento());
+        formReturn.setHorarioAbertura(unidade.getHorarioAbertura());
+        formReturn.setHorarioFechamento(unidade.getHorarioFechamento());
         formReturn.setCep(unidade.getCep());
 
 
@@ -140,7 +144,8 @@ public class UnidadeMapper {
         entity.setContato(formCreate.getContato());
         entity.setEspecialidade(formCreate.getEspecialidade());
         entity.setNome(formCreate.getNome());
-        entity.setHorarioFuncionamento(formCreate.getHorarioFuncionamento());
+        entity.setHorarioAbertura(formCreate.getHorarioAbertura());
+        entity.setHorarioFechamento(formCreate.getHorarioFechamento());
         entity.setCnpj(formCreate.getCnpj());
 
         entity.setCep(formCreate.getCep());

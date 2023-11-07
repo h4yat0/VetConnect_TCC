@@ -1,5 +1,6 @@
 package br.vetconnect.api.entity.Agendamento;
 
+import br.vetconnect.api.entity.FuncionarioEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +25,10 @@ public class FichaServicoEntity {
     @JoinColumn(name = "id_agendamento")
     private AgendamentoEntity idAgendamento;
 
+    @OneToOne
+    @JoinColumn(name = "id_funcionario")
+    private FuncionarioEntity nomeFuncionario;
+
 
 
     @Column( name = "observacao_servico")
@@ -32,6 +37,5 @@ public class FichaServicoEntity {
     private BigDecimal valorFichaServico;
     @Column(nullable = false, name = "servico_realizado")
     private String servicoRealizado;
-    @Column(nullable = false, name = "nome_funcionario")
-    private String nomeFuncionario;
+
 }

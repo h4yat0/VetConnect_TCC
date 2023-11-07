@@ -24,7 +24,8 @@ public class UnidadeFormReturn extends RepresentationModel<UnidadeFormReturn> im
     private Long id;
     private String nome;
     private String especialidade;
-    private String horarioFuncionamento;
+    private String horarioAbertura;
+    private String horarioFechamento;
     private String contato;
     private String cep;
     private List<ServicoEntity> servicos;

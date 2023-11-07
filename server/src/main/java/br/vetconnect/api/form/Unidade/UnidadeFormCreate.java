@@ -24,7 +24,10 @@ public class UnidadeFormCreate {
     private String especialidade;
     @Valid
     @NotBlank
-    private String horarioFuncionamento;
+    private String horarioAbertura;
+    @Valid
+    @NotBlank
+    private String horarioFechamento;
     @Valid
     @NotBlank
     private String contato;
