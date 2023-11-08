@@ -276,29 +276,32 @@ export default function AgendamentoModal({
                       </div>
                     </div>
                   </div>
-                  <div className="py-2">
-                    <label
-                      htmlFor="observation"
-                      className="text-sm leading-6 font-extrabold text-gray-900"
-                    >
-                      Oberservações
-                    </label>
-                    <div className="my-2">
-                      <textarea
-                        id="observation"
-                        name="observation"
-                        maxLength={200}
-                        required
-                        // onChange={(e) => setEmail(e.target.value)}
-                        className="block w-full rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
-                      />
+                  {newScheduling ? null : (
+                    <div className="py-2">
+                      <label
+                        htmlFor="observation"
+                        className="text-sm leading-6 font-extrabold text-gray-900"
+                      >
+                        Oberservações
+                      </label>
+                      <div className="my-2">
+                        <textarea
+                          id="observation"
+                          name="observation"
+                          maxLength={200}
+                          required
+                          // onChange={(e) => setEmail(e.target.value)}
+                          className="block w-full rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="items-start flex">
+                  )}
+
+                  <div className="items-start flex mt-5">
                     {newScheduling ? (
-                      <ButtonPrimary type="button" text="Agendar" />
+                      <ButtonPrimary type="button" text="Agendar" width="w-full" />
                     ) : (
-                      <ButtonDanger text="Cancelar atendimento" />
+                      <ButtonDanger text="Cancelar atendimento" width="w-full" />
                     )}
                   </div>
                 </Dialog.Panel>
