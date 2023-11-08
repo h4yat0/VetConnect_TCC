@@ -1,6 +1,6 @@
 import ButtonPrimary from "../buttons/ButtonPrimary";
 import { useSelector } from "react-redux";
-import { getId } from "../../redux/client";
+import { getAnimals, getId } from "../../redux/client";
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 
@@ -20,6 +20,7 @@ import {
 import vetConnectLogo from "../../assets/svgs/vetConnectLogo.svg";
 import { Link, Navigate } from "react-router-dom";
 import useSimpleAuth from "../../hooks/useSimpleAuth";
+import AgendamentoModal from "../AgendamentoModal";
 
 const products = [
   {
@@ -57,6 +58,8 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
   const userId = useSelector(getId);
   const auth = useSimpleAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const animals = useSelector(getAnimals);
 
   useEffect(() => {}, [userId]);
 
@@ -64,6 +67,15 @@ export default function Navbar() {
 
   return (
     <header className="bg-white">
+
+      <AgendamentoModal
+        type="update"
+        animalsStore={animals}
+        animalId={animals[0].id}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
+      
       <nav
         className="max-w-8xl mx-auto flex items-center justify-between p-6 lg:px-8 font-inter"
         aria-label="Global"
@@ -116,7 +128,7 @@ export default function Navbar() {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                <div className="p-4">
+                <div onClick={() => setIsOpen(!isOpen)} className="p-4">
                   {products.map((item) => (
                     <div
                       key={item.name}
