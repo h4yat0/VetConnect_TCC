@@ -1,9 +1,9 @@
 interface buttonPrimaryProps {
-	text: string;
-	type?: "button" | "submit" | "reset";
-	width?: "w-full";
-	onClickFunction?: () => void;
-	disabled?: boolean;
+  text: string;
+  type?: "button" | "submit" | "reset";
+  width?: string;
+  onClickFunction?: () => void;
+  disabled?: boolean;
 }
 
 export default function buttonPrimary(props: buttonPrimaryProps) {
