@@ -29,7 +29,7 @@ import jwt from "jwt-decode";
 
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
-import Alert from "../components/shared/Alert";
+import Alert from "../components/Alert";
 
 const LOGIN_URL = "api/cliente/v1/login";
 const TOKEN_URL = "auth/signin";

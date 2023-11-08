@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import Cleave from "cleave.js/react";
 import "../modules/cleave-phone.br.js";
-import Alert from "../components/shared/Alert";
+import Alert from "../components/Alert";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
 import AgendamentoModal from "../components/AgendamentoModal";

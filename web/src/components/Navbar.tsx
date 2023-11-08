@@ -1,6 +1,6 @@
-import ButtonPrimary from "../buttons/ButtonPrimary";
+import ButtonPrimary from "./buttons/ButtonPrimary";
 import { useSelector } from "react-redux";
-import { getId } from "../../redux/client";
+import { getId } from "../redux/client";
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 
@@ -17,9 +17,9 @@ import {
   PlayCircleIcon,
 } from "@heroicons/react/20/solid";
 
-import vetConnectLogo from "../../assets/svgs/vetConnectLogo.svg";
+import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
 import { Link, Navigate } from "react-router-dom";
-import useSimpleAuth from "../../hooks/useSimpleAuth";
+import useSimpleAuth from "../hooks/useSimpleAuth";
 
 const products = [
   {
