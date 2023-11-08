@@ -4,7 +4,7 @@ import PromoCard from "../components/PromoCard";
 import { useEffect, useState } from "react";
 import HistoryCard from "../components/HistoryCard";
 import useSimpleAuth from "../hooks/useSimpleAuth";
-import AgendamentoModal from "../components/AgendamentoModal";
+import AgendamentoModal from "../components/SchedulingModal";
 
 const clinicas = {
   clinicas: [

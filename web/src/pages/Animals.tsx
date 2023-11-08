@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Cachorro from "../assets/imgs/Cachorro.jpg";
-import AgendamentoModal from "../components/AgendamentoModal";
+import AgendamentoModal from "../components/SchedulingModal";
 import RegisterAnimalModal from "../components/AnimalModal";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import { getAnimals } from "../redux/client";

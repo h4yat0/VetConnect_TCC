@@ -6,7 +6,7 @@ import "../modules/cleave-phone.br.js";
 import Alert from "../components/Alert";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
-import AgendamentoModal from "../components/AgendamentoModal";
+import AgendamentoModal from "../components/SchedulingModal";
 
 function sanitizeString(str: string): string {
 	return str.replace(/[.\-\s]/g, "");
