@@ -1,16 +1,15 @@
-interface buttonSecundaryProps {
+interface buttonDangerProps {
 	text: string;
 	onClickFunction?: () => void;
 	disabled?: boolean;
 }
 
-export default function ButtonSecundary(props: buttonSecundaryProps) {
+export default function ButtonDanger(props: buttonDangerProps) {
 	const { text, onClickFunction, disabled } = props;
 
 	return (
 		<button
 			className='
-            w-full 
             bg-red-600 
             text-white 
             py-2 
