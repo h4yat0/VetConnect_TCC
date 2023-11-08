@@ -1,20 +1,11 @@
-import { useEffect, useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
-import ButtonSecundary from "./buttons/ButtonSecundary";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAccessToken,
-  getAnimals,
-  getId,
-  getName,
-  updateAnimals,
-} from "../redux/client";
-import { useNavigate } from "react-router-dom";
+import { getAccessToken, getId, getName, updateAnimals } from "../redux/client";
 import { Dialog, Transition } from "@headlessui/react";
 import api from "../api/axios";
-import AlertModal from "./shared/AlertModal";
-import { router } from "../routes/routes";
+import AlertModal from "./AlertModal";
 
 interface AnimalModalProps {
   type: "register" | "update";
@@ -25,7 +16,7 @@ interface AnimalModalProps {
 }
 
 interface Animal {
-  id: number
+  id: number;
   clientId: number;
   name: string;
   color: string;
@@ -48,7 +39,13 @@ export default function RegisterAnimalModal({
 }: AnimalModalProps) {
   const dispatch = useDispatch();
 
-  let animals = [...animalsStore]
+  const [alertType, setAlertType] = useState<"success" | "caution" | "danger">(
+    "success"
+  );
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertIsOpen, setAlertIsOpen] = useState(false);
+
+  let animals = [...animalsStore];
 
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -60,15 +57,15 @@ export default function RegisterAnimalModal({
   const [sex, setSex] = useState("");
 
   const idStore = useSelector(getId);
-  const nameStore = useSelector(getName);
   const accessToken = useSelector(getAccessToken);
 
   function isEmptyString(str: string) {
     return str.trim() === "";
   }
-function removeAnimalById(animals: Animal[], idToRemove: number): Animal[] {
-  return animals.filter((animal) => animal.id !== idToRemove);
-}
+
+  function removeAnimalById(animals: Animal[], idToRemove: number) {
+    animals = animals.filter((animal) => animal.id !== idToRemove);
+  }
 
   const postAnimal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -94,6 +91,13 @@ function removeAnimalById(animals: Animal[], idToRemove: number): Animal[] {
       )
       .then(function (response) {
         let data = response.data;
+
+        setAlertMessage("Cadastro bem sucedido");
+        setAlertType("success");
+        setAlertIsOpen(true);
+
+        setIsOpen(false);
+
         console.log(data);
       })
       .catch(function (error) {
@@ -150,8 +154,6 @@ function removeAnimalById(animals: Animal[], idToRemove: number): Animal[] {
           sex: data.sexo,
         };
         dispatch(updateAnimals(animals));
-
-        router.push({pathname: ''})
         console.log(response);
       })
       .catch(function (error) {
@@ -171,8 +173,14 @@ function removeAnimalById(animals: Animal[], idToRemove: number): Animal[] {
       })
       .then(function (response) {
         removeAnimalById(animals, animalId);
-        dispatch(updateAnimals(animals))
-        
+        dispatch(updateAnimals(animals));
+
+        setAlertMessage("Exclusão bem sucedido");
+        setAlertType("success");
+        setAlertIsOpen(true);
+
+        setIsOpen(false);
+
         console.log(response);
       })
       .catch(function (error) {
@@ -182,6 +190,12 @@ function removeAnimalById(animals: Animal[], idToRemove: number): Animal[] {
 
   return (
     <>
+      <AlertModal
+        type={alertType}
+        isOpen={alertIsOpen}
+        setIsOpen={setAlertIsOpen}
+        message={alertMessage}
+      />
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -410,14 +424,14 @@ function removeAnimalById(animals: Animal[], idToRemove: number): Animal[] {
                         <>
                           <div>
                             <ButtonPrimary
-                              text="Alterar dados"
+                              text="Alterar dados do animal"
                               width="w-full"
                               onClickFunction={postEditedInformation}
                             />
                           </div>
                           <div>
                             <ButtonDanger
-                              text="Deletar conta"
+                              text="Excluir animal"
                               onClickFunction={deleteAnimal}
                             />
                           </div>
