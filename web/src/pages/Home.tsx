@@ -1,9 +1,10 @@
 import UnitCard from "../components/UnitCard";
 import ServiceCard from "../components/ServiceCard";
 import PromoCard from "../components/PromoCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import HistoryCard from "../components/HistoryCard";
 import useSimpleAuth from "../hooks/useSimpleAuth";
+import AgendamentoModal from "../components/AgendamentoModal";
 
 const clinicas = {
   clinicas: [
@@ -114,8 +115,15 @@ export default function Home() {
 
   const loggedIn = useSimpleAuth();
 
+  const [agendamentoIsOpen, setAgendamentoIsOpen] = useState(true);
+
   return (
     <div className="w-full">
+      <AgendamentoModal
+        type="new"
+        isOpen={agendamentoIsOpen}
+        setIsOpen={setAgendamentoIsOpen} 
+      />
       <div className="p-0 font-inter ">
         <PromoCard></PromoCard>
 
