@@ -57,13 +57,14 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
   const userId = useSelector(getId);
   const auth = useSimpleAuth();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {}, [userId]);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white">
+    <header className="bg-white">      
       <nav
         className="max-w-8xl mx-auto flex items-center justify-between p-6 lg:px-8 font-inter"
         aria-label="Global"
@@ -116,7 +117,7 @@ export default function Navbar() {
               leaveTo="opacity-0 translate-y-1"
             >
               <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                <div className="p-4">
+                <div onClick={() => setIsOpen(!isOpen)} className="p-4">
                   {products.map((item) => (
                     <div
                       key={item.name}

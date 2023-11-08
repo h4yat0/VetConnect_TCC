@@ -113,4 +113,7 @@ public class AgendamentoService {
     }
 
 
+    public AgendamentoEntity buscarPorId(Long idAgendamento) {
+        return repository.buscarAgendamento(idAgendamento);
+    }
 }
