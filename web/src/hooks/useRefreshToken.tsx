@@ -18,8 +18,8 @@ const useRefreshToken = () => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    console.log(useSelector(getAccessToken));
-    console.log(response.data.accessToken);
+    // console.log(useSelector(getAccessToken));
+    // console.log(response.data.accessToken);
     dispatch(updateAccessToken(response.data.accessToken));
     return response.data.accessToken;
   }

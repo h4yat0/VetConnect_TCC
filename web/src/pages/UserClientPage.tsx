@@ -59,6 +59,7 @@ export default function UserClientPage() {
   const handleSetEditEnabled = () => {
     setEditDisabled(!editDisabled);
   };
+
   const [isOpen, setIsOpen] = useState(false);
 
   const [name, setName] = useState("");
@@ -90,7 +91,9 @@ export default function UserClientPage() {
   const birthDateStore = useSelector(getBirthDate);
   const passwordStore = useSelector(getPassword);
   const accessToken = useSelector(getAccessToken);
-  const animals = useSelector(getAnimals);
+  const animalsStore = useSelector(getAnimals);
+
+  const animals = [...animalsStore]
 
   useEffect(() => {
     setName(nameStore);

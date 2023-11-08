@@ -27,8 +27,8 @@ const PersistLogin = () => {
   }, []);
 
   useEffect(() => {
-    console.log(`isLoading: ${isloading}`);
-    console.log(`aT: ${accessToken}`);
+    // console.log(`isLoading: ${isloading}`);
+    // console.log(`aT: ${accessToken}`);
   }, [isloading]);
 
   return <>{isloading ? <p>Loading...</p> : <Outlet />}</>;
