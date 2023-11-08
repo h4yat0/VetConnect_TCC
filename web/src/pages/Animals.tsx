@@ -1,14 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cachorro from "../assets/imgs/Cachorro.jpg";
 import AgendamentoModal from "../components/AgendamentoModal";
 import RegisterAnimalModal from "../components/AnimalModal";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import { getAnimals } from "../redux/client";
 import { useSelector } from "react-redux";
+import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 
 export default function Animals() {
   const [isOpen, setIsOpen] = useState(false);
-  const animals = useSelector(getAnimals);
+  const [currentAnimal, setCurrentAnimal] = useState(0);
+
+  const animalsStore = useSelector(getAnimals);
+  const animals = [...animalsStore]
+
+  function incrementCurrentAnimal() {
+    if (currentAnimal < animals.length - 1) {
+      setCurrentAnimal(currentAnimal + 1);
+    }
+  }
+
+  function decrementCurrentAnimal() {
+    if (currentAnimal > 0) {
+      setCurrentAnimal(currentAnimal - 1);
+    }
+  }
 
   function calculateAge(dateOfBirth: string): number {
     const today = new Date();
@@ -31,35 +47,46 @@ export default function Animals() {
       <RegisterAnimalModal
         type="update"
         animalsStore={animals}
-        animalId={animals[0].id}
+        animalId={animals[currentAnimal].id}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       />
       <div className="pt-4 font-inter rounded-xl px-10">
         <div className="flex justify-between py-2">
           <h1 className="font-bold my-2">
-            {animals[0].name} - {animals[0].race} -{" "}
-            {calculateAge(animals[0].birthDate)}
+            {animals[currentAnimal].name} - {animals[currentAnimal].race} -{" "}
+            {calculateAge(animals[currentAnimal].birthDate)}
           </h1>
           <ButtonPrimary
             text="Editar Informações"
             onClickFunction={() => setIsOpen(!isOpen)}
           />
         </div>
+        <div className="flex items-center justify-center">
+          <GoChevronLeft
+            className="mr-5 h-8 w-8 color text-gray-600 cursor-pointer"
+            onClick={() => decrementCurrentAnimal()}
+          />
 
-        <div className="grid gap-4 grid-cols-3  " style={{ maxHeight: 400 }}>
-          <div className="col-span-2">
-            <img
-              src={Cachorro}
-              alt="tailwind logo"
-              className="rounded-xl w-full h-2/3 object-cover"
-            />
-          </div>
-          <div className="flex justify-center  bg-vetConnectSecundaryGreen h-2/3 rounded-xl">
-            <div className="flex items-center justify-center font-bold">
-              Prontuário
+          <div className="grid gap-4 grid-cols-3  " style={{ maxHeight: 400 }}>
+            <div className="col-span-2">
+              <img
+                src={Cachorro}
+                alt="tailwind logo"
+                className="rounded-xl w-full h-2/3 object-cover"
+              />
+            </div>
+            <div className="flex justify-center  bg-vetConnectSecundaryGreen h-2/3 rounded-xl">
+              <div className="flex items-center justify-center font-bold">
+                Prontuário
+              </div>
             </div>
           </div>
+
+          <GoChevronRight
+            className="ml-5 h-8 w-8 color text-gray-600 cursor-pointer"
+            onClick={() => incrementCurrentAnimal()}
+          />
         </div>
 
         {/* Histórico de Serviços */}
