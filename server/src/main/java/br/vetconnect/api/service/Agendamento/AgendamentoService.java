@@ -2,8 +2,8 @@ package br.vetconnect.api.service.Agendamento;
 
 import br.vetconnect.api.controller.Agendamento.AgendamentoController;
 import br.vetconnect.api.entity.Agendamento.AgendamentoEntity;
-import br.vetconnect.api.entity.Agendamento.ServicoEntity;
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
+import br.vetconnect.api.entity.UnidadeServico.ServicoEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import br.vetconnect.api.entity.AnimalEntity;
 import br.vetconnect.api.entity.ClienteEntity;
 import br.vetconnect.api.form.Agendamento.AgendamentoFormCreate;
@@ -18,7 +18,6 @@ import br.vetconnect.api.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -44,6 +43,12 @@ public class AgendamentoService {
 
     @Autowired
     private AgendamentoMapper mapper;
+
+//    @Autowired
+//    private FilaDeEsperaService filaDeEsperaService;
+
+//    @Autowired
+//    private FilaEsperaAgendamento filaEsperaAgendamento;
 
 //    @Autowired
 //    private AssociacaoService associacaoService;
@@ -110,6 +115,9 @@ public class AgendamentoService {
         AgendamentoEntity entity = repository.buscarAgendamento(id);
         entity.setCancelado(true);
         repository.save(entity);
+//
+////        FilaEsperaAgendamento filaEsperaAgendamento = new FilaEsperaAgendamento(this);
+//        filaDeEsperaService.verificaFilaEspera( id);
     }
 
 
