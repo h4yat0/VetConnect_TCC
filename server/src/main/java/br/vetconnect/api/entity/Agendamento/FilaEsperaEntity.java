@@ -20,11 +20,9 @@ public class FilaEsperaEntity {
     @JoinColumn(name = "id_agendamento")
     private AgendamentoEntity idAgendamento;
 
-    @Column(name = "horario_desejado")
-    private String horarioDesejavel;
-
-    @Column(name = "data_desejada")
-    private String dataDesejada;
+    @OneToOne
+    @JoinColumn(name = "id_agendamento_desejado")
+    private AgendamentoEntity idAgendamentoDesejado;
 
     private Boolean ativo;
 
