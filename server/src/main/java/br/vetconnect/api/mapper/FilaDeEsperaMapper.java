@@ -11,8 +11,7 @@ public class FilaDeEsperaMapper {
     public FilaEsperaEntity formCreateParaEntity(FilaDeEsperaFormCreate formCreate, AgendamentoEntity agendamentoEntity) {
         FilaEsperaEntity entity = new FilaEsperaEntity();
         entity.setAtivo(true);
-        entity.setDataDesejada(formCreate.getDataDesejada());
-        entity.setHorarioDesejavel(formCreate.getHoraDesejada());
+
         entity.setIdAgendamento(agendamentoEntity);
         return entity;
 
@@ -20,8 +19,7 @@ public class FilaDeEsperaMapper {
 
     public FilaDeEsperaFormReturn entityParaFormReturn(FilaEsperaEntity entity) {
         FilaDeEsperaFormReturn formReturn = new FilaDeEsperaFormReturn();
-        formReturn.setDataDesejada(entity.getDataDesejada());
-        formReturn.setHoraDesejada(entity.getDataDesejada());
+
         formReturn.setId(entity.getId());
         formReturn.setIdAgendamento(entity.getId());
         return formReturn;
