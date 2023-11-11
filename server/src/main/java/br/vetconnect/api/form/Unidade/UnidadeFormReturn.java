@@ -1,10 +1,6 @@
 package br.vetconnect.api.form.Unidade;
 
-import br.vetconnect.api.entity.Agendamento.ServicoEntity;
-import br.vetconnect.api.entity.imagens.UnidadeImagensEntity;
-import br.vetconnect.api.form.Cliente.ClienteFormCreate;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
+import br.vetconnect.api.entity.UnidadeServico.ServicoEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,8 +1,6 @@
 package br.vetconnect.api.controller.Agendamento;
 
 
-import br.vetconnect.api.entity.Agendamento.ServicoEntity;
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
 import br.vetconnect.api.form.Unidade.UnidadeFormReturn;
 import br.vetconnect.api.form.servico.ServicoFormCreate;
 import br.vetconnect.api.form.servico.ServicoFormReturn;
@@ -26,7 +24,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api/servico")
 @Tag(name = "Serviço", description = "end points relacionados aos serviços")
-@SecurityRequirement(name = "bearerAuth")
 public class ServicoController {
 
     @Autowired
@@ -34,7 +31,7 @@ public class ServicoController {
 
 
     @Operation(summary = "endPoint para buscar os serviços cadastrados no sistema", description = "endPoint para buscar os serviços cadastrados no sistema",
-            tags = {"Unidade"}, responses = {
+            tags = {"Serviço"}, responses = {
             @ApiResponse(description = "Sucesso", responseCode = "200", content = {
                     @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UnidadeFormReturn.class)))
             }),
@@ -89,7 +86,7 @@ public class ServicoController {
         }
     }
 
-
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "endPoint para cadastrar um serviço no sistema", description = "endPoint para cadastrar um serviço no sistema",
             tags = {"Unidade"}, responses = {
             @ApiResponse(description = "Sucesso", responseCode = "201", content = {

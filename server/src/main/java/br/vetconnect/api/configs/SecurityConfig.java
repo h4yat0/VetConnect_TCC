@@ -57,7 +57,10 @@ public class SecurityConfig {
                                         "api/cliente/v1/register",
                                         "api/unidade/v1/somente-unidades",
                                         "api/unidade/v1/unidades-servicos",
-                                        "api/unidade/v1/todas-unidades"
+                                        "api/unidade/v1/todas-unidades",
+                                        "api/servico/v1/somente-servicos",
+                                        "api/servico/v1/servicos-unidades",
+                                        "api/servico/v1/todos-servicos"
                                 ).permitAll()
                                 .requestMatchers("api/**").authenticated()
                                 .requestMatchers("/users").denyAll()

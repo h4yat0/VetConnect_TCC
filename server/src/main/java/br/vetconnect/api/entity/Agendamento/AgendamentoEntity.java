@@ -3,6 +3,8 @@ package br.vetconnect.api.entity.Agendamento;
 import br.vetconnect.api.entity.AnimalEntity;
 import br.vetconnect.api.entity.ClienteEntity;
 
+import br.vetconnect.api.entity.UnidadeServico.ServicoEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -55,4 +57,7 @@ public class AgendamentoEntity {
 
     @OneToOne(mappedBy = "idAgendamento", cascade = CascadeType.ALL)
     private FilaEsperaEntity filaEspera;
+
+    @OneToOne(mappedBy = "idAgendamentoDesejado", cascade = CascadeType.ALL)
+    private FilaEsperaEntity filaEspera2;
 }

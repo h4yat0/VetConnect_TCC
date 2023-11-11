@@ -2,8 +2,8 @@ package br.vetconnect.api.mapper;
 
 
 import br.vetconnect.api.entity.Agendamento.AgendamentoEntity;
-import br.vetconnect.api.entity.Agendamento.ServicoEntity;
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
+import br.vetconnect.api.entity.UnidadeServico.ServicoEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import br.vetconnect.api.entity.AnimalEntity;
 import br.vetconnect.api.entity.ClienteEntity;
 import br.vetconnect.api.form.Agendamento.AgendamentoFormCreate;

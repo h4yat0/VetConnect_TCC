@@ -1,13 +1,12 @@
 package br.vetconnect.api.mapper.Unidade;
 
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import br.vetconnect.api.entity.imagens.UnidadeImagensEntity;
 import br.vetconnect.api.form.Unidade.UnidadeFormCreate;
 import br.vetconnect.api.form.Unidade.UnidadeFormReturn;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 

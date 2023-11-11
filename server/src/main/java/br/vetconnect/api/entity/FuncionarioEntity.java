@@ -2,7 +2,7 @@ package br.vetconnect.api.entity;
 
 
 import br.vetconnect.api.entity.Agendamento.FichaServicoEntity;
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

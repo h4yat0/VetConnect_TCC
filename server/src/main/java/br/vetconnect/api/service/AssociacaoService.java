@@ -1,7 +1,7 @@
 package br.vetconnect.api.service;
 
-import br.vetconnect.api.entity.Agendamento.ServicoEntity;
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
+import br.vetconnect.api.entity.UnidadeServico.ServicoEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import br.vetconnect.api.form.AssociacaoForm;
 import br.vetconnect.api.repository.Agendamento.ServicoRepository;
 import br.vetconnect.api.repository.Agendamento.UnidadeRepository;

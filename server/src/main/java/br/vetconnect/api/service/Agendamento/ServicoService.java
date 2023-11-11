@@ -1,10 +1,8 @@
 package br.vetconnect.api.service.Agendamento;
 
 import br.vetconnect.api.controller.Agendamento.ServicoController;
-import br.vetconnect.api.controller.Agendamento.UnidadeController;
-import br.vetconnect.api.entity.Agendamento.ServicoEntity;
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
-import br.vetconnect.api.form.Unidade.UnidadeFormReturn;
+import br.vetconnect.api.entity.UnidadeServico.ServicoEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import br.vetconnect.api.form.servico.ServicoFormCreate;
 import br.vetconnect.api.form.servico.ServicoFormReturn;
 import br.vetconnect.api.mapper.Servico.ServicoMapper;

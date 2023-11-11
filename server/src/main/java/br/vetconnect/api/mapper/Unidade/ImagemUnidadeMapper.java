@@ -1,6 +1,6 @@
 package br.vetconnect.api.mapper.Unidade;
 
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import br.vetconnect.api.entity.imagens.UnidadeImagensEntity;
 import br.vetconnect.api.form.Unidade.UnidadeFormCreate;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,8 @@
-package br.vetconnect.api.entity.Agendamento;
+package br.vetconnect.api.entity.UnidadeServico;
 
 
 
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;

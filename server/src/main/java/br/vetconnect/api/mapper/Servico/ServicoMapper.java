@@ -1,8 +1,8 @@
 package br.vetconnect.api.mapper.Servico;
 
 
-import br.vetconnect.api.entity.Agendamento.ServicoEntity;
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
+import br.vetconnect.api.entity.UnidadeServico.ServicoEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import br.vetconnect.api.form.servico.ServicoFormCreate;
 import br.vetconnect.api.form.servico.ServicoFormReturn;
 import org.springframework.stereotype.Service;

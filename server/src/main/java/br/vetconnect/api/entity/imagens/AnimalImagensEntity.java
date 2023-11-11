@@ -1,7 +1,6 @@
 package br.vetconnect.api.entity.imagens;
 
 
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
 import br.vetconnect.api.entity.AnimalEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
