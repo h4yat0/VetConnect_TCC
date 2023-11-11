@@ -2,11 +2,12 @@ package br.vetconnect.api.service.Agendamento;
 
 import br.vetconnect.api.controller.Agendamento.UnidadeController;
 import br.vetconnect.api.entity.imagens.UnidadeImagensEntity;
+import br.vetconnect.api.form.ImagemUnidadeForm;
 import br.vetconnect.api.form.Unidade.UnidadeFormCreate;
 import br.vetconnect.api.form.Unidade.UnidadeFormReturn;
 import br.vetconnect.api.mapper.Unidade.UnidadeMapper;
 import br.vetconnect.api.repository.Agendamento.UnidadeRepository;
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 
 import br.vetconnect.api.service.Imagens.UnidadeImagemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,9 +104,9 @@ public class UnidadeService {
     }
 
 
-    public void salvarImagemUnidade(List<String> imagens, Long id) {
+    public void salvarImagemUnidade(ImagemUnidadeForm imagens, Long id) {
         UnidadeEntity entity = repository.buscarUnidade(id);
-        imagemService.salvarImagemUnidade(imagens, entity);
+        imagemService.salvarImagemUnidade(imagens.getImagem(), entity);
     }
 
     public void alterarImagemUnidade(List<String> imagens, Long id){

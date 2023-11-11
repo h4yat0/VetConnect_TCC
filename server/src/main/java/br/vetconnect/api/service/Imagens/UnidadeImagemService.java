@@ -1,15 +1,13 @@
 package br.vetconnect.api.service.Imagens;
 
-import br.vetconnect.api.entity.Agendamento.UnidadeEntity;
+import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import br.vetconnect.api.entity.imagens.UnidadeImagensEntity;
 import br.vetconnect.api.form.Unidade.UnidadeFormCreate;
 import br.vetconnect.api.mapper.Unidade.ImagemUnidadeMapper;
 import br.vetconnect.api.repository.Imagens.UnidadeImagensRepository;
-import br.vetconnect.api.service.Agendamento.UnidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
