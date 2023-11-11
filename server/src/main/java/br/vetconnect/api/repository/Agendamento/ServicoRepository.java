@@ -1,6 +1,6 @@
 package br.vetconnect.api.repository.Agendamento;
 
-import br.vetconnect.api.entity.Agendamento.ServicoEntity;
+import br.vetconnect.api.entity.UnidadeServico.ServicoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
