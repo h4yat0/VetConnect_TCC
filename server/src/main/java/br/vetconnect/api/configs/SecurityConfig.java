@@ -54,7 +54,10 @@ public class SecurityConfig {
                                         "/auth/refresh/**",
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**",
-                                        "api/cliente/v1/register"
+                                        "api/cliente/v1/register",
+                                        "api/unidade/v1/somente-unidades",
+                                        "api/unidade/v1/unidades-servicos",
+                                        "api/unidade/v1/todas-unidades"
                                 ).permitAll()
                                 .requestMatchers("api/**").authenticated()
                                 .requestMatchers("/users").denyAll()

@@ -1,5 +1,6 @@
 package br.vetconnect.api.controller.Agendamento;
 
+import br.vetconnect.api.form.ImagemUnidadeForm;
 import br.vetconnect.api.form.Unidade.UnidadeFormCreate;
 import br.vetconnect.api.form.Unidade.UnidadeFormReturn;
 import br.vetconnect.api.mapper.Unidade.ImagemUnidadeMapper;
@@ -24,7 +25,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api/unidade")
 @Tag(name = "Unidade", description = "end points relacionados as unidades")
-@SecurityRequirement(name = "bearerAuth")
 public class UnidadeController {
 
     @Autowired
@@ -85,6 +85,7 @@ public class UnidadeController {
         }
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "endPoint para cadastrar uma unidade no sistema", description = "endPoint para cadastrar uma unidade no sistema",
             tags = {"Unidade"}, responses = {
             @ApiResponse(description = "Sucesso", responseCode = "201", content = {
@@ -103,20 +104,20 @@ public class UnidadeController {
         }
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "endPoint para cadastrar imagens de unidade no sistema", description = "endPoint para cadastrar imagens de unidade no sistema",
             tags = {"Unidade"}, responses = {
-            @ApiResponse(description = "Sucesso", responseCode = "201", content = {
-                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UnidadeFormReturn.class)))
-            }),
+            @ApiResponse(description = "Sucesso", responseCode = "204",content = @Content),
             @ApiResponse(description = "Ja tem uma unidade cadastrada com esse cnpj", responseCode = "409", content = @Content),
             @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
     })
     @PostMapping("v1/cadastro-imagem/{id}")
-    public ResponseEntity<?> cadastroImagem(@RequestBody List<String> imagens, @PathVariable Long id){
+    public ResponseEntity<?> cadastroImagem(@RequestBody ImagemUnidadeForm imagens, @PathVariable Long id){
         service.salvarImagemUnidade(imagens, id);
         return ResponseEntity.noContent().build();
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "endPoint para editar imagens de unidade no sistema", description = "endPoint para editar imagens de unidade no sistema",
             tags = {"Unidade"}, responses = {
             @ApiResponse(description = "Sucesso", responseCode = "200", content = {
@@ -126,13 +127,13 @@ public class UnidadeController {
             @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = @Content)
     })
     @PutMapping("v1/alterar-imagem/{id}")
-    public ResponseEntity<?> alterarImagem(@RequestBody List<String> imagens, @PathVariable Long id){
-        service.alterarImagemUnidade(imagens, id);
+    public ResponseEntity<?> alterarImagem(@RequestBody ImagemUnidadeForm imagens, @PathVariable Long id){
+        service.alterarImagemUnidade(imagens.getImagem(), id);
         return ResponseEntity.noContent().build();
     }
 
 
-
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "endPoint para editar uma unidade no sistema", description = "endPoint para editar uma unidade no sistema",
             tags = {"Unidade"}, responses = {
             @ApiResponse(description = "Sucesso", responseCode = "200", content = {
@@ -151,6 +152,7 @@ public class UnidadeController {
         }
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @Operation(summary = "endPoint para deletar uma unidade no sistema", description = "endPoint para deletar uma unidade no sistema",
               tags = {"Unidade"}, responses = {
         @ApiResponse(description = "Sucesso", responseCode = "204", content = {
