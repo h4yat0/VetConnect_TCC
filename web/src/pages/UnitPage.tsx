@@ -63,9 +63,9 @@ export default function UnitPage() {
 
                 <Cleave
                   type="text"
-                  options={{ phone: true, phoneRegionCode: "br"}}
+                  options={{ phone: true, phoneRegionCode: "br" }}
                   value={unit.contact}
-				  disabled
+                  disabled
                   className="appearance-none border-none"
                 />
               </p>
