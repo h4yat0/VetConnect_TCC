@@ -4,9 +4,10 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import ButtonDanger from "./buttons/ButtonDanger";
 import { MobileDateTimePicker } from "@mui/x-date-pickers";
-import { getAnimals } from "../redux/client";
+import { getAccessToken, getAnimals } from "../redux/client";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
+import api from "../api/axios";
 
 interface AgendamentoModalProps {
   type: "new" | "inProgress" | "finished";
@@ -19,6 +20,9 @@ export default function AgendamentoModal({
   isOpen,
   setIsOpen,
 }: AgendamentoModalProps) {
+
+  const accessToken = useSelector(getAccessToken);
+
   const today = dayjs();
   const maxDate = today.add(1, "month");
 
@@ -50,6 +54,8 @@ export default function AgendamentoModal({
 
   const [selectedAnimal, setSelectedAnimal] = useState(animals[0]);
   const [selectedService, setSelectedService] = useState(services[0]);
+  // const [selectedUnit, setSelectedUnit] = useState(units[0]);
+  const [query, setQuery] = useState("");
 
   const newScheduling = type == "new";
 
@@ -276,7 +282,6 @@ export default function AgendamentoModal({
                       </div>
                     </div>
                   </div>
-                  {newScheduling ? null : (
                     <div className="py-2">
                       <label
                         htmlFor="observation"
@@ -295,8 +300,7 @@ export default function AgendamentoModal({
                         />
                       </div>
                     </div>
-                  )}
-
+    
                   <div className="items-start flex mt-5">
                     {newScheduling ? (
                       <ButtonPrimary type="button" text="Agendar" width="w-full" />
