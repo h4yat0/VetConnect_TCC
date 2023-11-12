@@ -52,16 +52,6 @@ export default function Animals() {
         setIsOpen={setIsOpen}
       />
       <div className="pt-4 font-inter rounded-xl px-10">
-        <div className="flex justify-between py-2">
-          <h1 className="font-bold my-2">
-            {animals[currentAnimal].name} - {animals[currentAnimal].race} -{" "}
-            {calculateAge(animals[currentAnimal].birthDate)}
-          </h1>
-          <ButtonPrimary
-            text="Editar Informações"
-            onClickFunction={() => setIsOpen(!isOpen)}
-          />
-        </div>
         <div className="flex items-center justify-center">
           <GoChevronLeft
             className="mr-5 h-8 w-8 color text-gray-600 cursor-pointer"
@@ -76,9 +66,49 @@ export default function Animals() {
                 className="rounded-xl w-full h-2/3 object-cover"
               />
             </div>
-            <div className="flex justify-center  bg-vetConnectSecundaryGreen h-2/3 rounded-xl">
-              <div className="flex items-center justify-center font-bold">
-                Prontuário
+            <div className="p-4 rounded-lg border-vetConnectSecundaryGreen">
+              <h1 className="text-3xl font-bold">{animals[currentAnimal].name}</h1>
+              <div className="pt-4 gap-y-6 flex flex-col">
+                <div className="text-lg">
+                  <p>
+                    <b>Idade:</b>{" "}
+                    {calculateAge(animals[currentAnimal].birthDate) == 1
+                      ? `${calculateAge(animals[currentAnimal].birthDate)} Ano`
+                      : `${calculateAge(animals[currentAnimal].birthDate)} Anos`}
+                  </p>
+                  <p>
+                    <b>Raça:</b> {animals[currentAnimal].race}
+                  </p>
+                  <p>
+                    <b>Cor:</b> {animals[currentAnimal].color}
+                  </p>
+                  <p>
+                    <b>Sexo:</b>{" "}
+                    {animals[currentAnimal].sex == "M" ? "Macho" : "Fêmea"}
+                  </p>
+                  <p>
+                    <b>Tamanho:</b>{" "}
+                    {parseInt(animals[currentAnimal].size)
+                      .toFixed(2)
+                      .replace(".", ",")}
+                    m
+                  </p>
+                  <p>
+                    <b>Peso:</b>{" "}
+                    {parseInt(animals[currentAnimal].weigth)
+                      .toFixed(2)
+                      .replace(".", ",")}
+                    kg
+                  </p>
+                  <div className="pt-6">
+                  <ButtonPrimary
+                    text="Editar Informações"
+                    onClickFunction={() => setIsOpen(!isOpen)}
+                    width="w-full"
+          
+                  />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
