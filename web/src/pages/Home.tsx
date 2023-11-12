@@ -5,31 +5,10 @@ import { useEffect, useState } from "react";
 import HistoryCard from "../components/HistoryCard";
 import useSimpleAuth from "../hooks/useSimpleAuth";
 import AgendamentoModal from "../components/SchedulingModal";
-
-const clinicas = {
-  clinicas: [
-    {
-      id: 1,
-      nome: "Clínica PetVet - Centro",
-      imgPath: "ClínicaPetVet-Centro.jpg",
-    },
-    {
-      id: 2,
-      nome: "Clínica PetVet - Zona Oeste",
-      imgPath: "Clínica PetVet - Zona Oeste.jpg",
-    },
-    {
-      id: 3,
-      nome: "Clínica PetVet - Zona Leste",
-      imgPath: "Clínica PetVet - Zona Leste.jpg",
-    },
-    {
-      id: 4,
-      nome: "Clínica PetVet - Zona Norte",
-      imgPath: "Clínica PetVet - Zona Norte.jpg",
-    },
-  ],
-};
+import { useSelector } from "react-redux";
+import { getUnits } from "../redux/unit";
+import unitsAndServices from "../hooks/useStoreRestock";
+import useRestockUnitsAndServices from "../hooks/useStoreRestock";
 
 const servicos = {
   servicos: [
@@ -59,27 +38,26 @@ const servicos = {
 const HistoryServices = {
   history: [
     {
+      id: 1,
       clinicId: 1,
       nome: "Banho",
       dateService: "24/02/2023",
     },
     {
+      id: 2,
       clinicId: 2,
       nome: "Tosa",
       dateService: "24/01/2023",
     },
     {
+      id: 3,
       clinicId: 3,
       nome: "Castração",
       dateService: "24/01/2023",
     },
     {
+      id: 4,
       clinicId: 4,
-      nome: "Vacinação",
-      dateService: "24/01/2022",
-    },
-    {
-      clinicId: 5,
       nome: "Vacinação",
       dateService: "24/01/2022",
     },
@@ -115,17 +93,27 @@ export default function Home() {
 
   const loggedIn = useSimpleAuth();
 
+  let units = useSelector(getUnits)
+  units = [...units]
+
   const [agendamentoIsOpen, setAgendamentoIsOpen] = useState(true);
+
+  const { getUnitsAndServices } = useRestockUnitsAndServices();
+
+
+  useEffect(() => {
+    if (units.length == 0) getUnitsAndServices();
+  }, []);
 
   return (
     <div className="w-full">
       <AgendamentoModal
         type="new"
         isOpen={agendamentoIsOpen}
-        setIsOpen={setAgendamentoIsOpen} 
+        setIsOpen={setAgendamentoIsOpen}
       />
       <div className="p-0 font-inter ">
-        <PromoCard></PromoCard>
+        <PromoCard />
 
         <div className="py-8">
           {loggedIn ? (
@@ -149,30 +137,28 @@ export default function Home() {
                     nome={history.nome}
                     clinicId={history.clinicId}
                     dateService={history.dateService}
+                    key={history.id}
                   />
                 ))}
               </div>
             </>
-          ) : (
-            ""
-          )}
+          ) : null}
 
           <div className="py-8">
-            <h1 className="text-2xl font-black ">Clinicas</h1>
-            <div className="flex flex-row gap-20 pt-2">
-              {clinicas.clinicas.map((clinica) => (
+            <h1 className="text-2xl font-black ">Unidades</h1>
+            <div className="flex-row gap-20 pt-5 grid grid-cols-4 ">
+              {units.map((unit) => (
                 <UnitCard
-                  key={clinica.id}
-                  title={clinica.nome}
-                  clinicId={clinica.id}
-                  imgPath={"src/assets/imgs/" + clinica.imgPath}
+                  key={unit.id}
+                  title={unit.name}
+                  unitId={unit.id}
+                  image={unit.images[0]}
                 />
               ))}
             </div>
           </div>
         </div>
       </div>
-      
     </div>
   );
 }
