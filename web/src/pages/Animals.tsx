@@ -11,8 +11,8 @@ export default function Animals() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentAnimal, setCurrentAnimal] = useState(0);
 
-  const animalsStore = useSelector(getAnimals);
-  const animals = [...animalsStore]
+  let animals = useSelector(getAnimals);
+  animals = [...animals];
 
   function incrementCurrentAnimal() {
     if (currentAnimal < animals.length - 1) {
