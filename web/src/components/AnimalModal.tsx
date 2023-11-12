@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,19 @@ interface AnimalModalProps {
   animalsStore: Animal[];
   animalId: number;
   setIsOpen: (isOpen: boolean) => void;
+}
+
+interface ApiAnimal {
+  id: number;
+  idCliente: number;
+  nome: string;
+  cor: string;
+  raca: string;
+  dataNascimento: string;
+  peso: string;
+  tamanho: string;
+  especie: string;
+  sexo: string;
 }
 
 interface Animal {
@@ -30,6 +43,22 @@ interface Animal {
 
 const ANIMALRECORD_URL = "api/animal/v1/cadastro";
 
+function mapApiDataToModel(apiData: ApiAnimal): Animal {
+    return {
+      id: apiData.id,
+      clientId: apiData.idCliente,
+      name: apiData.nome,
+      color: apiData.cor,
+      race: apiData.raca,
+      birthDate: apiData.dataNascimento,
+      weigth: apiData.peso,
+      size: apiData.tamanho,
+      specie: apiData.especie,
+      sex: apiData.sexo,
+    };
+  
+}
+
 export default function RegisterAnimalModal({
   type,
   isOpen,
@@ -46,6 +75,8 @@ export default function RegisterAnimalModal({
   const [alertIsOpen, setAlertIsOpen] = useState(false);
 
   let animals = [...animalsStore];
+  const currentAnimal = animals.findIndex((animal) => animal.id === animalId)
+  console.log(currentAnimal, animalId, animals[currentAnimal].name)
 
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -58,6 +89,17 @@ export default function RegisterAnimalModal({
 
   const idStore = useSelector(getId);
   const accessToken = useSelector(getAccessToken);
+
+  useEffect(()=> {
+    setName(animals[currentAnimal].name);
+    setBirthDate(animals[currentAnimal].birthDate)
+    setColor(animals[currentAnimal].color)
+    setRace(animals[currentAnimal].race)
+    setWeigth(animals[currentAnimal].weigth)
+    setSize(animals[currentAnimal].size)
+    setSpecie(animals[currentAnimal].specie)
+    setSex(animals[currentAnimal].sex)
+  }, [currentAnimal])
 
   function isEmptyString(str: string) {
     return str.trim() === "";
@@ -95,10 +137,9 @@ export default function RegisterAnimalModal({
         setAlertMessage("Cadastro bem sucedido");
         setAlertType("success");
         setAlertIsOpen(true);
-
         setIsOpen(false);
-
-        console.log(data);
+        animals.push(mapApiDataToModel(data));
+        dispatch(updateAnimals(animals));
       })
       .catch(function (error) {
         console.log(error);
@@ -433,6 +474,7 @@ export default function RegisterAnimalModal({
                             <ButtonDanger
                               text="Excluir animal"
                               onClickFunction={deleteAnimal}
+                              width="w-full"
                             />
                           </div>
                         </>
