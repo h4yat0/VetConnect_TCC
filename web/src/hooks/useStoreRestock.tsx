@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { updateUnits } from "../redux/unit";
 import api from "../api/axios";
 
-const UNIT_AND_SERVICES_URL = "api/unidade/v1/todas-unidades";
+const UNIT_AND_SERVICES_URL = "api/unidade/v1/unidades-servicos";
 
 const useRestockUnitsAndServices = () => {
   const dispatch = useDispatch();
