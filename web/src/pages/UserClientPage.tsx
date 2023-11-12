@@ -44,7 +44,7 @@ import api from "../api/axios.js";
 import { useEffect, useState, Fragment } from "react";
 import ButtonDanger from "../components/buttons/ButtonDanger.js";
 import { Link, Navigate } from "react-router-dom";
-import RegisterAnimalModal from "../components/AnimalModal.js";
+import AnimalModal from "../components/AnimalModal.js";
 
 function sanitizeString(str: string): string {
   return str.replace(/[.\-\s]/g, "");
@@ -190,10 +190,10 @@ export default function UserClientPage() {
 
   return (
     <>
-      <RegisterAnimalModal
+      <AnimalModal
         type="register"
         animalsStore={animals}
-        animalId={0}
+        animalId={-1}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
       />
@@ -239,7 +239,6 @@ export default function UserClientPage() {
                 />
               </div>
             </div>
-
             <div>
               <label
                 htmlFor="cpf"
@@ -264,7 +263,6 @@ export default function UserClientPage() {
                 />
               </div>
             </div>
-
             <div>
               <label
                 htmlFor="birthDate"
@@ -285,7 +283,6 @@ export default function UserClientPage() {
                 />
               </div>
             </div>
-
             <div>
               <label
                 htmlFor="streetName"
@@ -443,7 +440,6 @@ export default function UserClientPage() {
                 />
               </div>
             </div>
-
             <div>
               <label
                 htmlFor="email"

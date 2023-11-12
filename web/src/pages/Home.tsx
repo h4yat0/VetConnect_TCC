@@ -4,36 +4,35 @@ import PromoCard from "../components/PromoCard";
 import { useEffect, useState } from "react";
 import HistoryCard from "../components/HistoryCard";
 import useSimpleAuth from "../hooks/useSimpleAuth";
-import AgendamentoModal from "../components/SchedulingModal";
+import SchedulingModal from "../components/SchedulingModal";
 import { useSelector } from "react-redux";
 import { getUnits } from "../redux/unit";
 import unitsAndServices from "../hooks/useStoreRestock";
 import useRestockUnitsAndServices from "../hooks/useStoreRestock";
+import AlertConfirm from "../components/AlertConfirm";
+import api from "../api/axios";
 
-const servicos = {
-  servicos: [
-    {
-      id: 1,
-      nome: "Banho",
-      iconName: "ClínicaPetVet-Centro.jpg",
-    },
-    {
-      id: 2,
-      nome: "Tosa",
-      iconName: "Clínica PetVet - Zona Oeste.jpg",
-    },
-    {
-      id: 3,
-      nome: "Castração",
-      iconName: "Clínica PetVet - Zona Leste.jpg",
-    },
-    {
-      id: 4,
-      nome: "Vacinação",
-      iconName: "Clínica PetVet - Zona Norte.jpg",
-    },
-  ],
-};
+const SERVICE_URL = "/api/servico/v1/somente-servicos";
+
+interface ApiService {
+  id: number;
+  nome: string;
+  preco: number;
+}
+
+interface Service {
+  id: number;
+  name: string;
+  price: number;
+}
+
+function mapApiServicesToServices(apiServices: ApiService[]): Service[] {
+  return apiServices.map((apiService) => ({
+    id: apiService.id,
+    name: apiService.nome,
+    price: apiService.preco,
+  }));
+}
 
 const HistoryServices = {
   history: [
@@ -64,68 +63,68 @@ const HistoryServices = {
   ],
 };
 
-const Agendamentos = {
-  servicos: [
-    {
-      id: 1,
-      nome: "Banho",
-      iconName: "ClínicaPetVet-Centro.jpg",
-    },
-    {
-      id: 2,
-      nome: "Tosa",
-      iconName: "Clínica PetVet - Zona Oeste.jpg",
-    },
-    {
-      id: 3,
-      nome: "Castração",
-      iconName: "Clínica PetVet - Zona Leste.jpg",
-    },
-    {
-      id: 4,
-      nome: "Vacinação",
-      iconName: "Clínica PetVet - Zona Norte.jpg",
-    },
-  ],
-};
 
 export default function Home() {
-
   const loggedIn = useSimpleAuth();
 
-  let units = useSelector(getUnits)
-  units = [...units]
-
-  const [agendamentoIsOpen, setAgendamentoIsOpen] = useState(true);
+  let units = useSelector(getUnits);
+  units = [...units];
 
   const { getUnitsAndServices } = useRestockUnitsAndServices();
 
+  const [services, setServices] = useState<Service[]>([]);
+  const [schedulingIsOpen, setSchedulingIsOpen] = useState(false);
+  const [serviceId, setServiceId] = useState<number>(-1)
+
+  const handleSchedulingOpen = (serviceId : any) => {
+    return ()=> {
+      setServiceId(serviceId);
+      setSchedulingIsOpen(true);
+    }
+  };
 
   useEffect(() => {
     if (units.length == 0) getUnitsAndServices();
+    if (services.length == 0) getServices();
+    setSchedulingIsOpen(false);
   }, []);
+
+  const getServices = async () => {
+    let response = await api
+      .get(SERVICE_URL)
+      .then(function (response) {
+        let data = response.data;
+        setServices(mapApiServicesToServices(data).slice(0,5));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="w-full">
-      <AgendamentoModal
-        type="new"
-        isOpen={agendamentoIsOpen}
-        setIsOpen={setAgendamentoIsOpen}
-      />
+      {units.length > 0 ? (
+        <SchedulingModal
+          type="inProgress"
+          isOpen={schedulingIsOpen}
+          serviceId={serviceId}
+          setIsOpen={setSchedulingIsOpen}
+        />
+      ) : null}
       <div className="p-0 font-inter ">
         <PromoCard />
 
         <div className="py-8">
           {loggedIn ? (
             <>
-              <h1 className="text-2xl font-black ">Agendamentos</h1>
-              <div className="flex flex-row gap-20 pt-2 pb-6">
-                {servicos.servicos.map((servicos) => (
+              <h1 className="text-2xl font-black ">Serviços</h1>
+              <div className="flex flex-row gap-10 pt-2 pb-6">
+                {services.map((service) => (
                   <ServiceCard
-                    key={servicos.id}
-                    title={servicos.nome}
-                    serviceId={servicos.id}
-                    iconName={"src/assets/imgs/" + servicos.iconName}
+                    key={service.id}
+                    title={service.name}
+                    serviceId={service.id}
+                    handleSchedulingOpen={handleSchedulingOpen(service.id)}
                   />
                 ))}
               </div>

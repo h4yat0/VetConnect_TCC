@@ -44,22 +44,21 @@ interface Animal {
 const ANIMALRECORD_URL = "api/animal/v1/cadastro";
 
 function mapApiDataToModel(apiData: ApiAnimal): Animal {
-    return {
-      id: apiData.id,
-      clientId: apiData.idCliente,
-      name: apiData.nome,
-      color: apiData.cor,
-      race: apiData.raca,
-      birthDate: apiData.dataNascimento,
-      weigth: apiData.peso,
-      size: apiData.tamanho,
-      specie: apiData.especie,
-      sex: apiData.sexo,
-    };
-  
+  return {
+    id: apiData.id,
+    clientId: apiData.idCliente,
+    name: apiData.nome,
+    color: apiData.cor,
+    race: apiData.raca,
+    birthDate: apiData.dataNascimento,
+    weigth: apiData.peso,
+    size: apiData.tamanho,
+    specie: apiData.especie,
+    sex: apiData.sexo,
+  };
 }
 
-export default function RegisterAnimalModal({
+export default function AnimalModal({
   type,
   isOpen,
   animalsStore,
@@ -75,8 +74,7 @@ export default function RegisterAnimalModal({
   const [alertIsOpen, setAlertIsOpen] = useState(false);
 
   let animals = [...animalsStore];
-  const currentAnimal = animals.findIndex((animal) => animal.id === animalId)
-  console.log(currentAnimal, animalId, animals[currentAnimal].name)
+  const currentAnimal = animals.findIndex((animal) => animal.id === animalId);
 
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
@@ -90,16 +88,18 @@ export default function RegisterAnimalModal({
   const idStore = useSelector(getId);
   const accessToken = useSelector(getAccessToken);
 
-  useEffect(()=> {
-    setName(animals[currentAnimal].name);
-    setBirthDate(animals[currentAnimal].birthDate)
-    setColor(animals[currentAnimal].color)
-    setRace(animals[currentAnimal].race)
-    setWeigth(animals[currentAnimal].weigth)
-    setSize(animals[currentAnimal].size)
-    setSpecie(animals[currentAnimal].specie)
-    setSex(animals[currentAnimal].sex)
-  }, [currentAnimal])
+  useEffect(() => {
+    if (animalId !== -1) {
+      setName(animals[currentAnimal].name);
+      setBirthDate(animals[currentAnimal].birthDate);
+      setColor(animals[currentAnimal].color);
+      setRace(animals[currentAnimal].race);
+      setWeigth(animals[currentAnimal].weigth);
+      setSize(animals[currentAnimal].size);
+      setSpecie(animals[currentAnimal].specie);
+      setSex(animals[currentAnimal].sex);
+    }
+  }, [currentAnimal]);
 
   function isEmptyString(str: string) {
     return str.trim() === "";

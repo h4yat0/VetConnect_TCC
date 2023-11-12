@@ -1,18 +1,25 @@
 import { useEffect, useState } from "react";
 import Cachorro from "../assets/imgs/Cachorro.jpg";
-import AgendamentoModal from "../components/SchedulingModal";
-import RegisterAnimalModal from "../components/AnimalModal";
+import SchedulingModal from "../components/SchedulingModal";
+import AnimalModal from "../components/AnimalModal";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import { getAnimals } from "../redux/client";
 import { useSelector } from "react-redux";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
+import { useNavigate } from "react-router-dom";
 
 export default function Animals() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [currentAnimal, setCurrentAnimal] = useState(0);
 
   let animals = useSelector(getAnimals);
   animals = [...animals];
+
+  useEffect(()=> {
+    if (animals.length == 0) navigate("user/client");
+  },[])
+
 
   function incrementCurrentAnimal() {
     if (currentAnimal < animals.length - 1) {
@@ -44,7 +51,7 @@ export default function Animals() {
 
   return (
     <>
-      <RegisterAnimalModal
+      <AnimalModal
         type="update"
         animalsStore={animals}
         animalId={animals[currentAnimal].id}
