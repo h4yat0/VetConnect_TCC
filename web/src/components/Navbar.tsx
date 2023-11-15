@@ -98,7 +98,7 @@ export default function Navbar() {
             Página principal
           </Link>
 
-          <Popover className="relative">
+          {/* <Popover className="relative">
             <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
               Agendar serviço
               <ChevronDownIcon
@@ -143,6 +143,7 @@ export default function Navbar() {
                     </div>
                   ))}
                 </div>
+
                 <div className="grid  items-center divide-x divide-gray-900/5 bg-gray-50">
                   {callsToAction.map((item) => (
                     <a
@@ -160,7 +161,7 @@ export default function Navbar() {
                 </div>
               </Popover.Panel>
             </Transition>
-          </Popover>
+          </Popover> */}
           <Link
             to="/unidades"
             className="text-sm font-semibold leading-6 text-gray-900"

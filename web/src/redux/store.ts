@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import clientReducer from "./client";
+import unitsReducer from "./unit"
 
 const store = configureStore({
-	reducer: {
-		client: clientReducer,
-	},
+  reducer: {
+    client: clientReducer,
+    units: unitsReducer,
+  },
 });
 
 export default store;

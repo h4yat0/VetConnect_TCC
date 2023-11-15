@@ -166,7 +166,7 @@ export default function SignIn() {
       })
       .catch(function (error) {
         console.log(error);
-        errorHandling(error)
+        errorHandling(error);
 
         errRef.current?.focus();
       });

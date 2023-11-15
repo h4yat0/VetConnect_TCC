@@ -8,7 +8,7 @@ export default function ButtonSecundary(props: buttonSecundaryProps) {
 
 	return (
 		<button
-			className='mx-8 
+			className='
             bg-gray-800 
             text-white 
             py-2 

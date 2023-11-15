@@ -1,5 +1,16 @@
 @echo off
 
+set /p username=Digite o nome de usário do MySQL:
+set /p password=Digite a senha do MySQL: 
+
+mysqlsh -u %username% -p%password% --sql < createDataBase.sql
+
+if %errorlevel%==0 (
+  echo Banco de dados "vetconnect" criado com sucesso.
+) else (
+  echo Houve um erro ao criar o banco de dados "vetconnect".
+)
+
 cd server 
 
 call mvn clean package
