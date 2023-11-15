@@ -11,28 +11,29 @@ import unitsAndServices from "../hooks/useStoreRestock";
 import useRestockUnitsAndServices from "../hooks/useStoreRestock";
 import AlertConfirm from "../components/AlertConfirm";
 import api from "../api/axios";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
-const SERVICE_URL = "/api/servico/v1/somente-servicos";
+// const SERVICE_URL = "/api/servico/v1/somente-servicos";
 
-interface ApiService {
-  id: number;
-  nome: string;
-  preco: number;
-}
+// interface ApiService {
+//   id: number;
+//   nome: string;
+//   preco: number;
+// }
 
-interface Service {
-  id: number;
-  name: string;
-  price: number;
-}
+// interface Service {
+//   id: number;
+//   name: string;
+//   price: number;
+// }
 
-function mapApiServicesToServices(apiServices: ApiService[]): Service[] {
-  return apiServices.map((apiService) => ({
-    id: apiService.id,
-    name: apiService.nome,
-    price: apiService.preco,
-  }));
-}
+// function mapApiServicesToServices(apiServices: ApiService[]): Service[] {
+//   return apiServices.map((apiService) => ({
+//     id: apiService.id,
+//     name: apiService.nome,
+//     price: apiService.preco,
+//   }));
+// }
 
 const HistoryServices = {
   history: [
@@ -63,49 +64,55 @@ const HistoryServices = {
   ],
 };
 
-
 export default function Home() {
   const loggedIn = useSimpleAuth();
 
-  let units = useSelector(getUnits);
-  units = [...units];
+  const units = [...useSelector(getUnits)];
 
   const { getUnitsAndServices } = useRestockUnitsAndServices();
 
-  const [services, setServices] = useState<Service[]>([]);
+  // const [services, setServices] = useState<Service[]>([]);
   const [schedulingIsOpen, setSchedulingIsOpen] = useState(false);
+  const [schedulingType, setSchedulingType] = useState<
+    "new" | "inProgress" | "finished"
+  >("new");
+
   const [serviceId, setServiceId] = useState<number>(-1)
 
-  const handleSchedulingOpen = (serviceId : any) => {
-    return ()=> {
+  const handleSchedulingOpen = (
+    schedulingType: "new" | "inProgress" | "finished",
+    serviceId: number,
+  ) => {
+    return () => {
+      setSchedulingType(schedulingType);
       setServiceId(serviceId);
       setSchedulingIsOpen(true);
-    }
+    };
   };
 
   useEffect(() => {
     if (units.length == 0) getUnitsAndServices();
-    if (services.length == 0) getServices();
+    // if (services.length == 0) getServices();
     setSchedulingIsOpen(false);
   }, []);
 
-  const getServices = async () => {
-    let response = await api
-      .get(SERVICE_URL)
-      .then(function (response) {
-        let data = response.data;
-        setServices(mapApiServicesToServices(data).slice(0,5));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  // const getServices = async () => {
+  //   let response = await api
+  //     .get(SERVICE_URL)
+  //     .then(function (response) {
+  //       let data = response.data;
+  //       setServices(mapApiServicesToServices(data).slice(0,5));
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
 
   return (
     <div className="w-full">
       {units.length > 0 ? (
         <SchedulingModal
-          type="inProgress"
+          type={schedulingType}
           isOpen={schedulingIsOpen}
           serviceId={serviceId}
           setIsOpen={setSchedulingIsOpen}
@@ -117,16 +124,29 @@ export default function Home() {
         <div className="py-8">
           {loggedIn ? (
             <>
-              <h1 className="text-2xl font-black ">Serviços</h1>
+              <h1 className="text-2xl font-black ">Agendamentos</h1>
               <div className="flex flex-row gap-10 pt-2 pb-6">
-                {services.map((service) => (
+                <button
+                  className="min-w-50 p-4 bg-white flex space-x-4 rounded-lg border-4 border-dashed hover:scale-105 hover:border-vetConnectPrimaryGreen hover:text-vetConnectPrimaryGreen transition transform duration-500 cursor-pointer"
+                  onClick={handleSchedulingOpen("new", -1)}
+                >
+                  <div className="mt-4 ml-2">
+                    <PlusIcon className="h-10 w-10" />
+                  </div>
+                  <div className="w-full">
+                    <h1 className="p-2 text-left text-xl font-bold text-gray-700">
+                      Novo <br /> agendamento
+                    </h1>
+                  </div>
+                </button>
+                {/* {services.map((service) => (
                   <ServiceCard
                     key={service.id}
                     title={service.name}
                     serviceId={service.id}
                     handleSchedulingOpen={handleSchedulingOpen(service.id)}
                   />
-                ))}
+                ))} */}
               </div>
 
               <h1 className="text-2xl font-black ">Últimos serviços utilizados</h1>
