@@ -24,5 +24,5 @@ public class AgendamentoFormReturn extends RepresentationModel<AgendamentoFormRe
     private String unidade;
     private String cliente;
     private String animal;
-    private Boolean cancelado;
+    private char status;
 }

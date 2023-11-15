@@ -25,7 +25,7 @@ public class AgendamentoMapper {
         entity.setDataAgendada(form.getDataAgendada());
         entity.setHoraAgendada(form.getHoraAgendada());
         entity.setValorAgendado(form.getValorAgendado());
-        entity.setCancelado(false);
+        entity.setStatus('1');
         if(form.getObservacao() !=null){
             entity.setObservacao(form.getObservacao());
         }
@@ -62,7 +62,7 @@ public class AgendamentoMapper {
         formReturn.setAnimal(entity.getIdAnimal().getNome());
         formReturn.setServico(entity.getIdServico().getNome());
         formReturn.setUnidade(entity.getIdUnidade().getNome());
-        formReturn.setCancelado(entity.getCancelado());
+        formReturn.setStatus(entity.getStatus());
         return  formReturn;
     }
 
@@ -82,7 +82,7 @@ public class AgendamentoMapper {
             formReturn.setAnimal(entity.getIdAnimal().getNome());
             formReturn.setServico(entity.getIdServico().getNome());
             formReturn.setUnidade(entity.getIdUnidade().getNome());
-            formReturn.setCancelado(entity.getCancelado());
+            formReturn.setStatus(entity.getStatus());
             formReturnList.add(formReturn);
         }
 

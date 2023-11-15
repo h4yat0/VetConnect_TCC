@@ -112,6 +112,7 @@ public class AgendamentoController {
             service.cancelarAgendamento(id);
             return ResponseEntity.noContent().build();
         }catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(new Date(), HttpStatus.NOT_FOUND, "Não foi possivel cancelar esse agendamento"));
         }
     }

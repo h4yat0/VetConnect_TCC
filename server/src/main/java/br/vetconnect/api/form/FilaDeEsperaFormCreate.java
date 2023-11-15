@@ -7,5 +7,7 @@ public class FilaDeEsperaFormCreate {
     private Long idAgendamento;
     private String horaDesejada;
     private String dataDesejada;
+    private Long idServico;
+    private Long idUnidade;
 
 }

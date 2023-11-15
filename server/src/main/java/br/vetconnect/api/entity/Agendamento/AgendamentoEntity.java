@@ -3,6 +3,7 @@ package br.vetconnect.api.entity.Agendamento;
 import br.vetconnect.api.entity.AnimalEntity;
 import br.vetconnect.api.entity.ClienteEntity;
 
+import br.vetconnect.api.entity.FuncionarioEntity;
 import br.vetconnect.api.entity.UnidadeServico.ServicoEntity;
 import br.vetconnect.api.entity.UnidadeServico.UnidadeEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,13 +14,14 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "fichaServico"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "agendamento")
-@Entity(name = "agendamento")
+@Entity
 public class AgendamentoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +38,9 @@ public class AgendamentoEntity {
     @ManyToOne
     @JoinColumn(name = "id_unidade")
     private UnidadeEntity idUnidade;
-
+    @ManyToOne
+    @JoinColumn(name = "id_funcionario")
+    private FuncionarioEntity idFuncionario;
 
     @Column(nullable = false, name = "data_agendada")
     private String dataAgendada;
@@ -48,16 +52,15 @@ public class AgendamentoEntity {
 
     private String observacao;
 
-    @Column(columnDefinition = "boolean DEFAULT false")
-    private Boolean cancelado;
+    @Column(columnDefinition = "char(1)")
+    private char status;
 
 
-    @OneToOne(mappedBy = "idAgendamento",cascade = CascadeType.ALL)
-    private FichaServicoEntity fichaServico;
 
-    @OneToOne(mappedBy = "idAgendamento", cascade = CascadeType.ALL)
-    private FilaEsperaEntity filaEspera;
 
-    @OneToOne(mappedBy = "idAgendamentoDesejado", cascade = CascadeType.ALL)
-    private FilaEsperaEntity filaEspera2;
+    @OneToMany(mappedBy = "idAgendamento", cascade = CascadeType.ALL)
+    private List<FilaEsperaEntity> filaEspera;
+
+    @OneToMany(mappedBy = "idAgendamentoDesejado", cascade = CascadeType.ALL)
+    private List<FilaEsperaEntity> filaEspera2;
 }

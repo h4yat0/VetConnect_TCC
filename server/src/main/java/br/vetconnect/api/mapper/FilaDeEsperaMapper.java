@@ -8,20 +8,19 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class FilaDeEsperaMapper {
-    public FilaEsperaEntity formCreateParaEntity(FilaDeEsperaFormCreate formCreate, AgendamentoEntity agendamentoEntity) {
+    public FilaEsperaEntity formCreateParaEntity(AgendamentoEntity agendamentoDesejado, AgendamentoEntity agendamentoAtual) {
         FilaEsperaEntity entity = new FilaEsperaEntity();
+        entity.setIdAgendamentoDesejado(agendamentoDesejado);
+        entity.setIdAgendamento(agendamentoAtual);
         entity.setAtivo(true);
-
-        entity.setIdAgendamento(agendamentoEntity);
         return entity;
 
     }
 
     public FilaDeEsperaFormReturn entityParaFormReturn(FilaEsperaEntity entity) {
         FilaDeEsperaFormReturn formReturn = new FilaDeEsperaFormReturn();
-
         formReturn.setId(entity.getId());
-        formReturn.setIdAgendamento(entity.getId());
+        formReturn.setIdAgendamento(entity.getIdAgendamento().getId());
         return formReturn;
     }
 }

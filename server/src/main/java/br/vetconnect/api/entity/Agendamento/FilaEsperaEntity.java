@@ -16,14 +16,15 @@ public class FilaEsperaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_agendamento")
     private AgendamentoEntity idAgendamento;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_agendamento_desejado")
     private AgendamentoEntity idAgendamentoDesejado;
 
+    @Column(columnDefinition = "boolean DEFAULT true")
     private Boolean ativo;
 
 

@@ -8,6 +8,8 @@ import br.vetconnect.api.entity.AnimalEntity;
 import br.vetconnect.api.entity.ClienteEntity;
 import br.vetconnect.api.form.Agendamento.AgendamentoFormCreate;
 import br.vetconnect.api.form.Agendamento.AgendamentoFormReturn;
+import br.vetconnect.api.form.AgendamentoEmail;
+import br.vetconnect.api.form.EmailFilaDeEspera;
 import br.vetconnect.api.mapper.AgendamentoMapper;
 import br.vetconnect.api.repository.Agendamento.AgendamentoRepository;
 import br.vetconnect.api.repository.Agendamento.ServicoRepository;
@@ -18,6 +20,7 @@ import br.vetconnect.api.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -44,14 +47,10 @@ public class AgendamentoService {
     @Autowired
     private AgendamentoMapper mapper;
 
-//    @Autowired
-//    private FilaDeEsperaService filaDeEsperaService;
+    @Autowired
+    private FilaDeEsperaService filaDeEsperaService;
 
-//    @Autowired
-//    private FilaEsperaAgendamento filaEsperaAgendamento;
 
-//    @Autowired
-//    private AssociacaoService associacaoService;
 
 
     public AgendamentoFormReturn cadastrarAgendamento(AgendamentoFormCreate form){
@@ -113,15 +112,25 @@ public class AgendamentoService {
 
     public void cancelarAgendamento(Long id) {
         AgendamentoEntity entity = repository.buscarAgendamento(id);
-        entity.setCancelado(true);
+        entity.setStatus('3');
         repository.save(entity);
-//
-////        FilaEsperaAgendamento filaEsperaAgendamento = new FilaEsperaAgendamento(this);
-//        filaDeEsperaService.verificaFilaEspera( id);
+        filaDeEsperaService.verificaFilaEspera( id);
     }
 
 
     public AgendamentoEntity buscarPorId(Long idAgendamento) {
         return repository.buscarAgendamento(idAgendamento);
+    }
+
+    public AgendamentoEntity buscarPorDataHoraServicoUnidade(String data, String hora, Long idServico, Long idUnidade){
+        return repository.verificaDataHora(data, hora, idServico, idUnidade);
+    }
+
+    public EmailFilaDeEspera criaEmail(Long id) {
+         return repository.criaEmail(id);
+    }
+
+    public List<AgendamentoEmail> criaNotificaoEmail(LocalDate dataAtual, LocalDate dataDaquiDoisDias) {
+        return repository.criaNotificaoEmail(String.valueOf(dataAtual), String.valueOf(dataDaquiDoisDias));
     }
 }
