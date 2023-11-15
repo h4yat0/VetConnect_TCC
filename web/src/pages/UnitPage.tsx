@@ -5,43 +5,26 @@ import { useEffect, useState } from "react";
 import Cleave from "cleave.js/react";
 import ServiceCard from "../components/ServiceCard";
 import SchedulingModal from "../components/SchedulingModal";
+import useRestockUnitsAndServices from "../hooks/useStoreRestock";
 
 export default function UnitPage() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const unitId: number = parseInt(location.pathname.replace("/unidades/", ""));
+  const { getUnitsAndServices } = useRestockUnitsAndServices();
 
-  let units = useSelector(getUnits);
-  units = [...units];
+  const unitId: number = parseInt(location.pathname.replace("/unidades/", ""));
+  const units = [...useSelector(getUnits)];
+  const unit = units.find((unit) => unit.id === unitId);
 
   useEffect(() => {
-    if (units.length == 0) {
-      navigate("/", { replace: true });
-    }
+    if (units.length == 0) getUnitsAndServices();
+    setSchedulingIsOpen(false);
   }, []);
-
-  let unit = units.find((unit) => unit.id === unitId);
-
+  
   if (unit === undefined) {
-    unit = {
-      id: -1,
-      name: "",
-      cnpj: "",
-      cep: "",
-      bairro: "",
-      rua: "",
-      numero: "",
-      estado: "",
-      cidade: "",
-      complemento: "",
-      contact: "",
-      specialty: "",
-      images: [""],
-      services: [{ id: -1, name: "", price: 0 }],
-      openingTime: "",
-      closingTime: "",
-    };
+    navigate("/", { replace: true });
+    return null
   }
 
   const [schedulingIsOpen, setSchedulingIsOpen] = useState(false);
@@ -55,7 +38,6 @@ export default function UnitPage() {
         setSchedulingIsOpen(true);
       };
     };
-
 
   return (
     <>
