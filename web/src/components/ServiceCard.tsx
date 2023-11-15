@@ -26,7 +26,7 @@ function iconSelect(title: string): any {
 }
 
 export default function ServiceCard(props: ServiceCardProps) {
-  const { title, serviceId, handleSchedulingOpen } = props;
+  const { title, handleSchedulingOpen } = props;
 
   return (
     <div
