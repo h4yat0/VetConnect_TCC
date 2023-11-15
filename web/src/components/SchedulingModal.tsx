@@ -3,13 +3,13 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import ButtonDanger from "./buttons/ButtonDanger";
-import { DatePicker, MobileDateTimePicker, TimePicker } from "@mui/x-date-pickers";
+import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { getAccessToken, getAnimals } from "../redux/client";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import api from "../api/axios";
 import AlertConfirm from "./AlertConfirm";
-import unit, { getUnits } from "../redux/unit";
+import { getUnits } from "../redux/unit";
 
 interface AgendamentoModalProps {
   type: "new" | "inProgress" | "finished";
@@ -34,13 +34,10 @@ export default function SchedulingModal({
 }: AgendamentoModalProps) {
   const accessToken = useSelector(getAccessToken);
 
-  let animals = useSelector(getAnimals);
-  animals = [...animals];
+  const animals = [...useSelector(getAnimals)];
+  const units = [...useSelector(getUnits)];
 
-  let units = useSelector(getUnits);
-  units = [...units];
-
-  const [alertConfirmIsOpen, setAlertConfirmIsOpen] = useState(true);
+  const [alertConfirmIsOpen, setAlertConfirmIsOpen] = useState(false);
   const [selectedAnimal, setSelectedAnimal] = useState(animals[0]);
   const [selectedUnit, setSelectedUnit] = useState(units[0]);
 
@@ -290,7 +287,7 @@ export default function SchedulingModal({
                               onChange={setSelectedService}
                             >
                               <div className="relative">
-                                <Listbox.Button className="w-full p-4 cursor-pointer rounded text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-vetConnectPrimaryGreen sm:text-sm">
+                                <Listbox.Button className="w-full p-[18px] cursor-pointer rounded text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-vetConnectPrimaryGreen sm:text-sm">
                                   <span className="block truncate">
                                     {selectedService.name}
                                   </span>
