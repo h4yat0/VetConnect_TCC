@@ -29,8 +29,20 @@ public class FuncionarioEntity {
     @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false)
+    private String senha;
+
+    @Column(nullable = false)
+    private String email;
+
     @Column(name = "data_nascimento")
     private String dataNascimento;
+
+    @Column
+    private String horaDeEntrada;
+
+    @Column
+    private String horaDeSaida;
 
     @OneToMany(mappedBy = "idFuncionario", cascade = CascadeType.ALL)
     private List<AgendamentoEntity> agendamentoEntities;

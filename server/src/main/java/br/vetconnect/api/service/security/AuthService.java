@@ -107,6 +107,20 @@ public class AuthService {
 
     }
 
+    public void createUserFuncionario(String email, String senha, Long id){
+        UsersEntity entity = new UsersEntity();
+        entity.setUserName(email);
+        entity.setPassword(senha);
+        entity.setAccountNonExpired(true);
+        entity.setCredentialsNonExpired(true);
+        entity.setAccountNonLocked(true);
+        entity.setEnabled(true);
+        entity.setPermissions(new ArrayList<>(Arrays.asList(new PermissionEntity(2L, "Funcionario"))));
+        entity.setTipo(2);
+        entity.setIdTipo(id);
+        repository.save(entity);
+    }
+
     public void updateUser(String email, Long id) {
         UsersEntity entity = repository.findByTipoEId(id);
         entity.setUserName(email);

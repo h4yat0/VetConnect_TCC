@@ -21,6 +21,7 @@ public class teste implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if(repository.count() ==0){
             repository.save(new PermissionEntity(1L, "Cliente"));
+            repository.save(new PermissionEntity(2L, "Funcionario"));
         }
     }
 }
