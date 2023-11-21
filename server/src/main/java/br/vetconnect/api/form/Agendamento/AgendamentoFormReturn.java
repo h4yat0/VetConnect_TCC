@@ -1,6 +1,7 @@
 package br.vetconnect.api.form.Agendamento;
 
 import br.vetconnect.api.form.Animal.AnimalFormReturn;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AgendamentoFormReturn extends RepresentationModel<AgendamentoFormReturn> implements Serializable {
-
+    private Long id;
     private String dataAgendada;
     private String horaAgendada;
     private BigDecimal valorAgendado;
