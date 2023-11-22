@@ -24,8 +24,6 @@ public class ItemProntuarioEntity {
     private ProntuarioEntity idProntuario;
     @Column(nullable = false)
     private String data;
-    @Column(nullable = false)
-    private String veterinario;
     private String sintomas;
     @Column(name = "exames_solicitados")
     private String examesSolicitados;

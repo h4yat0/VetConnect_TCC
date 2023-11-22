@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface ProntuarioRepository extends JpaRepository<ProntuarioEntity, Long> {
 
 
-    @Query(value = "SELECT * FROM prontuario WHERE id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM prontuario WHERE id_animal = ?1  LIMIT 1", nativeQuery = true)
+    ProntuarioEntity buscarProntuarioPorIdAnimal(Long id);
+
+    @Query(value = "SELECT * FROM prontuario WHERE id = ?2", nativeQuery = true)
     ProntuarioEntity buscarProntuarioPorId(Long id);
 }
