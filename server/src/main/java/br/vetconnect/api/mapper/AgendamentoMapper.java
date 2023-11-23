@@ -84,6 +84,7 @@ public class AgendamentoMapper {
             formReturn.setServico(entity.getIdServico().getNome());
             formReturn.setUnidade(entity.getIdUnidade().getNome());
             formReturn.setStatus(entity.getStatus());
+            formReturn.setId(entity.getId());
             formReturnList.add(formReturn);
         }
 
