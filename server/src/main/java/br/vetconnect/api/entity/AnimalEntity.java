@@ -47,7 +47,7 @@ public class AnimalEntity {
     @Check(constraints = "sexo IN ('S', 'N')")
     private String sexo;
 
-    @OneToOne(mappedBy = "idAnimal", cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "idAnimal", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private ProntuarioEntity prontuario;
 
     @OneToMany(mappedBy = "idAnimal")
