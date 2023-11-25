@@ -34,13 +34,13 @@ public class ProntuarioEntity {
     private String alergia;
     private String medicamento;
 
-    @OneToMany(mappedBy = "idProntuario", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
+    @OneToMany(mappedBy = "idProntuario", cascade = CascadeType.ALL) //excluir todos os animais desse cliente não faz ele ser apagado
     private List<VacinaEntity> vacinas = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idProntuario", cascade = CascadeType.PERSIST) //excluir todos os animais desse cliente não faz ele ser apagado
+    @OneToMany(mappedBy = "idProntuario", cascade = CascadeType.ALL) //excluir todos os animais desse cliente não faz ele ser apagado
     private List<ExameEntity> exames = new ArrayList<>();
 
-    @OneToMany(mappedBy =  "idProntuario", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy =  "idProntuario", cascade = CascadeType.ALL)
     private  List<ItemProntuarioEntity> itemProntuario = new ArrayList<>();
 
 
