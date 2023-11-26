@@ -19,7 +19,7 @@ public class VacinaService {
     private ProntuarioRepository prontuarioRepository;
 
     public VacinaEntity salvarVacina(VacinaForm form) {
-        ProntuarioEntity prontuario = prontuarioRepository.buscarProntuarioPorId(form.getIdProntuario());
+        ProntuarioEntity prontuario = prontuarioRepository.buscarProntuarioPorIdAnimal(form.getIdProntuario());
         if (prontuario == null) {
             return null;
         } else {
