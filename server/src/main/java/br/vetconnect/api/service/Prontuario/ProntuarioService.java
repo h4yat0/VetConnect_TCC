@@ -72,4 +72,8 @@ public class  ProntuarioService {
             return formReturn;
         }
     }
+
+    public void insereProntuarioVazio(AnimalEntity id, String data) {
+        repository.save(mapper.prontuarioVazio(id, data));
+    }
 }

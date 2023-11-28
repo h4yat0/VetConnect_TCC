@@ -10,9 +10,11 @@ import br.vetconnect.api.form.Animal.AnimalFormReturn;
 import br.vetconnect.api.mapper.Animal.AnimalMapper;
 import br.vetconnect.api.repository.AnimalRepository;
 import br.vetconnect.api.repository.ClienteRepository;
+import br.vetconnect.api.service.Prontuario.ProntuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -33,6 +35,9 @@ public class AnimalService {
     @Autowired
     private ImagemAnimalService imagemService;
 
+    @Autowired
+    private ProntuarioService prontuarioService;
+
     public AnimalFormReturn saveAnimal(AnimalFormCreate animal) {
         ClienteEntity cliente = clienteRepository.buscarPorId(animal.getIdCliente());
         if(cliente == null){
@@ -45,6 +50,7 @@ public class AnimalService {
             if(animal.getImagens() != null && !animal.getImagens().isEmpty()){
                 imagemService.salvarImagemAnimal(animal.getImagens(), animalEntity);
             }
+            prontuarioService.insereProntuarioVazio(animalEntity, LocalDate.now().toString());
 
             return animalFormReturn;
         }

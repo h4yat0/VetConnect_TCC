@@ -40,4 +40,14 @@ public class ProntuarioMapper {
         prontuario.setId(id);
         return prontuario;
     }
+
+    public ProntuarioEntity prontuarioVazio(AnimalEntity animal, String data) {
+        ProntuarioEntity entity = new ProntuarioEntity();
+        entity.setMedicamento("");
+        entity.setAlergia("");
+        entity.setEnfermidade("");
+        entity.setDataAbertura(data);
+        entity.setIdAnimal(animal);
+        return entity;
+    }
 }
