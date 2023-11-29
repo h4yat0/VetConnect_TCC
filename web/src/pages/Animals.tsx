@@ -1,25 +1,31 @@
 import { useEffect, useState } from "react";
 import Cachorro from "../assets/imgs/Cachorro.jpg";
-import SchedulingModal from "../components/SchedulingModal";
+import ScheduleModal from "../components/SchedulingModal";
 import AnimalModal from "../components/AnimalModal";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
-import { getAnimals } from "../redux/client";
+import { getAnimals, getSchedules } from "../redux/client";
 import { useSelector } from "react-redux";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
+import ButtonSecundary from "../components/buttons/ButtonSecundary";
+import ProntuarioModal from "../components/ProntuarioModal";
 
 export default function Animals() {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+
+  const [animalModalIsOpen, setAnimalModalIsOpen] = useState(false);
+  const [prontuarioModalIsOpen, setProntuarioModalIsOpen] = useState(false);
+
   const [currentAnimal, setCurrentAnimal] = useState(0);
 
-  let animals = useSelector(getAnimals);
-  animals = [...animals];
+  const animals = [...useSelector(getAnimals)];
+  const schedules = [...useSelector(getSchedules)].filter(
+    (schedule) => schedule.animal === animals[currentAnimal].name && schedule.status != 1
+  );
 
-  useEffect(()=> {
+  useEffect(() => {
     if (animals.length == 0) navigate("user/client");
-  },[])
-
+  }, []);
 
   function incrementCurrentAnimal() {
     if (currentAnimal < animals.length - 1) {
@@ -55,9 +61,10 @@ export default function Animals() {
         type="update"
         animalsStore={animals}
         animalId={animals[currentAnimal].id}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
+        isOpen={animalModalIsOpen}
+        setIsOpen={setAnimalModalIsOpen}
       />
+      <ProntuarioModal isOpen={prontuarioModalIsOpen} setIsOpen={setProntuarioModalIsOpen} animalId={animals[currentAnimal].id} />
       <div className="pt-4 font-inter rounded-xl px-10">
         <div className="flex items-center justify-center">
           <GoChevronLeft
@@ -107,13 +114,15 @@ export default function Animals() {
                       .replace(".", ",")}
                     kg
                   </p>
-                  <div className="pt-6">
-                  <ButtonPrimary
-                    text="Editar Informações"
-                    onClickFunction={() => setIsOpen(!isOpen)}
-                    width="w-full"
-          
-                  />
+                  <div className="pt-6 flex flex-col gap-1">
+                    <ButtonPrimary
+                      text="Editar Informações"
+                      onClickFunction={() =>
+                        setAnimalModalIsOpen(!animalModalIsOpen)
+                      }
+                      width="w-full"
+                    />
+                    <ButtonSecundary text="Prontuário" onClickFunction={()=> setProntuarioModalIsOpen(!prontuarioModalIsOpen)}/> 
                   </div>
                 </div>
               </div>
@@ -128,22 +137,33 @@ export default function Animals() {
 
         {/* Histórico de Serviços */}
         <div>
-          <h1 className="font-bold m-2">Histórico de Serviços</h1>
+          <h1 className="font-bold text-2xl m-2">Histórico de Serviços</h1>
           <div className=" rounded-xl px-4 ">
-            <div className="grid gap-4 grid-cols-3 h-2/3">
-              <div className=" col-span-2">Tosa - Unidade Centro Jundiaí</div>
-              <div className="flex justify-center  h-2/3">21 Jan</div>
-            </div>
-
-            <div className="grid gap-4 grid-cols-3 h-2/3">
-              <div className=" col-span-2">Banho - Unidade Centro Jundiaí</div>
-              <div className="flex justify-center  h-2/3">21 Jan</div>
-            </div>
-
-            <div className="grid gap-4 grid-cols-3 h-2/3">
-              <div className=" col-span-2">Castração - Unidade Retiro</div>
-              <div className="flex justify-center  h-2/3">30 Jan</div>
-            </div>
+            {schedules.length > 0 ? (
+              schedules.map((schedule) => (
+                <div className="flex justify-between" key={schedule.id}>
+                  <div className="flex items-center justify-center">
+                    <div
+                      className={`h-5 w-5 rounded-full mr-4 ${
+                        schedule.status == 3
+                          ? "bg-red-400"
+                          : schedule.status == 2
+                          ? "bg-vetConnectSecundaryGreen"
+                          : "bg-white border border-black"
+                      }`}
+                    />
+                    <div className=" col-span-2">
+                      {schedule.service} - {schedule.unit}
+                    </div>
+                  </div>
+                  <div className="flex justify-center  h-2/3">
+                    {schedule.scheduledDate}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div>Sem serviços prévios</div>
+            )}
           </div>
         </div>
       </div>
