@@ -8,6 +8,7 @@ interface AlertModalProps {
   type: "insert" | "edit" | "delete";
   isOpen: boolean;
   message: string;
+  onConfirmFunction: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   setIsOpen: (isOpen: boolean) => void;
 }
 
@@ -15,11 +16,22 @@ export default function AlertConfirm({
   type,
   isOpen,
   message,
+  onConfirmFunction,
   setIsOpen,
 }: AlertModalProps) {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await onConfirmFunction(e);
+    setIsOpen(false);
+  };
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="absolute z-[11]" onClose={() => setIsOpen(!isOpen)}>
+      <Dialog
+        as="div"
+        className="absolute z-[11]"
+        onClose={() => setIsOpen(!isOpen)}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -50,17 +62,19 @@ export default function AlertConfirm({
                 >
                   <span>Confirmação</span>
                 </Dialog.Title>
-                <div className="mt-2">
-                  <p className="text-md text-gray-800">{message}</p>
-                </div>
+                <form action="POST" onSubmit={handleSubmit}>
+                  <div className="mt-2">
+                    <p className="text-md text-gray-800">{message}</p>
+                  </div>
 
-                <div className="mt-4 flex gap-2">
-                  <ButtonPrimary text="Sim" />
-                  <ButtonSecundary
-                    text="Não"
-                    onClickFunction={() => setIsOpen(!isOpen)}
-                  />
-                </div>
+                  <div className="mt-4 flex gap-2">
+                    <ButtonPrimary text="Sim" type="submit" />
+                    <ButtonSecundary
+                      text="Não"
+                      onClickFunction={() => setIsOpen(!isOpen)}
+                    />
+                  </div>
+                </form>
               </Dialog.Panel>
             </Transition.Child>
           </div>
