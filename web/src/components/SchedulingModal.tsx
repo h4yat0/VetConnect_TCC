@@ -4,19 +4,38 @@ import { XMarkIcon } from "@heroicons/react/20/solid";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import ButtonDanger from "./buttons/ButtonDanger";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
-import { getAccessToken, getAnimals } from "../redux/client";
-import { useSelector } from "react-redux";
+import { getAccessToken, getAnimals, getId, getSchedules, updateSchedules } from "../redux/client";
+import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import api from "../api/axios";
 import AlertConfirm from "./AlertConfirm";
 import { getUnits } from "../redux/unit";
 
+interface Schedules {
+  id: number;
+  client: string;
+  animal: string;
+  unit: string;
+  service: string;
+  scheduledDate: string;
+  scheduledTime: string;
+  scheduledValue: number;
+  canceled: boolean;
+  observation: string;
+}
+
 interface AgendamentoModalProps {
   type: "new" | "inProgress" | "finished";
   isOpen: boolean;
+  unitId?: number;
   serviceId?: number;
+  scheduleId: number;
   setIsOpen: (isOpen: boolean) => void;
 }
+
+const SCHEDULE_URL = "api/agendamento/v1/agendar";
+const SCHEDULING_URL = "/api/agendamento/v1/buscarAgendamentos/";
+const CANCEL_AGENDAMENTO = "api/agendamento/v1/cancelar-agendamento/";
 
 function parseTimeString(timeString: string): { hour: number; minute: number } {
   const [hourStr, minuteStr] = timeString.split(":");
@@ -26,23 +45,29 @@ function parseTimeString(timeString: string): { hour: number; minute: number } {
   return { hour, minute };
 }
 
-export default function SchedulingModal({
+export default function ScheduleModal({
   type,
   isOpen,
+  unitId,
   serviceId,
+  scheduleId,
   setIsOpen,
 }: AgendamentoModalProps) {
+  const dispatch = useDispatch();
   const accessToken = useSelector(getAccessToken);
+  const clientId = useSelector(getId);
 
   const animals = [...useSelector(getAnimals)];
   const units = [...useSelector(getUnits)];
+  const schedule = [...useSelector(getSchedules)].find(
+    (schedule) => schedule.id === scheduleId
+  );
 
   const [alertConfirmIsOpen, setAlertConfirmIsOpen] = useState(false);
   const [selectedAnimal, setSelectedAnimal] = useState(animals[0]);
   const [selectedUnit, setSelectedUnit] = useState(units[0]);
 
   const services = [...selectedUnit.services];
-
   const [selectedService, setSelectedService] = useState(services[0]);
 
   const newScheduling = type == "new";
@@ -52,20 +77,99 @@ export default function SchedulingModal({
   const minTime = parseTimeString(selectedUnit.openingTime);
   const maxTime = parseTimeString(selectedUnit.closingTime);
 
-  function handleConfirmationMessage(): string {
-    switch (type) {
-      case "new":
-        return "Você deseja realizar esse atendimento";
-      case "inProgress":
-        return "Você deseja cancelar este agendamento";
-      default:
-        return "";
-    }
-  }
+  const [date, setDate] = useState(minDate);
+  const [time, setTime] = useState(minTime);
 
-  useEffect(()=> {
+  const [observation, setObservation] = useState("Sem observações");
+  const [waitingList, setWaitingList] = useState(false)
+
+  const getSchedulesApi = async () => {
+    let response = await api
+      .get(SCHEDULING_URL + clientId, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(function (response) {
+        let data = response.data;
+        dispatch(updateSchedules(data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const postScheduling = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (selectedService.id == undefined || selectedUnit.id == undefined) {
+      return;
+    }
+    let reponse = await api
+      .post(
+        SCHEDULE_URL,
+        {
+          idCliente: clientId,
+          idAnimal: selectedAnimal.id,
+          idServico: selectedService.id,
+          idUnidade: selectedUnit.id,
+          dataAgendada: date.format("DD/MM/YYYY"),
+          horaAgendada: `${time.hour}:${time.minute}`,
+          valorAgendado: selectedService.price,
+          observacao: observation,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then(function (response) {
+        let data = response.data;
+        getSchedulesApi()
+        setIsOpen(false)
+        console.log(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        console.log(`${time.hour}:${time.minute}`);
+        if(error?.status == 409){
+          setWaitingList(true)
+          setAlertConfirmIsOpen(true)
+        }
+        if (!error?.message) {
+          // setErrorMessage("No server response");
+        } else {
+          // setErrorMessage(error.message);
+        }
+        // errRef.current?.focus();
+      });
+  };
+
+  const cancelScheduling = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    let reponse = await api
+      .put(
+        `${CANCEL_AGENDAMENTO + scheduleId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then(function (response) {
+        getSchedulesApi()
+        setIsOpen(false);
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
     if (serviceId !== -1) locateServiceId(serviceId);
-  },[serviceId])
+  }, [serviceId]);
 
   const locateServiceId = (serviceId: any) => {
     if (units.length > 0 && services.length > 0) {
@@ -75,7 +179,11 @@ export default function SchedulingModal({
           (service) => service.id === serviceId
         );
         if (serviceIndex !== -1) {
-          setSelectedUnit(units[i]);
+          setSelectedUnit(
+            unitId != i && unitId != undefined && unitId > 0
+              ? units[unitId - 1]
+              : units[i]
+          );
           setSelectedService(services[serviceIndex]);
         }
       }
@@ -88,8 +196,16 @@ export default function SchedulingModal({
         isOpen={alertConfirmIsOpen}
         setIsOpen={setAlertConfirmIsOpen}
         type="insert"
-        message={handleConfirmationMessage()}
+        onConfirmFunction={newScheduling ? postScheduling : cancelScheduling}
+        message={
+          newScheduling
+            ? waitingList 
+              ? "Deseja entrar na fila de espera?" 
+              : "Confirme o agendamento"
+            : "Confirme o cancelamento do agendamento"
+        }
       />
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -207,7 +323,8 @@ export default function SchedulingModal({
                         ) : (
                           <div className="p-5 rounded border border-black  ">
                             <div className="text-black text-sm font-extrabold ">
-                              Animal: Dog
+                              Animal:{" "}
+                              {schedule != undefined ? schedule.animal : "Animal"}
                             </div>
                           </div>
                         )}
@@ -267,7 +384,8 @@ export default function SchedulingModal({
                         ) : (
                           <div className="p-5 rounded border border-black  ">
                             <div className="text-black text-sm font-extrabold ">
-                              Unidade: Dasi
+                              Unidade:{" "}
+                              {schedule != undefined ? schedule.unit : "Unidade"}
                             </div>
                           </div>
                         )}
@@ -334,7 +452,8 @@ export default function SchedulingModal({
                         ) : (
                           <div className="p-5 rounded border border-black ">
                             <div className="text-black text-sm font-extrabold ">
-                              Serviço: Tosa
+                              Serviço:{" "}
+                              {schedule != undefined ? schedule.service : "Serviço"}
                             </div>
                           </div>
                         )}
@@ -348,6 +467,8 @@ export default function SchedulingModal({
                             <div className="flex gap-2">
                               <DatePicker
                                 disablePast
+                                value={date}
+                                onChange={() => setDate(date)}
                                 defaultValue={minDate}
                                 maxDate={maxDate}
                               />
@@ -366,7 +487,9 @@ export default function SchedulingModal({
                         ) : (
                           <div className="p-5 rounded border border-black  ">
                             <div className="text-black text-sm font-extrabold ">
-                              22 mar - 15:00
+                              {schedule != undefined
+                                ? `${schedule.scheduledDate} - ${schedule.scheduledTime}`
+                                : "data - hora"}
                             </div>
                           </div>
                         )}
@@ -377,7 +500,13 @@ export default function SchedulingModal({
                         }`}
                       >
                         <div className="text-black text-sm font-extrabold ">
-                          R$ {selectedService.price.toString().replace(".", ",")}
+                          R${" "}
+                          {schedule != undefined && scheduleId != -1
+                            ? schedule.scheduledValue
+                                .toFixed(2)
+                                .toString()
+                                .replace(".", ",")
+                            : selectedService.price.toString().replace(".", ",")}
                         </div>
                       </div>
                     </div>
@@ -394,8 +523,9 @@ export default function SchedulingModal({
                         id="observation"
                         name="observation"
                         maxLength={200}
-                        required
-                        // onChange={(e) => setEmail(e.target.value)}
+                        value={scheduleId > 0 ? schedule?.observation : observation }
+                        disabled={scheduleId > 0 ? true : false}
+                        onChange={(e) => setObservation(e.target.value)}
                         className="block w-full rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                       />
                     </div>
@@ -404,7 +534,7 @@ export default function SchedulingModal({
                   <div className="items-start flex mt-5">
                     {newScheduling ? (
                       <ButtonPrimary
-                        type="button"
+                        type="submit"
                         text="Agendar"
                         width="w-full"
                         onClickFunction={() =>
@@ -413,7 +543,7 @@ export default function SchedulingModal({
                       />
                     ) : (
                       <ButtonDanger
-                        text="Cancelar atendimento"
+                        text="Cancelar agendamento"
                         width="w-full"
                         onClickFunction={() =>
                           setAlertConfirmIsOpen(!alertConfirmIsOpen)
