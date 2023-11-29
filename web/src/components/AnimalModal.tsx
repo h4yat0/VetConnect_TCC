@@ -15,19 +15,6 @@ interface AnimalModalProps {
   setIsOpen: (isOpen: boolean) => void;
 }
 
-interface ApiAnimal {
-  id: number;
-  idCliente: number;
-  nome: string;
-  cor: string;
-  raca: string;
-  dataNascimento: string;
-  peso: string;
-  tamanho: string;
-  especie: string;
-  sexo: string;
-}
-
 interface Animal {
   id: number;
   clientId: number;
@@ -42,21 +29,7 @@ interface Animal {
 }
 
 const ANIMALRECORD_URL = "api/animal/v1/cadastro";
-
-function mapApiDataToModel(apiData: ApiAnimal): Animal {
-  return {
-    id: apiData.id,
-    clientId: apiData.idCliente,
-    name: apiData.nome,
-    color: apiData.cor,
-    race: apiData.raca,
-    birthDate: apiData.dataNascimento,
-    weigth: apiData.peso,
-    size: apiData.tamanho,
-    specie: apiData.especie,
-    sex: apiData.sexo,
-  };
-}
+const ANIMALS_URL = "/api/animal/v1/buscar/";
 
 export default function AnimalModal({
   type,
@@ -85,7 +58,7 @@ export default function AnimalModal({
   const [specie, setSpecie] = useState("");
   const [sex, setSex] = useState("");
 
-  const idStore = useSelector(getId);
+  const id = useSelector(getId);
   const accessToken = useSelector(getAccessToken);
 
   useEffect(() => {
@@ -105,9 +78,21 @@ export default function AnimalModal({
     return str.trim() === "";
   }
 
-  function removeAnimalById(animals: Animal[], idToRemove: number) {
-    animals = animals.filter((animal) => animal.id !== idToRemove);
-  }
+  const getAnimals = async () => {
+    let response = await api
+      .get(ANIMALS_URL + id, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(function (response) {
+        let data = response.data;
+        dispatch(updateAnimals(data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const postAnimal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -115,7 +100,7 @@ export default function AnimalModal({
       .post(
         ANIMALRECORD_URL,
         {
-          idCliente: idStore,
+          idCliente: id,
           nome: name,
           cor: color,
           raca: race,
@@ -134,12 +119,11 @@ export default function AnimalModal({
       .then(function (response) {
         let data = response.data;
 
+        getAnimals();
         setAlertMessage("Cadastro bem sucedido");
         setAlertType("success");
         setAlertIsOpen(true);
         setIsOpen(false);
-        animals.push(mapApiDataToModel(data));
-        dispatch(updateAnimals(animals));
       })
       .catch(function (error) {
         console.log(error);
@@ -160,7 +144,7 @@ export default function AnimalModal({
       .put(
         `api/animal/v1/alterar/${animalId}`,
         {
-          idCliente: idStore,
+          idCliente: id,
           nome: isEmptyString(name) ? animals[animalId]?.name : name,
           cor: isEmptyString(color) ? animals[animalId]?.color : color,
           raca: isEmptyString(race) ? animals[animalId]?.race : race,
@@ -181,20 +165,7 @@ export default function AnimalModal({
       )
       .then(function (response) {
         let data = response.data;
-
-        animals[animalId] = {
-          id: data.id,
-          clientId: data.idCliente,
-          name: data.nome,
-          color: data.cor,
-          race: data.raca,
-          birthDate: data.dataNascimento,
-          weigth: data.peso,
-          size: data.tamanho,
-          specie: data.especie,
-          sex: data.sexo,
-        };
-        dispatch(updateAnimals(animals));
+        getAnimals();
         console.log(response);
       })
       .catch(function (error) {
@@ -213,9 +184,7 @@ export default function AnimalModal({
         },
       })
       .then(function (response) {
-        removeAnimalById(animals, animalId);
-        dispatch(updateAnimals(animals));
-
+        getAnimals();
         setAlertMessage("Exclusão bem sucedido");
         setAlertType("success");
         setAlertIsOpen(true);
