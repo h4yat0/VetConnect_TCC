@@ -18,6 +18,20 @@ interface ClientState {
   complemento: string;
   streetNumber: string;
   cep: string;
+  schedules: Schedules[]
+}
+
+interface ApiAnimal {
+  id: number;
+  idCliente: number;
+  nome: string;
+  cor: string;
+  raca: string;
+  dataNascimento: string;
+  peso: string;
+  tamanho: string;
+  especie: string;
+  sexo: string;
 }
 
 interface Animal {
@@ -32,6 +46,67 @@ interface Animal {
   specie: string;
   sex: string;
 }
+
+interface ApiSchedules {
+  id: number;
+  cliente: string;
+  animal: string;
+  unidade: string;
+  servico: string;
+  dataAgendada: string;
+  horaAgendada: string;
+  valorAgendado: number;
+  status: number;
+  observacao: string;
+}
+
+interface Schedules {
+  id: number
+  client: string;
+  animal: string;
+  unit: string;
+  service: string;
+  scheduledDate: string;
+  scheduledTime: string;
+  scheduledValue: number;
+  status: number;
+  observation: string;
+}
+
+function mapApiSchedulesToSchedules(apiServices: ApiSchedules[]): Schedules[] {
+  return apiServices.map((apiService) => ({
+    id: apiService.id,
+    client: apiService.cliente,
+    animal: apiService.animal,
+    unit: apiService.unidade,
+    service: apiService.servico,
+    scheduledDate: apiService.dataAgendada,
+    scheduledTime: apiService.horaAgendada,
+    scheduledValue: apiService.valorAgendado,
+    status: apiService.status,
+    observation: apiService.observacao,
+  }));
+}
+
+
+  function mapApiDataToModel(apiData: ApiAnimal[]): Animal[] {
+    return apiData.map((apiAnimal) => {
+      return {
+        id: apiAnimal.id,
+        clientId: apiAnimal.idCliente,
+        name: apiAnimal.nome,
+        color: apiAnimal.cor,
+        race: apiAnimal.raca,
+        birthDate: apiAnimal.dataNascimento,
+        weigth: apiAnimal.peso,
+        size: apiAnimal.tamanho,
+        specie: apiAnimal.especie,
+        sex: apiAnimal.sexo,
+      };
+    });
+  }
+
+
 
 const initialState: ClientState = {
   id: -1,
@@ -64,6 +139,7 @@ const initialState: ClientState = {
       sex: "",
     },
   ],
+  schedules: []
 };
 
 const clientSlice = createSlice({
@@ -85,7 +161,6 @@ const clientSlice = createSlice({
     updateCpf: (state, action: PayloadAction<string>) => {
       state.cpf = action.payload;
     },
-
     updatestreetName: (state, action: PayloadAction<string>) => {
       state.streetName = action.payload;
     },
@@ -119,8 +194,11 @@ const clientSlice = createSlice({
     updateRoles: (state, action: PayloadAction<string[]>) => {
       state.roles = action.payload;
     },
-    updateAnimals: (state, action: PayloadAction<Animal[]>) => {
-      state.animals = action.payload;
+    updateAnimals: (state, action: PayloadAction<ApiAnimal[]>) => {
+      state.animals = mapApiDataToModel(action.payload);
+    },
+    updateSchedules: (state, action: PayloadAction<ApiSchedules[]>) => {
+      state.schedules = mapApiSchedulesToSchedules(action.payload);
     },
   },
 });
@@ -143,6 +221,7 @@ export const {
   updateAccessToken,
   updateRoles,
   updateAnimals,
+  updateSchedules
 } = clientSlice.actions;
 
 export const getId = (state: { client: ClientState }) => state.client.id;
@@ -169,5 +248,7 @@ export const getAccessToken = (state: { client: ClientState }) =>
   state.client.accessToken;
 export const getRoles = (state: { client: ClientState }) => state.client.roles;
 export const getAnimals = (state: { client: ClientState }) => state.client.animals;
+export const getSchedules = (state: { client: ClientState }) =>
+  state.client.schedules;
 
 export default clientSlice.reducer;
