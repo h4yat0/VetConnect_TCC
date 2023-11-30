@@ -1,4 +1,4 @@
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment, useEffect, ChangeEvent } from "react";
 import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,6 +57,7 @@ export default function AnimalModal({
   const [size, setSize] = useState("");
   const [specie, setSpecie] = useState("");
   const [sex, setSex] = useState("");
+  const [img, setImg] = useState("");
 
   const id = useSelector(getId);
   const accessToken = useSelector(getAccessToken);
@@ -76,6 +77,14 @@ export default function AnimalModal({
 
   function isEmptyString(str: string) {
     return str.trim() === "";
+  }
+
+  function handleImgChange(e: ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+
+    if (files && files.length > 0) {
+      setImg(URL.createObjectURL(files[0]));
+    }
   }
 
   const getAnimals = async () => {
@@ -373,7 +382,7 @@ export default function AnimalModal({
                           htmlFor="weigth"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
-                          Peso
+                          Peso (kg)
                         </label>
                         <div className="mt-2">
                           <input
@@ -394,7 +403,7 @@ export default function AnimalModal({
                           htmlFor="size"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
-                          Tamanho
+                          Tamanho (cm)
                         </label>
                         <div className="mt-2">
                           <input
@@ -430,6 +439,27 @@ export default function AnimalModal({
                           />
                         </div>
                       </div>
+
+                      <div>
+                        <label
+                          htmlFor="img"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Faça o upload de uma imagem do seu animalzinho
+                        </label>
+                        <div className="mt-2">
+                          <input
+                            id="img"
+                            name="img"
+                            type="file"
+                            value={img}
+                            onChange={(e) => handleImgChange(e)}
+                            maxLength={1}
+                            className="block w-full border border-gray-300 rounded-md file:rounded file:bg-vetConnectGray file:text-white file:p-2 ring-0 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                          />
+                        </div>
+                      </div>
+
                       {type == "update" ? (
                         <>
                           <div>
