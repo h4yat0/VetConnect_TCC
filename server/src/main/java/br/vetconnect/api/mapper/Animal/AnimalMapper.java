@@ -2,6 +2,8 @@ package br.vetconnect.api.mapper.Animal;
 
 import br.vetconnect.api.entity.AnimalEntity;
 import br.vetconnect.api.entity.ClienteEntity;
+import br.vetconnect.api.entity.imagens.AnimalImagensEntity;
+import br.vetconnect.api.entity.imagens.UnidadeImagensEntity;
 import br.vetconnect.api.form.Animal.AnimalFormCreate;
 import br.vetconnect.api.form.Animal.AnimalFormReturn;
 import org.springframework.stereotype.Service;
@@ -69,6 +71,7 @@ public class AnimalMapper {
                     animalFormReturn.setRaca(entity.getRaca());
                 }
                 animalFormReturn.setIdCliente(entity.getIdCliente().getId());
+                animalFormReturn.setImagens(listaDeImagens(entity.getImagens()));
                 formReturnList.add(animalFormReturn);
             }
             return formReturnList;
@@ -100,5 +103,13 @@ public class AnimalMapper {
         DecimalFormat format = new DecimalFormat("#,###");
         String valorFormatado = format.format(valorDouble);
         return  new BigDecimal(valorFormatado);
+    }
+
+    public List<byte[]> listaDeImagens(List<AnimalImagensEntity> entityList){
+        List<byte[]> imagens = new ArrayList<>();
+        for(AnimalImagensEntity entity : entityList){
+            imagens.add(entity.getImagem());
+        }
+        return imagens;
     }
 }

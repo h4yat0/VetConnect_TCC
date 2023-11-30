@@ -3,6 +3,7 @@ package br.vetconnect.api.entity;
 
 import br.vetconnect.api.entity.Prontuario.ProntuarioEntity;
 import br.vetconnect.api.entity.Agendamento.AgendamentoEntity;
+import br.vetconnect.api.entity.imagens.AnimalImagensEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -52,4 +53,7 @@ public class AnimalEntity {
 
     @OneToMany(mappedBy = "idAnimal")
     private List<AgendamentoEntity> agendamentoEntityList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "animal",  cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<AnimalImagensEntity> imagens;
 }

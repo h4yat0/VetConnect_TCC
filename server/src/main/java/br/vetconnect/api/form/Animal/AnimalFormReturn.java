@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 @EqualsAndHashCode(callSuper = false)
@@ -25,4 +26,5 @@ public class AnimalFormReturn extends RepresentationModel<AnimalFormReturn> impl
     private String tamanho;
     private String especie;
     private String sexo;
+    private List<byte[]> imagens;
 }
