@@ -14,6 +14,7 @@ import Unauthorized from "../pages/Unauthorized";
 import Prontuario from "../pages/Prontuario";
 import RequireAuthorization from "../components/security/RequireAuthorization";
 import PersistLogin from "../components/security/PersistLogin";
+import Funcionario from "../pages/Funcionario";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
               {
                 path: "animal",
                 element: <Prontuario />,
+              },
+              {
+                path: "funcionario",
+                element: <Funcionario />,
               },
             ],
           },

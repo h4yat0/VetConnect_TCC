@@ -3,56 +3,68 @@ import Cachorro from "../assets/imgs/Cachorro.jpg";
 import ScheduleModal from "../components/SchedulingModal";
 import AnimalModal from "../components/AnimalModal";
 import ButtonPrimary from "../components/buttons/ButtonPrimary";
-import { getFuncionario } from "../redux/client";
+
 import { useSelector } from "react-redux";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
+import FuncionarioCard from "../components/FuncionarioCard";
 
 export default function Funcionario() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const [currentAnimal, setCurrentAnimal] = useState(0);
 
-  let Funcionario = useSelector(getFuncionario);
-  Funcionario = [...Funcionario];
-
-  useEffect(()=> {
-    if (Funcionario.length == 0) navigate("user/client");
-  },[])
-
-
-  function incrementCurrentAnimal() {
-    if (currentAnimal < Funcionario.length - 1) {
-      setCurrentAnimal(currentAnimal + 1);
-    }
-  }
-
-  function decrementCurrentAnimal() {
-    if (currentAnimal > 0) {
-      setCurrentAnimal(currentAnimal - 1);
-    }
-  }
-
-  function calculateAge(dateOfBirth: string): number {
-    const today = new Date();
-    const birthdayDate = new Date(dateOfBirth);
-    let age = today.getFullYear() - birthdayDate.getFullYear();
-
-    // Check if the birthday has already occurred this year
-    if (
-      today <
-      new Date(today.getFullYear(), birthdayDate.getMonth(), birthdayDate.getDate())
-    ) {
-      age--;
-    }
-
-    return age;
-  }
+  var funcionarioAgendamento = [
+    {
+      nomeDono: "Nome do Dono 1",
+      nomeAnimal: "Nome do Animal 1",
+      servico: "Serviço 1",
+      porte: "Porte 1",
+      preco: 50.0,
+      data: "2023-11-29",
+    },
+    {
+      nomeDono: "Nome do Dono 2",
+      nomeAnimal: "Nome do Animal 2",
+      servico: "Serviço 2",
+      porte: "Porte 2",
+      preco: 75.0,
+      data: "2023-11-30",
+    },
+    {
+      nomeDono: "Nome do Dono 3",
+      nomeAnimal: "Nome do Animal 3",
+      servico: "Serviço 3",
+      porte: "Porte 3",
+      preco: 100.0,
+      data: "2023-12-01",
+    },
+  ];
 
   return (
     <>
       <div>
         <h1 className="font-bold m-2">Agendamentos</h1>
+      </div>
+
+      <div>
+        <div>
+          <div>Pendentes</div>
+          <div>Em atendimento</div>
+          <div>Concluído</div>
+        </div>
+
+        <div>
+          {funcionarioAgendamento.map((Agendamento: any) => (
+            <FuncionarioCard
+              nomeDono={Agendamento.nomeDono}
+              nomeAnimal={Agendamento.nomeAnimal}
+              servico={Agendamento.servico}
+              porte={Agendamento.porte}
+              preco={Agendamento.preco}
+              data={Agendamento.data}
+            />
+          ))}
+        </div>
       </div>
     </>
   );
