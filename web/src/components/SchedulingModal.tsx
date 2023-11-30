@@ -67,6 +67,26 @@ export default function ScheduleModal({
   const [selectedAnimal, setSelectedAnimal] = useState(animals[0]);
   const [selectedUnit, setSelectedUnit] = useState(units[0]);
 
+
+  const times = [
+      "07:00",
+      "07:30",
+      "08:00",
+      "08:30",
+      "09:00",
+      "09:30",
+      "11:30",
+      "12:30",
+      "13:30",
+      "14:30",
+      "15:00",
+      "15:30",
+      "16:00",
+      "16:30",
+    ]
+  
+  const [selectedTime, setSelectedTime] = useState(times[0]);
+
   const services = [...selectedUnit.services];
   const [selectedService, setSelectedService] = useState(services[0]);
 
@@ -199,8 +219,8 @@ export default function ScheduleModal({
         onConfirmFunction={newScheduling ? postScheduling : cancelScheduling}
         message={
           newScheduling
-            ? waitingList 
-              ? "Deseja entrar na fila de espera?" 
+            ? waitingList
+              ? "Deseja entrar na fila de espera?"
               : "Confirme o agendamento"
             : "Confirme o cancelamento do agendamento"
         }
@@ -472,16 +492,54 @@ export default function ScheduleModal({
                                 defaultValue={minDate}
                                 maxDate={maxDate}
                               />
-
-                              <TimePicker
-                                defaultValue={dayjs().set("hour", 6).startOf("hour")}
-                                minTime={dayjs()
-                                  .set("hour", minTime.hour)
-                                  .set("minute", minTime.minute)}
-                                maxTime={dayjs()
-                                  .set("hour", maxTime.hour)
-                                  .set("minute", maxTime.minute)}
-                              />
+                              <Listbox
+                                value={selectedTime}
+                                onChange={setSelectedTime}
+                              >
+                                <div className="relative">
+                                  <Listbox.Button className="w-full p-[18px] min-w-[120px] cursor-pointer rounded text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-vetConnectPrimaryGreen sm:text-sm">
+                                    <span className="block truncate">
+                                      {selectedTime}
+                                    </span>
+                                  </Listbox.Button>
+                                  <Transition
+                                    as={Fragment}
+                                    leave="transition ease-in duration-100"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                  >
+                                    <Listbox.Options className="absolute max-h-44 z-50 mt-1 cursor-pointer w-full overflow-auto rounded py-1 bg-white text-base shadow-lg focus:outline-none sm:text-sm">
+                                      {times.map((time) => (
+                                        <Listbox.Option
+                                          key={time + 1}
+                                          className={({ active }) =>
+                                            `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                              active
+                                                ? "text-vetConnectPrimaryGreen font-extrabold"
+                                                : "text-gray-900"
+                                            }`
+                                          }
+                                          value={time}
+                                        >
+                                          {({ selected }) => (
+                                            <>
+                                              <span
+                                                className={`block truncate ${
+                                                  selected
+                                                    ? "font-medium"
+                                                    : "font-normal"
+                                                }`}
+                                              >
+                                                {time}
+                                              </span>
+                                            </>
+                                          )}
+                                        </Listbox.Option>
+                                      ))}
+                                    </Listbox.Options>
+                                  </Transition>
+                                </div>
+                              </Listbox>
                             </div>
                           </>
                         ) : (
@@ -523,7 +581,7 @@ export default function ScheduleModal({
                         id="observation"
                         name="observation"
                         maxLength={200}
-                        value={scheduleId > 0 ? schedule?.observation : observation }
+                        value={scheduleId > 0 ? schedule?.observation : observation}
                         disabled={scheduleId > 0 ? true : false}
                         onChange={(e) => setObservation(e.target.value)}
                         className="block w-full rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
