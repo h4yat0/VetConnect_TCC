@@ -58,6 +58,8 @@ export default function AnimalModal({
   const [specie, setSpecie] = useState("");
   const [sex, setSex] = useState("");
   const [img, setImg] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [base64Image, setBase64Image] = useState<string>('');
 
   const id = useSelector(getId);
   const accessToken = useSelector(getAccessToken);
@@ -83,9 +85,27 @@ export default function AnimalModal({
     const files = e.target.files;
 
     if (files && files.length > 0) {
-      setImg(URL.createObjectURL(files[0]));
-    }
+      const selectedFile = files[0];
+      setImg(URL.createObjectURL(files[0]))
+      
+      setFile(selectedFile);
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        // 'event.target.result' contains the base64 representation of the image
+        if (typeof event.target?.result === "string") {
+          setBase64Image(event.target.result);
+        }
+      };
+
+      reader.readAsDataURL(selectedFile);
   }
+}
+
+function formatBase64(base64: string) {
+  const commaIndex = base64.indexOf(",");
+  return [base64.substring(commaIndex + 1).trim()];
+}
 
   const getAnimals = async () => {
     let response = await api
@@ -118,6 +138,7 @@ export default function AnimalModal({
           tamanho: size,
           especie: specie,
           sexo: sex,
+          imagens: formatBase64(base64Image)
         },
         {
           headers: {
@@ -452,11 +473,12 @@ export default function AnimalModal({
                             id="img"
                             name="img"
                             type="file"
-                            value={img}
                             onChange={(e) => handleImgChange(e)}
                             maxLength={1}
                             className="block w-full border border-gray-300 rounded-md file:rounded file:bg-vetConnectGray file:text-white file:p-2 ring-0 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                           />
+
+                          {img && <img src={img} alt="Imagem selecionada" className="mt-1 rounded"/>}
                         </div>
                       </div>
 
