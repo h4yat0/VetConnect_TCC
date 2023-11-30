@@ -32,10 +32,11 @@ interface ApiAnimal {
   tamanho: string;
   especie: string;
   sexo: string;
+  imagens: string[]
 }
 
 interface Animal {
-  id: number,
+  id: number;
   clientId: number;
   name: string;
   color: string;
@@ -45,6 +46,7 @@ interface Animal {
   size: string;
   specie: string;
   sex: string;
+  imgs: string[];
 }
 
 interface ApiSchedules {
@@ -88,8 +90,7 @@ function mapApiSchedulesToSchedules(apiServices: ApiSchedules[]): Schedules[] {
   }));
 }
 
-
-  function mapApiDataToModel(apiData: ApiAnimal[]): Animal[] {
+  function mapApiAnimalDataToModel(apiData: ApiAnimal[]): Animal[] {
     return apiData.map((apiAnimal) => {
       return {
         id: apiAnimal.id,
@@ -102,11 +103,10 @@ function mapApiSchedulesToSchedules(apiServices: ApiSchedules[]): Schedules[] {
         size: apiAnimal.tamanho,
         specie: apiAnimal.especie,
         sex: apiAnimal.sexo,
+        imgs: apiAnimal.imagens
       };
     });
   }
-
-
 
 const initialState: ClientState = {
   id: -1,
@@ -137,6 +137,7 @@ const initialState: ClientState = {
       size: "",
       specie: "",
       sex: "",
+      imgs: []
     },
   ],
   schedules: []
@@ -195,7 +196,7 @@ const clientSlice = createSlice({
       state.roles = action.payload;
     },
     updateAnimals: (state, action: PayloadAction<ApiAnimal[]>) => {
-      state.animals = mapApiDataToModel(action.payload);
+      state.animals = mapApiAnimalDataToModel(action.payload);
     },
     updateSchedules: (state, action: PayloadAction<ApiSchedules[]>) => {
       state.schedules = mapApiSchedulesToSchedules(action.payload);
