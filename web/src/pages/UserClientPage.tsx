@@ -212,10 +212,14 @@ export default function UserClientPage() {
               <div className="w-10 h-10 bg-slate-800 rounded-full"></div>
               <span className="font-bold text-xl">{nameStore}</span>
             </div>
+            <div className="flex gap-1">
+
             <ButtonSecundary
               text="Editar informações"
               onClickFunction={handleSetEditEnabled}
             />
+            <ButtonDanger text="Sair"/>
+            </div>
           </div>
 
           <form className="space-y-6" action="#" method="POST">

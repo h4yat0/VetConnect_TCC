@@ -4,10 +4,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Cleave from "cleave.js/react";
 import ServiceCard from "../components/ServiceCard";
-import SchedulingModal from "../components/SchedulingModal";
+import ScheduleModal from "../components/SchedulingModal";
 import useRestockUnitsAndServices from "../hooks/useStoreRestock";
+import useSimpleAuth from "../hooks/useSimpleAuth";
 
 export default function UnitPage() {
+
+  const loggedIn = useSimpleAuth();
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -41,11 +45,13 @@ export default function UnitPage() {
 
   return (
     <>
-      {units.length > 0 ? (
-        <SchedulingModal
+      {units.length > 0 && loggedIn ? (
+        <ScheduleModal
           type="new"
+          scheduleId={-1}
           isOpen={schedulingIsOpen}
           serviceId={serviceId}
+          unitId={unit.id}
           setIsOpen={setSchedulingIsOpen}
         />
       ) : null}
@@ -115,7 +121,6 @@ export default function UnitPage() {
                 handleSchedulingOpen={handleSchedulingOpen(service.id)}
               />
             ))}
-            {/* <div className="flex flex-row gap-10 pt-2 pb-6"> */}
           </div>
         </div>
       </div>

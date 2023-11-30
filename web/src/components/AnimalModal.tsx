@@ -1,4 +1,4 @@
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment, useEffect, ChangeEvent } from "react";
 import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,19 +15,6 @@ interface AnimalModalProps {
   setIsOpen: (isOpen: boolean) => void;
 }
 
-interface ApiAnimal {
-  id: number;
-  idCliente: number;
-  nome: string;
-  cor: string;
-  raca: string;
-  dataNascimento: string;
-  peso: string;
-  tamanho: string;
-  especie: string;
-  sexo: string;
-}
-
 interface Animal {
   id: number;
   clientId: number;
@@ -42,21 +29,7 @@ interface Animal {
 }
 
 const ANIMALRECORD_URL = "api/animal/v1/cadastro";
-
-function mapApiDataToModel(apiData: ApiAnimal): Animal {
-  return {
-    id: apiData.id,
-    clientId: apiData.idCliente,
-    name: apiData.nome,
-    color: apiData.cor,
-    race: apiData.raca,
-    birthDate: apiData.dataNascimento,
-    weigth: apiData.peso,
-    size: apiData.tamanho,
-    specie: apiData.especie,
-    sex: apiData.sexo,
-  };
-}
+const ANIMALS_URL = "/api/animal/v1/buscar/";
 
 export default function AnimalModal({
   type,
@@ -84,8 +57,11 @@ export default function AnimalModal({
   const [size, setSize] = useState("");
   const [specie, setSpecie] = useState("");
   const [sex, setSex] = useState("");
+  const [img, setImg] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [base64Image, setBase64Image] = useState<string>('');
 
-  const idStore = useSelector(getId);
+  const id = useSelector(getId);
   const accessToken = useSelector(getAccessToken);
 
   useEffect(() => {
@@ -105,9 +81,47 @@ export default function AnimalModal({
     return str.trim() === "";
   }
 
-  function removeAnimalById(animals: Animal[], idToRemove: number) {
-    animals = animals.filter((animal) => animal.id !== idToRemove);
+  function handleImgChange(e: ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+
+    if (files && files.length > 0) {
+      const selectedFile = files[0];
+      setImg(URL.createObjectURL(files[0]))
+      
+      setFile(selectedFile);
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        // 'event.target.result' contains the base64 representation of the image
+        if (typeof event.target?.result === "string") {
+          setBase64Image(event.target.result);
+        }
+      };
+
+      reader.readAsDataURL(selectedFile);
   }
+}
+
+function formatBase64(base64: string) {
+  const commaIndex = base64.indexOf(",");
+  return [base64.substring(commaIndex + 1).trim()];
+}
+
+  const getAnimals = async () => {
+    let response = await api
+      .get(ANIMALS_URL + id, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(function (response) {
+        let data = response.data;
+        dispatch(updateAnimals(data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   const postAnimal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -115,7 +129,7 @@ export default function AnimalModal({
       .post(
         ANIMALRECORD_URL,
         {
-          idCliente: idStore,
+          idCliente: id,
           nome: name,
           cor: color,
           raca: race,
@@ -124,6 +138,7 @@ export default function AnimalModal({
           tamanho: size,
           especie: specie,
           sexo: sex,
+          imagens: formatBase64(base64Image)
         },
         {
           headers: {
@@ -134,12 +149,11 @@ export default function AnimalModal({
       .then(function (response) {
         let data = response.data;
 
+        getAnimals();
         setAlertMessage("Cadastro bem sucedido");
         setAlertType("success");
         setAlertIsOpen(true);
         setIsOpen(false);
-        animals.push(mapApiDataToModel(data));
-        dispatch(updateAnimals(animals));
       })
       .catch(function (error) {
         console.log(error);
@@ -160,7 +174,7 @@ export default function AnimalModal({
       .put(
         `api/animal/v1/alterar/${animalId}`,
         {
-          idCliente: idStore,
+          idCliente: id,
           nome: isEmptyString(name) ? animals[animalId]?.name : name,
           cor: isEmptyString(color) ? animals[animalId]?.color : color,
           raca: isEmptyString(race) ? animals[animalId]?.race : race,
@@ -181,20 +195,7 @@ export default function AnimalModal({
       )
       .then(function (response) {
         let data = response.data;
-
-        animals[animalId] = {
-          id: data.id,
-          clientId: data.idCliente,
-          name: data.nome,
-          color: data.cor,
-          race: data.raca,
-          birthDate: data.dataNascimento,
-          weigth: data.peso,
-          size: data.tamanho,
-          specie: data.especie,
-          sex: data.sexo,
-        };
-        dispatch(updateAnimals(animals));
+        getAnimals();
         console.log(response);
       })
       .catch(function (error) {
@@ -213,9 +214,7 @@ export default function AnimalModal({
         },
       })
       .then(function (response) {
-        removeAnimalById(animals, animalId);
-        dispatch(updateAnimals(animals));
-
+        getAnimals();
         setAlertMessage("Exclusão bem sucedido");
         setAlertType("success");
         setAlertIsOpen(true);
@@ -404,7 +403,7 @@ export default function AnimalModal({
                           htmlFor="weigth"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
-                          Peso
+                          Peso (kg)
                         </label>
                         <div className="mt-2">
                           <input
@@ -425,7 +424,7 @@ export default function AnimalModal({
                           htmlFor="size"
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
-                          Tamanho
+                          Tamanho (cm)
                         </label>
                         <div className="mt-2">
                           <input
@@ -461,6 +460,28 @@ export default function AnimalModal({
                           />
                         </div>
                       </div>
+
+                      <div>
+                        <label
+                          htmlFor="img"
+                          className="block text-sm font-medium leading-6 text-gray-900"
+                        >
+                          Faça o upload de uma imagem do seu animalzinho
+                        </label>
+                        <div className="mt-2">
+                          <input
+                            id="img"
+                            name="img"
+                            type="file"
+                            onChange={(e) => handleImgChange(e)}
+                            maxLength={1}
+                            className="block w-full border border-gray-300 rounded-md file:rounded file:bg-vetConnectGray file:text-white file:p-2 ring-0 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
+                          />
+
+                          {img && <img src={img} alt="Imagem selecionada" className="mt-1 rounded"/>}
+                        </div>
+                      </div>
+
                       {type == "update" ? (
                         <>
                           <div>
