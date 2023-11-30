@@ -66,12 +66,7 @@ export default function ProntuarioModal({
       })
       .then(function (response) {
         let data = response.data;
-        console.log(data);
-        setProntuario(data);
-
-        if (prontuario?.id != undefined) {
-          getItensProntuario();
-        }
+        setProntuario(data);      
       })
       .catch(function (error) {
         console.log(error);
@@ -88,7 +83,6 @@ export default function ProntuarioModal({
       .then(function (response) {
         let data = response.data;
         setItensProntuario(data);
-        console.log(data);
       })
       .catch(function (error) {
         console.log(error);
@@ -98,6 +92,10 @@ export default function ProntuarioModal({
   useEffect(() => {
     getProntuario();
   }, [isOpen]);
+
+  useEffect(()=> {
+    if (prontuario !== undefined) getItensProntuario();    
+  }, [prontuario])
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -205,13 +203,15 @@ export default function ProntuarioModal({
                         </div>
                       </div>
                       <div className="flex flex-col w-full gap-5">
+                        
                         {itensProntuario !== undefined &&
                         itensProntuario.length > 0 ? (
                           itensProntuario.map((item) => (
-                            <div className="border border-black rounded p-4 w-full">
+                            <div className="border border-black rounded p-4 w-full" key={item.id}>
+         
+
                               <h1 className="text-lg font-bold">{item.data}</h1>
                               <div className="flex flex-col gap-2">
-
 
                               <div className="border border-black rounded p-2">
                                 <h2 className="font-bold">Sintomas</h2>
@@ -236,11 +236,14 @@ export default function ProntuarioModal({
                                 <p>{item.observacoes}</p>
                               </div>
                               </div>
-                            </div>
+                             </div>
                           ))
-                        ) : (
-                          <li>Sem enfermidades registradas</li>
-                        )}
+                          ) : (
+                             <div className="border border-black rounded p-4 w-full" >
+                               <h1>Não há nenhum dado de consultas</h1>
+                             </div>
+                            )}
+                           
                       </div>
                     </div>
                   </div>
