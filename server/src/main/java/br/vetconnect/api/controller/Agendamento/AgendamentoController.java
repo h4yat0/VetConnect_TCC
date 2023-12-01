@@ -5,6 +5,7 @@ import br.vetconnect.api.form.Agendamento.AgendamentoFormCreate;
 import br.vetconnect.api.entity.Agendamento.AgendamentoEntity;
 import br.vetconnect.api.form.Agendamento.AgendamentoFormReturn;
 import br.vetconnect.api.form.Animal.AnimalFormReturn;
+import br.vetconnect.api.form.HorariosDisponiveis;
 import br.vetconnect.api.service.Agendamento.AgendamentoService;
 import exceptions.ExceptionResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -115,5 +116,18 @@ public class AgendamentoController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(new Date(), HttpStatus.NOT_FOUND, "Não foi possivel cancelar esse agendamento"));
         }
+    }
+
+    @Operation(summary = "endPoint para retornar horarios disponiveis do serviço e unidade", description = "endPoint para retornar horarios disponiveis do serviço e unidade",
+            tags ={"Agendamento"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "200"),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ExceptionResponse.class)))})
+
+    })
+    @GetMapping("v1/horarios-disponiveis/{idUnidade}/{idServico}/{data}")
+    public ResponseEntity<?> buscarHorarios(@PathVariable Long idUnidade, @PathVariable Long idServico, @PathVariable String data){
+        HorariosDisponiveis horarios = service.buscarHorarios(idUnidade, idServico, data);
+        return ResponseEntity.ok().body(horarios);
     }
 }

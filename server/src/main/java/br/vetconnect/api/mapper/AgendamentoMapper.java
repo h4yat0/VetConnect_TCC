@@ -62,6 +62,10 @@ public class AgendamentoMapper {
         formReturn.setAnimal(entity.getIdAnimal().getNome());
         formReturn.setServico(entity.getIdServico().getNome());
         formReturn.setUnidade(entity.getIdUnidade().getNome());
+        formReturn.setIdAnimal(entity.getIdAnimal().getId());
+        formReturn.setIdUnidade(entity.getIdUnidade().getId());
+        formReturn.setIdCliente(entity.getIdCliente().getId());
+        formReturn.setIdServico(entity.getIdServico().getId());
         formReturn.setStatus(entity.getStatus());
         formReturn.setId(entity.getId());
         return  formReturn;
@@ -85,6 +89,10 @@ public class AgendamentoMapper {
             formReturn.setUnidade(entity.getIdUnidade().getNome());
             formReturn.setStatus(entity.getStatus());
             formReturn.setId(entity.getId());
+            formReturn.setIdAnimal(entity.getIdAnimal().getId());
+            formReturn.setIdUnidade(entity.getIdUnidade().getId());
+            formReturn.setIdCliente(entity.getIdCliente().getId());
+            formReturn.setIdServico(entity.getIdServico().getId());
             formReturnList.add(formReturn);
         }
 

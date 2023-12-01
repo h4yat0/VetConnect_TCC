@@ -50,4 +50,7 @@ public interface AgendamentoRepository extends JpaRepository<AgendamentoEntity, 
             "LEFT JOIN unidade as uni ON uni.id = age.idUnidade " +
             "WHERE (age.dataAgendada = :dataAtual OR age.dataAgendada = :dataDaquiDoisDias) AND age.status = '1'")
     List<AgendamentoEmail> criaNotificaoEmail(@Param("dataAtual") String dataAtual, @Param("dataDaquiDoisDias") String dataDaquiDoisDias);
+
+    @Query(value = "SELECT hora_agendada FROM agendamento where id_unidade = ?1 and id_servico = ?2 and data_agendada = ?3 and status = 1", nativeQuery = true)
+    List<String> buscarHorariosDisponiveis(Long idUnidade, Long idServico, String data);
 }

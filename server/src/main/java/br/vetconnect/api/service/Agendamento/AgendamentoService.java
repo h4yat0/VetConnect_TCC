@@ -10,6 +10,7 @@ import br.vetconnect.api.form.Agendamento.AgendamentoFormCreate;
 import br.vetconnect.api.form.Agendamento.AgendamentoFormReturn;
 import br.vetconnect.api.form.AgendamentoEmail;
 import br.vetconnect.api.form.EmailFilaDeEspera;
+import br.vetconnect.api.form.HorariosDisponiveis;
 import br.vetconnect.api.mapper.AgendamentoMapper;
 import br.vetconnect.api.repository.Agendamento.AgendamentoRepository;
 import br.vetconnect.api.repository.Agendamento.ServicoRepository;
@@ -17,10 +18,13 @@ import br.vetconnect.api.repository.Agendamento.UnidadeRepository;
 import br.vetconnect.api.repository.AnimalRepository;
 import br.vetconnect.api.repository.ClienteRepository;
 //import br.vetconnect.api.service.AssociacaoService;
+import br.vetconnect.api.service.AssociacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -49,6 +53,9 @@ public class AgendamentoService {
 
     @Autowired
     private FilaDeEsperaService filaDeEsperaService;
+
+    @Autowired
+    private AssociacaoService associacaoService;
 
 
 
@@ -133,4 +140,50 @@ public class AgendamentoService {
     public List<AgendamentoEmail> criaNotificaoEmail(LocalDate dataAtual, LocalDate dataDaquiDoisDias) {
         return repository.criaNotificaoEmail(String.valueOf(dataAtual), String.valueOf(dataDaquiDoisDias));
     }
+
+    public HorariosDisponiveis buscarHorarios(Long idUnidade, Long idServico, String data) {
+        List<String> horariosString = repository.buscarHorariosDisponiveis(idUnidade, idServico, data);
+        String tempoServico = associacaoService.tempoServico(idUnidade, idServico);
+        UnidadeEntity unidadeEntity = unidadeRepository.buscarUnidade(idUnidade);
+
+
+
+
+        String[] partesInicio = unidadeEntity.getHorarioAbertura().split(":");
+        String[] partesFim = unidadeEntity.getHorarioFechamento().split(":");
+
+
+        int horasInicio = Integer.parseInt(partesInicio[0]);
+        int minutosInicio = Integer.parseInt(partesInicio[1]);
+
+        int horasFim = Integer.parseInt(partesFim[0]);
+        int minutosFim = Integer.parseInt(partesFim[1]);
+
+        List<String> horariosResultantes = new ArrayList<>();
+        LocalTime inicioEspediente = LocalTime.of(horasInicio, minutosInicio);
+        LocalTime fimEspediente = LocalTime.of(horasFim, minutosFim);
+        LocalTime duracaoHorario = LocalTime.parse(tempoServico);
+
+
+
+
+        while (inicioEspediente.isBefore(fimEspediente)) {
+            String horarioAtual = inicioEspediente.toString();
+
+
+            if (!horariosString.contains(horarioAtual)) {
+                horariosResultantes.add(horarioAtual);
+            }
+
+            inicioEspediente = inicioEspediente.plusHours(duracaoHorario.getHour())
+                    .plusMinutes(duracaoHorario.getMinute())
+                    .plusSeconds(duracaoHorario.getSecond());
+        }
+
+        HorariosDisponiveis horariosDisponiveis = new HorariosDisponiveis();
+        horariosDisponiveis.setHorarios(horariosResultantes);
+        return horariosDisponiveis;
+
+    }
+
 }
