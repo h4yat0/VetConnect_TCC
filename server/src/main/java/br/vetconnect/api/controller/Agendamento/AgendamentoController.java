@@ -120,7 +120,8 @@ public class AgendamentoController {
 
     @Operation(summary = "endPoint para retornar horarios disponiveis do serviço e unidade", description = "endPoint para retornar horarios disponiveis do serviço e unidade",
             tags ={"Agendamento"}, responses = {
-            @ApiResponse(description = "Sucesso", responseCode = "200"),
+            @ApiResponse(description = "Sucesso", responseCode = "200", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = HorariosDisponiveis.class)))}),
+            @ApiResponse(description = "Sucesso", responseCode = "204"),
             @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = {
                     @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ExceptionResponse.class)))})
 
