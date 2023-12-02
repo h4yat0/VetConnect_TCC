@@ -128,6 +128,10 @@ public class AgendamentoController {
     @GetMapping("v1/horarios-disponiveis/{idUnidade}/{idServico}/{data}")
     public ResponseEntity<?> buscarHorarios(@PathVariable Long idUnidade, @PathVariable Long idServico, @PathVariable String data){
         HorariosDisponiveis horarios = service.buscarHorarios(idUnidade, idServico, data);
-        return ResponseEntity.ok().body(horarios);
+        if(horarios.getHorarios().isEmpty()){
+            return ResponseEntity.noContent().build();
+        }else{
+            return ResponseEntity.ok().body(horarios);
+        }
     }
 }
