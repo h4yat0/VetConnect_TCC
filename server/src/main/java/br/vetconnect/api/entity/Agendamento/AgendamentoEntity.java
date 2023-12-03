@@ -58,9 +58,4 @@ public class AgendamentoEntity {
 
 
 
-    @OneToMany(mappedBy = "idAgendamento", cascade = CascadeType.ALL)
-    private List<FilaEsperaEntity> filaEspera;
-
-    @OneToMany(mappedBy = "idAgendamentoDesejado", cascade = CascadeType.ALL)
-    private List<FilaEsperaEntity> filaEspera2;
 }

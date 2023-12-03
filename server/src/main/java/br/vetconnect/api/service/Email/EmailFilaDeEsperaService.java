@@ -35,7 +35,8 @@ public class EmailFilaDeEsperaService {
                 helper.setSubject("Desistencia");
                 helper.setText("Olá, "+email.getNomeCliente() +" Estamos entrando em contato pois houve uma desistencia no agendamento das "+ email.getHoraAgendada() +
                         " no dia " + formataData(email.getDataAgendada()) +"\n"+
-                        "Gostaria de realizar o agendamento de " + email.getNomeAnimal() + " para o serviço " + email.getNomeServico() + " na unidade "+email.getNomeUnidade() +"?");
+                        "Gostaria de realizar o agendamento para o serviço " + email.getNomeServico() + " na unidade "+email.getNomeUnidade() +"?"+
+                        "Entrar em contato: " + email.getContatoUnidade());
 
                 helper.setTo(email.getEmailCliente());
                 emailSender.send(mensagem);

@@ -1,6 +1,7 @@
 package br.vetconnect.api.entity;
 
 
+import br.vetconnect.api.entity.Agendamento.FilaEsperaEntity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
@@ -60,4 +61,7 @@ public class ClienteEntity {
    // @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL) se não tiver animal não tem cliente
     @OneToMany(mappedBy = "idCliente", cascade = CascadeType.ALL) //excluir todos os animais desse cliente não faz ele ser apagado
     private List<AnimalEntity> animais = new ArrayList<>();
+
+    @OneToMany(mappedBy = "idCliente")
+    private List<FilaEsperaEntity> filaEsperaEntities;
 }
