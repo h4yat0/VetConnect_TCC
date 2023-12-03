@@ -15,6 +15,7 @@ import Prontuario from "../pages/Prontuario";
 import RequireAuthorization from "../components/security/RequireAuthorization";
 import PersistLogin from "../components/security/PersistLogin";
 import Funcionario from "../pages/Funcionario";
+import ProntuarioCadastro from "../pages/ProntuarioCadastro";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
               {
                 path: "funcionario",
                 element: <Funcionario />,
+              },
+              {
+                path: "ProntuarioCadastro",
+                element: <ProntuarioCadastro />,
               },
             ],
           },
