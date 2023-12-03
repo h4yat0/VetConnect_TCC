@@ -76,9 +76,33 @@ public class AnimalMapper {
             }
             return formReturnList;
         }
-
-
     }
+
+    public List<AnimalFormReturn> listEntityToFormReturn1(List<AnimalEntity> animalEntities) {
+        if(animalEntities == null || animalEntities.size()==0){
+            return null;
+        }else{
+            List<AnimalFormReturn> formReturnList = new ArrayList<>();
+            for (AnimalEntity entity : animalEntities){
+                AnimalFormReturn animalFormReturn = new AnimalFormReturn();
+                animalFormReturn.setId(entity.getId());
+                animalFormReturn.setCor(entity.getCor());
+                animalFormReturn.setNome(entity.getNome());
+                animalFormReturn.setPeso(String.valueOf(entity.getPeso()));
+                animalFormReturn.setEspecie(entity.getEspecie());
+                animalFormReturn.setTamanho(String.valueOf(entity.getTamanho()));
+                animalFormReturn.setDataNascimento(entity.getDataNascimento());
+                animalFormReturn.setSexo(entity.getSexo());
+                if(entity.getRaca() != null){
+                    animalFormReturn.setRaca(entity.getRaca());
+                }
+                animalFormReturn.setIdCliente(entity.getIdCliente().getId());
+                formReturnList.add(animalFormReturn);
+            }
+            return formReturnList;
+        }
+    }
+
 
     public AnimalEntity formCreateToEntity(AnimalFormCreate animal, long id, ClienteEntity cliente) {
         AnimalEntity entity = new AnimalEntity();

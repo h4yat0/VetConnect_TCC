@@ -135,4 +135,22 @@ public class AgendamentoController {
             return ResponseEntity.ok().body(horarios);
         }
     }
+
+    @Operation(summary = "endPoint para retornar os agendamentos de uma unidade a partir do id do funcionario", description = "endPoint para retornar os agendamentos de uma unidade a partir do id do funcionario",
+            tags ={"Agendamento"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "200", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = HorariosDisponiveis.class)))}),
+            @ApiResponse(description = "Sucesso", responseCode = "204"),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ExceptionResponse.class)))})
+
+    })
+    @GetMapping("v1/buscar-por-id-funcionario/{idFuncionario}")
+    public ResponseEntity<?> buscarAgendamentoPorIdFuncionario(@PathVariable Long idFuncionario){
+        List<AgendamentoFormReturn> agendamentoFormReturns = service.buscarPorIdFuncionario(idFuncionario);
+        if(agendamentoFormReturns.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }else{
+            return ResponseEntity.ok().body(agendamentoFormReturns);
+        }
+    }
 }

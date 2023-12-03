@@ -3,12 +3,20 @@ package br.vetconnect.api.mapper;
 import br.vetconnect.api.entity.ClienteEntity;
 import br.vetconnect.api.form.Cliente.ClienteFormReturn;
 import br.vetconnect.api.form.Cliente.ClienteFormCreate;
+import br.vetconnect.api.mapper.Animal.AnimalMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 
 @Service
 public class ClienteMapper {
+
+    @Autowired
+    private FilaDeEsperaMapper filaDeEsperaMapper;
+
+    @Autowired
+    private AnimalMapper animalMapper;
 
     public ClienteFormReturn convertEntityToForm(ClienteEntity entity){
         ClienteFormReturn clienteForm = new ClienteFormReturn();
@@ -32,6 +40,25 @@ public class ClienteMapper {
         }
         if(entity.getImagem() != null){
             clienteForm.setImagem(entity.getImagem());
+        }
+
+        if(!entity.getFilaEsperaEntities().isEmpty()){
+            clienteForm.setFilaDeEsperaFormReturns(filaDeEsperaMapper.entitysParaFormReturn(entity.getFilaEsperaEntities()));
+        }
+
+        return clienteForm;
+    }
+
+    public ClienteFormReturn convertEntityToForm1(ClienteEntity entity){
+        ClienteFormReturn clienteForm = new ClienteFormReturn();
+        clienteForm.setId(entity.getId());
+        clienteForm.setNome(entity.getNome());
+        if(!entity.getFilaEsperaEntities().isEmpty()){
+            clienteForm.setFilaDeEsperaFormReturns(filaDeEsperaMapper.entitysParaFormReturn(entity.getFilaEsperaEntities()));
+        }
+
+        if(!entity.getAnimais().isEmpty()){
+            clienteForm.setAnimalFormReturnList(animalMapper.listEntityToFormReturn1(entity.getAnimais()));
         }
 
         return clienteForm;

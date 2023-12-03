@@ -19,6 +19,7 @@ import br.vetconnect.api.repository.AnimalRepository;
 import br.vetconnect.api.repository.ClienteRepository;
 //import br.vetconnect.api.service.AssociacaoService;
 import br.vetconnect.api.service.AssociacaoService;
+import br.vetconnect.api.service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,9 @@ public class AgendamentoService {
 
     @Autowired
     private AssociacaoService associacaoService;
+
+    @Autowired
+    private FuncionarioService funcionarioService;
 
 
 
@@ -121,7 +125,7 @@ public class AgendamentoService {
         AgendamentoEntity entity = repository.buscarAgendamento(id);
         entity.setStatus('3');
         repository.save(entity);
-        filaDeEsperaService.verificaFilaEspera( id);
+        filaDeEsperaService.verificaFilaEspera( entity);
     }
 
 
@@ -133,9 +137,7 @@ public class AgendamentoService {
         return repository.verificaDataHora(data, hora, idServico, idUnidade);
     }
 
-    public EmailFilaDeEspera criaEmail(Long id) {
-         return repository.criaEmail(id);
-    }
+
 
     public List<AgendamentoEmail> criaNotificaoEmail(LocalDate dataAtual, LocalDate dataDaquiDoisDias) {
         return repository.criaNotificaoEmail(String.valueOf(dataAtual), String.valueOf(dataDaquiDoisDias));
@@ -186,4 +188,14 @@ public class AgendamentoService {
 
     }
 
+    public List<AgendamentoFormReturn> buscarPorIdFuncionario(Long idFucionario) {
+        UnidadeEntity unidadeEntity = unidadeRepository.buscarUnidade(funcionarioService.buscarIdUnidade(idFucionario));
+        List<AgendamentoFormReturn> formReturnList = mapper.entitysParaFormsReturs(repository.buscarAgendamentos(unidadeEntity.getId()));
+
+        if(formReturnList != null && formReturnList.size()>0 ){
+            formReturnList.stream().forEach(a -> a.add(linkTo(methodOn(AgendamentoController.class).buscarPorIdCliente(idFucionario)).withSelfRel()));
+        }
+
+        return formReturnList;
+    }
 }

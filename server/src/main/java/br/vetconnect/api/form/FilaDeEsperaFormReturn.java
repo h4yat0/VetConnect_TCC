@@ -11,10 +11,11 @@ import java.io.Serializable;
 @Data
 public class FilaDeEsperaFormReturn  extends RepresentationModel<FilaDeEsperaFormReturn> implements Serializable {
     private Long id;
-    private Long idAgendamento;
+    private Long idCliente;
     private String horaDesejada;
     private String dataDesejada;
-    @JsonIgnore
-    private String filaPreenchida;
+    private Long idServico;
+    private Long idUnidade;
+
 
 }

@@ -84,6 +84,10 @@ public class ClienteService extends MetodosAuxiliares {
         }
     }
 
+    public ClienteEntity getClientByIdEntity(Long id){
+       return repository.buscarPorId(id);
+    }
+
     public ClienteFormReturn buscarPorEmail(String email){
         ClienteEntity result = repository.buscarPorEmail(email);
         if(result == null){
@@ -99,6 +103,15 @@ public class ClienteService extends MetodosAuxiliares {
             return null;
         }else{
             return mapper.convertEntityToForm(repository.buscarPorCpf(cpf));
+        }
+    }
+
+    public ClienteFormReturn getClienteByCpf1(String cpf){
+        ClienteEntity result = repository.buscarPorCpf(cpf);
+        if(result == null){
+            return null;
+        }else{
+            return mapper.convertEntityToForm1(repository.buscarPorCpf(cpf));
         }
     }
 

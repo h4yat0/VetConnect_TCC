@@ -27,10 +27,6 @@ public class FilaDeEsperaController {
     @PostMapping("/v1/cadastrar")
     public ResponseEntity<?> cadastraEspera(@RequestBody FilaDeEsperaFormCreate formCreate) {
         FilaDeEsperaFormReturn formReturn = service.cadastraEspera(formCreate);
-        if(formReturn.getFilaPreenchida() != null){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(new Date(), HttpStatus.CONFLICT, formReturn.getFilaPreenchida()));
-        }else{
-            return ResponseEntity.ok().body(formReturn);
-        }
+        return ResponseEntity.ok().body(formReturn);
     }
 }

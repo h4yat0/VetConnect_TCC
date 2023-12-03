@@ -132,5 +132,52 @@ public class ClienteController extends MetodosAuxiliares {
         return ResponseEntity.noContent().build();
     }
 
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("v1/busca-por-cpf/{cpf}")
+    @Operation(summary = "endPoint para buscar um cliente a partir do cpf", description = "endPoint para buscar um cliente a partir do cpf",
+            tags = {"Cliente"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ClienteFormReturn.class))
+            }),
+            @ApiResponse(description = "Cliente não foi encontrado", responseCode = "404",content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+            }),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500",content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+            })
+    })
+    public ResponseEntity<?> buscaPorcpf(@PathVariable String cpf){
+        ClienteFormReturn entity = service.getClienteByCpf1(cpf);
+        if (entity == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(new Date(), HttpStatus.NOT_FOUND, "Cliente não foi encontrado"));
+        } else {
+            return ResponseEntity.ok().body(entity);
+        }
+
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("v1/busca-por-email/{email}")
+    @Operation(summary = "endPoint para buscar um cliente a partir do email", description = "endPoint para buscar um cliente a partir do email",
+            tags = {"Cliente"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "200", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ClienteFormReturn.class))
+            }),
+            @ApiResponse(description = "Cliente não foi encontrado", responseCode = "404",content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+            }),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500",content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class))
+            })
+    })
+    public ResponseEntity<?> buscarPorEmail(@PathVariable String email){
+        ClienteFormReturn entity = service.buscarPorEmail(email);
+        if (entity == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(new Date(), HttpStatus.NOT_FOUND, "Cliente não foi encontrado"));
+        } else {
+            return ResponseEntity.ok().body(entity);
+        }
+    }
+
 
 }

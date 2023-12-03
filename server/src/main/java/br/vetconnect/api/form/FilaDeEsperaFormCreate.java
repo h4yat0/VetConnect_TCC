@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class FilaDeEsperaFormCreate {
-    private Long idAgendamento;
+    private Long idCliente;
     private String horaDesejada;
     private String dataDesejada;
     private Long idServico;

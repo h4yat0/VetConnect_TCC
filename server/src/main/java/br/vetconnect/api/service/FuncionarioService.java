@@ -76,4 +76,8 @@ public class FuncionarioService {
             return null;
         }
     }
+
+    public Long buscarIdUnidade(Long idFuncionario){
+        return repository.buscarIdUnidade(idFuncionario);
+    }
 }

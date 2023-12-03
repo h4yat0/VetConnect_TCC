@@ -30,16 +30,16 @@ public interface AgendamentoRepository extends JpaRepository<AgendamentoEntity, 
     @Query(value = "select * from agendamento where data_agendada = ?1 and hora_agendada = ?2 and id != ?3", nativeQuery = true)
     AgendamentoEntity verificaIdDataHora(String dataAgendada, String horaAgendada, Long id);
 
-    @Query(value = "select new br.vetconnect.api.form.EmailFilaDeEspera( age.dataAgendada, age.horaAgendada, cli.nome as nomeCliente, ani.nome as nomeAnimal, ser.nome as nomeServico, uni.nome as nomeUnidade, cli.email as emailCliente) " +
-            "FROM AgendamentoEntity as age " +
-            "LEFT JOIN FilaEsperaEntity as fe ON fe.idAgendamentoDesejado = age.id " +
-            "LEFT JOIN AgendamentoEntity as age2 ON fe.idAgendamento = age2.id " +
-            "LEFT JOIN servico as ser ON ser.id = age2.idServico " +
-            "LEFT JOIN unidade as uni ON uni.id = age2.idUnidade " +
-            "LEFT JOIN cliente as cli ON cli.id = age2.idCliente " +
-            "LEFT JOIN animal as ani ON ani.id = age2.idAnimal " +
-            "where age.id = :agend and ativo = 1")
-    EmailFilaDeEspera criaEmail(@Param("agend")Long id);
+//    @Query(value = "select new br.vetconnect.api.form.EmailFilaDeEspera( age.dataAgendada, age.horaAgendada, cli.nome as nomeCliente, ani.nome as nomeAnimal, ser.nome as nomeServico, uni.nome as nomeUnidade, cli.email as emailCliente) " +
+//            "FROM AgendamentoEntity as age " +
+//            "LEFT JOIN FilaEsperaEntity as fe ON fe.idAgendamentoDesejado = age.id " +
+//            "LEFT JOIN AgendamentoEntity as age2 ON fe.idAgendamento = age2.id " +
+//            "LEFT JOIN servico as ser ON ser.id = age2.idServico " +
+//            "LEFT JOIN unidade as uni ON uni.id = age2.idUnidade " +
+//            "LEFT JOIN cliente as cli ON cli.id = age2.idCliente " +
+//            "LEFT JOIN animal as ani ON ani.id = age2.idAnimal " +
+//            "where age.id = :agend and ativo = 1")
+//    EmailFilaDeEspera criaEmail(@Param("agend")Long id);
 
 
     @Query(value = "select new br.vetconnect.api.form.AgendamentoEmail( cli.nome as nomeCliente, ani.nome as nomeAnimal, ser.nome as nomeServico, uni.nome as nomeUnidade, age.horaAgendada as horaAgendamento, uni.rua as ruaUnidade, uni.bairro as bairroUnidade, uni.cidade as cidadeUnidade, cli.email as emailCliente, uni.contato as contatoUnidade, age.dataAgendada as dataAgendamento )" +

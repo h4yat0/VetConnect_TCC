@@ -65,4 +65,8 @@ public class ServicoService {
         ServicoEntity servicoReturn = mapper.formCreateToEntitysSemUnidades(servico);
         return null;
     }
+
+    public ServicoEntity buscarPorId(Long idServico) {
+        return repository.buscarServico(idServico);
+    }
 }
