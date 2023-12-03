@@ -72,7 +72,7 @@ public class JwtTokenProvider {
                 .withClaim("roles", roles)
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
-                .withSubject(username)
+                .withClaim("email",username)
                 .withIssuer(issuerUrl)
                 .sign(algorithm)
                 .strip();
@@ -84,7 +84,7 @@ public class JwtTokenProvider {
                 .withClaim("roles", roles)
                 .withIssuedAt(now)
                 .withExpiresAt(validityRefreshToken)
-                .withSubject(username)
+                .withClaim("email",username)
                 .sign(algorithm)
                 .strip();
     }
