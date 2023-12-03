@@ -92,7 +92,7 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         DecodedJWT decodedJWT = decodedToken(token);
         UserDetails userDetails = this.userDetailsService
-                .loadUserByUsername(decodedJWT.getSubject());
+                .loadUserByUsername(decodedJWT.getClaim("email").asString());
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
