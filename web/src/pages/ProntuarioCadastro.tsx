@@ -8,7 +8,9 @@ export default function ProntuarioCadastro() {
         <div className="mx-4 rounded-md ">
           <h1 className="font-bold text-lg ">Cadastro de Prontuário</h1>
         </div>
-
+        
+        <hr/>
+        
         <div className="my-4  rounded-md  ">
           <div className="my-4 mx-4">
             <div className="mx-8 mb-2   py-1.5  rounded-md  bg-vetConnectSecundaryGreen">
