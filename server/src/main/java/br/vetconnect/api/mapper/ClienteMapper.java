@@ -42,7 +42,7 @@ public class ClienteMapper {
             clienteForm.setImagem(entity.getImagem());
         }
 
-        if(!entity.getFilaEsperaEntities().isEmpty()){
+        if(entity.getFilaEsperaEntities() != null && !entity.getFilaEsperaEntities().isEmpty()){
             clienteForm.setFilaDeEsperaFormReturns(filaDeEsperaMapper.entitysParaFormReturn(entity.getFilaEsperaEntities()));
         }
 
