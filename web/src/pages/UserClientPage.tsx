@@ -60,6 +60,11 @@ export default function UserClientPage() {
     setEditDisabled(!editDisabled);
   };
 
+  function handleLogout(){
+    localStorage.clear()
+    location.reload()
+  }
+
   const [isOpen, setIsOpen] = useState(false);
 
   const [name, setName] = useState("");
@@ -213,12 +218,11 @@ export default function UserClientPage() {
               <span className="font-bold text-xl">{nameStore}</span>
             </div>
             <div className="flex gap-1">
-
-            <ButtonSecundary
-              text="Editar informações"
-              onClickFunction={handleSetEditEnabled}
-            />
-            <ButtonDanger text="Sair"/>
+              <ButtonSecundary
+                text="Editar informações"
+                onClickFunction={handleSetEditEnabled}
+              />
+              <ButtonDanger text="Sair" onClickFunction={() => handleLogout()} />
             </div>
           </div>
 
@@ -492,15 +496,13 @@ export default function UserClientPage() {
 
             {!editDisabled ? (
               <>
-                <div>
+                <div className="flex flex-col gap-1">
                   <ButtonPrimary
                     text="Alterar dados"
                     width="w-full"
                     disabled={editDisabled}
                     onClickFunction={postEditedInformation}
                   />
-                </div>
-                <div>
                   <ButtonDanger
                     text="Deletar conta"
                     disabled={editDisabled}
