@@ -16,8 +16,7 @@ import java.util.List;
 @Service
 public class ImagemAnimalMapper {
 
-    @Autowired
-    private AnimalMapper mapper;
+
 
 
 

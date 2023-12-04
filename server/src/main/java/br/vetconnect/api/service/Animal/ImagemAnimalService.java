@@ -8,6 +8,7 @@ import br.vetconnect.api.repository.Imagens.AnimalImagensRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,9 +35,10 @@ public class ImagemAnimalService {
 
 
     public void alterarImagem(List<String> imagens, AnimalEntity entity) {
+        repository.deletePorIdAnimal(entity.getId());
         List<AnimalImagensEntity> AnimalImagensEntityList = mapper.formCreateParaEntity(imagens, entity);
         try{
-            repository.deleteAll();
+
             for(AnimalImagensEntity imagem : AnimalImagensEntityList){
                 repository.save(imagem);
             }

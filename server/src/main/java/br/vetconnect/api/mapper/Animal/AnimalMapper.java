@@ -3,13 +3,12 @@ package br.vetconnect.api.mapper.Animal;
 import br.vetconnect.api.entity.AnimalEntity;
 import br.vetconnect.api.entity.ClienteEntity;
 import br.vetconnect.api.entity.imagens.AnimalImagensEntity;
-import br.vetconnect.api.entity.imagens.UnidadeImagensEntity;
 import br.vetconnect.api.form.Animal.AnimalFormCreate;
 import br.vetconnect.api.form.Animal.AnimalFormReturn;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,8 @@ import java.util.List;
 @Service
 public class AnimalMapper {
 
+    @Autowired
+    private ImagemAnimalMapper imagemAnimalMapper;
 
     public AnimalEntity formCreateToEntity(AnimalFormCreate animalCreate, ClienteEntity clienteEntity){
         AnimalEntity entity = new AnimalEntity();
@@ -118,6 +119,7 @@ public class AnimalMapper {
             entity.setRaca(animal.getRaca());
         }
         entity.setIdCliente(cliente);
+        entity.setImagens(imagemAnimalMapper.formCreateParaEntity(animal.getImagens(), entity));
         return entity;
     }
 

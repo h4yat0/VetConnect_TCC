@@ -2,7 +2,6 @@ package br.vetconnect.api.service.Animal;
 
 
 import br.vetconnect.api.controller.AnimalController;
-import br.vetconnect.api.controller.ClienteController;
 import br.vetconnect.api.entity.AnimalEntity;
 import br.vetconnect.api.entity.ClienteEntity;
 import br.vetconnect.api.form.Animal.AnimalFormCreate;
