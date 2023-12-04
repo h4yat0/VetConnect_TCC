@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
         element: <PersistLogin />,
         children: [
           {
-            element: <RequireAuthorization allowedRoles={['Cliente']} />,
+            element: <RequireAuthorization allowedRoles={["Cliente"]} />,
             children: [
               {
                 path: "user/client",
@@ -51,19 +51,20 @@ export const router = createBrowserRouter([
               },
             ],
           },
+
+          {
+            path: "unidades",
+            element: <UnitListPage />,
+          },
+          {
+            path: "unidades/:id",
+            element: <UnitPage />,
+          },
+          {
+            path: "/",
+            element: <Home />,
+          },
         ],
-      },
-      {
-        path: "unidades",
-        element: <UnitListPage />,
-      },
-      {
-        path: "unidades/:id",
-        element: <UnitPage />,
-      },
-      {
-        path: "/",
-        element: <Home />,
       },
     ],
   },
