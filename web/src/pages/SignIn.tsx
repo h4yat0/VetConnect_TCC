@@ -22,6 +22,7 @@ import {
   updateCep,
   getId,
   updateAnimals,
+  updateRefreshToken,
 } from "../redux/client";
 
 import api from "../api/axios";
@@ -96,6 +97,10 @@ export default function SignIn() {
 
         dispatch(updateRoles(roles.roles));
         dispatch(updateAccessToken(data.accessToken));
+        dispatch(updateRefreshToken(data.refreshToken));
+        localStorage.setItem("refreshToken", data.refreshToken);
+
+        console.log(data)
       })
       .catch(function (error) {
         errorHandling(error);
@@ -164,7 +169,7 @@ export default function SignIn() {
 
   return (
     <div
-      className="min-h-screen flex flex-col flex-1 justify-center items-center"
+      className="min-h-screen flex flex-col flex-1 justify-center items-center relative rounded"
       style={{
         backgroundImage:
           "url('https://images.unsplash.com/photo-1570347929626-2bbc8032d98b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80')",
