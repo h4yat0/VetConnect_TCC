@@ -60,7 +60,7 @@ public class JwtTokenProvider {
 
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT decodedJWT = verifier.verify(refreshToken);
-        String username = decodedJWT.getSubject();
+        String username = decodedJWT.getClaim("email").asString();
         List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
         return createAccessToken(username, roles);
     }
