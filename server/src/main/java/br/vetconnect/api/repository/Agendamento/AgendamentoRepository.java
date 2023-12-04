@@ -24,10 +24,10 @@ public interface AgendamentoRepository extends JpaRepository<AgendamentoEntity, 
     @Query(value = "SELECT * FROM agendamento WHERE id = ?1", nativeQuery = true)
     AgendamentoEntity buscarAgendamento(Long id);
 
-    @Query(value = "select * from agendamento where data_agendada = ?1 and hora_agendada = ?2 and id_servico = ?3 and id_unidade = ?4", nativeQuery = true)
+    @Query(value = "select * from agendamento where data_agendada = ?1 and hora_agendada = ?2 and id_servico = ?3 and id_unidade = ?4 and status = 1", nativeQuery = true)
     AgendamentoEntity verificaDataHora(String dataAgendada, String horaAgendada, Long idServico, Long idUnidade);
 
-    @Query(value = "select * from agendamento where data_agendada = ?1 and hora_agendada = ?2 and id != ?3", nativeQuery = true)
+    @Query(value = "select * from agendamento where data_agendada = ?1 and hora_agendada = ?2 and id != ?3 and status = 1", nativeQuery = true)
     AgendamentoEntity verificaIdDataHora(String dataAgendada, String horaAgendada, Long id);
 
 //    @Query(value = "select new br.vetconnect.api.form.EmailFilaDeEspera( age.dataAgendada, age.horaAgendada, cli.nome as nomeCliente, ani.nome as nomeAnimal, ser.nome as nomeServico, uni.nome as nomeUnidade, cli.email as emailCliente) " +
