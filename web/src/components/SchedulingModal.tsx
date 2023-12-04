@@ -41,7 +41,8 @@ interface AgendamentoModalProps {
 const SCHEDULE_URL = "api/agendamento/v1/agendar";
 const SCHEDULING_URL = "/api/agendamento/v1/buscarAgendamentos/";
 const CANCEL_AGENDAMENTO = "api/agendamento/v1/cancelar-agendamento/";
-const AVAILABLE_TIMES = "api/agendamento/v1/horarios-disponiveis/";
+const AVAILABLE_TIMES_URL = "api/agendamento/v1/horarios-disponiveis/"
+const WAITING_LIST_URL = '/api/fila-espera/v1/cadastrar';
 
 export default function ScheduleModal({
   type,
@@ -121,7 +122,7 @@ export default function ScheduleModal({
     const dateSelected = date;
 
     let response = await axiosPrivate
-      .get(`${AVAILABLE_TIMES}${unitSelected}/${serviceSelected}/${dateSelected}`, {
+      .get(`${AVAILABLE_TIMES_URL}${unitSelected}/${serviceSelected}/${dateSelected}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -141,6 +142,44 @@ export default function ScheduleModal({
       })
       .catch(function (error) {
         console.log(error);
+      });
+  };
+
+  const postWaitingList = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (selectedService.id == undefined || selectedUnit.id == undefined) {
+      return;
+    }
+    let reponse = await axiosPrivate
+      .post(
+        WAITING_LIST_URL,
+        {
+          idCliente: clientId,
+          horaDesejada: selectedTime,
+          dataDesejada: date,
+          idServico: selectedService.id,
+          idUnidade: selectedUnit.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
+      .then(function (response) {
+        let data = response.data;
+        getSchedulesApi();
+        setIsOpen(false);
+        console.log(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        if (!error?.message) {
+          // setErrorMessage("No server response");
+        } else {
+          // setErrorMessage(error.message);
+        }
+        // errRef.current?.focus();
       });
   };
 
@@ -256,7 +295,7 @@ export default function ScheduleModal({
         isOpen={alertConfirmIsOpen}
         setIsOpen={setAlertConfirmIsOpen}
         type="insert"
-        onConfirmFunction={newScheduling ? postScheduling : cancelScheduling}
+        onConfirmFunction={newScheduling ? waitingList ? postWaitingList : postScheduling : cancelScheduling}
         message={
           newScheduling
             ? waitingList
@@ -306,7 +345,16 @@ export default function ScheduleModal({
                           case "new":
                             return <span>Novo agendamento</span>;
                           case "inProgress":
-                            return <span>Agendamento em progresso</span>;
+                            return (
+                              <>
+                                <span>Agendamento em progresso</span>
+                                <span> - id:  {' '}
+                                  {schedule != undefined
+                                    ? schedule.id
+                                    : null}
+                                </span>
+                              </>
+                            );
                           case "finished":
                             return <span>Agendamento concluído</span>;
                           default:
