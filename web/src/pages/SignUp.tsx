@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import Cleave from "cleave.js/react";
 import "../modules/cleave-phone.br.js";
@@ -79,7 +79,7 @@ export default function SignUp() {
         backgroundSize: "cover",
       }}
     >
-      <div className="font-inter px-32 py-8 my-20 bg-white rounded-lg">
+      <div className="font-inter px-14 py-8 my-20 bg-white rounded-lg">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-24 w-auto"
@@ -91,7 +91,7 @@ export default function SignUp() {
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm lg:w-96 lg:mt-4">
           {errorMessage ? (
             <Alert title={errorMessage} description="" type="danger" />
           ) : (
@@ -280,7 +280,7 @@ export default function SignUp() {
                 />
               </div>
             </div>
-            
+
             <div>
               <label
                 htmlFor="cep"
@@ -377,12 +377,20 @@ export default function SignUp() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Já possui uma conta?{" "}
-            <a
-              href="/signin"
+            <Link
+              to={"/signin"}
               className="font-semibold leading-6 text-vetConnectPrimaryGreen hover:text-vetConnectSecundaryGreen"
             >
               Entre aqui
-            </a>
+            </Link>
+          </p>
+          <p className="mt-2 text-center text-sm text-gray-500">
+            <Link
+              to={"/"}
+              className="font-semibold leading-6 hover:text-vetConnectSecundaryGreen"
+            >
+              Voltar para a página principal
+            </Link>
           </p>
         </div>
       </div>

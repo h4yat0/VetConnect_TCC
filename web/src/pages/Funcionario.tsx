@@ -7,11 +7,29 @@ import ButtonPrimary from "../components/buttons/ButtonPrimary";
 import { useSelector } from "react-redux";
 import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
-import FuncionarioCard from "../components/FuncionarioCard";
+import FuncionarioCard from "../components/ScheduleFuncionarioCard";
+
+const SCHEDULES_URL = "/api/agendamento/v1/buscar-por-id-funcionario/";
 
 export default function Funcionario() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+
+  // const getSchedulesApi = async () => {
+  //   let response = await api
+  //     .get(SCHEDULES_URL + clientId, {
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     })
+  //     .then(function (response) {
+  //       let data = response.data;
+  //       dispatch(updateSchedules(data));
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
 
   var funcionarioAgendamento = [
     {
@@ -43,14 +61,20 @@ export default function Funcionario() {
   return (
     <>
       <div>
-        <h1 className="font-bold m-2">Agendamentos</h1>
+        <h1 className="text-2xl font-bold m-2">Agendamentos</h1>
       </div>
 
-      <div>
-        <div>
-          <div>Pendentes</div>
-          <div>Em atendimento</div>
-          <div>Concluído</div>
+      <div className="flex flex-col justify-center items-center">
+        <div className="flex gap-5">
+          <button className="text-xl border-b-2 focus:border-vetConnectPrimaryGreen">
+            Pendentes
+          </button>
+          <button className="text-xl border-b-2 focus:border-vetConnectPrimaryGreen">
+            Concluídos
+          </button>
+          <button className="text-xl border-b-2 focus:border-vetConnectPrimaryGreen">
+            Cancelados
+          </button>
         </div>
 
         <div>
