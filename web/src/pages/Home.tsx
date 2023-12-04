@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 
 const SCHEDULING_URL = "/api/agendamento/v1/buscarAgendamentos/";
 
-export default function Home() {  
+export default function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const loggedIn = useSimpleAuth();
@@ -34,9 +34,9 @@ export default function Home() {
     (schedule) => schedule.status == 1
   );
   const units = [...useSelector(getUnits)];
-  const animals = useSelector(getAnimals)  
+  const animals = useSelector(getAnimals);
 
-  const animalsValidation = animals.length > 0 && animals[0].id !== -1
+  const animalsValidation = animals.length > 0 && animals[0].id !== -1;
 
   const { getUnitsAndServices } = useRestockUnitsAndServices();
 
@@ -139,7 +139,15 @@ export default function Home() {
                   </div>
                   <div className="w-full">
                     <h1 className="p-2 text-left text-xl font-bold text-gray-700">
-                      Você não tem um <br /> animal cadatrado
+                      {animalsValidation ? (
+                        <>
+                          Novo <br /> Agendamento
+                        </>
+                      ) : (
+                        <>
+                          Você não tem um <br /> animal cadatrado
+                        </>
+                      )}
                     </h1>
                   </div>
                 </button>
@@ -179,7 +187,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>      
+      </div>
     </div>
   );
 }
