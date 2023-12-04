@@ -181,6 +181,7 @@ export default function SignUp() {
                 />
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="streetNumber"
@@ -200,6 +201,7 @@ export default function SignUp() {
                 />
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="bairro"
@@ -219,6 +221,7 @@ export default function SignUp() {
                 />
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="city"
@@ -238,6 +241,7 @@ export default function SignUp() {
                 />
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="estado"
@@ -257,6 +261,7 @@ export default function SignUp() {
                 />
               </div>
             </div>
+
             <div>
               <label
                 htmlFor="complemento"
@@ -275,6 +280,7 @@ export default function SignUp() {
                 />
               </div>
             </div>
+            
             <div>
               <label
                 htmlFor="cep"

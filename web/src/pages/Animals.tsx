@@ -24,7 +24,7 @@ export default function Animals() {
   );
 
   useEffect(() => {
-    if (animals.length == 0) navigate("user/client");
+    if (animals.length == 0 && animals[0].id !== -1 ) navigate("user/client");
   }, []);
 
   function incrementCurrentAnimal() {
@@ -64,7 +64,11 @@ export default function Animals() {
         isOpen={animalModalIsOpen}
         setIsOpen={setAnimalModalIsOpen}
       />
-      <ProntuarioModal isOpen={prontuarioModalIsOpen} setIsOpen={setProntuarioModalIsOpen} animalId={animals[currentAnimal].id} />
+      <ProntuarioModal
+        isOpen={prontuarioModalIsOpen}
+        setIsOpen={setProntuarioModalIsOpen}
+        animalId={animals[currentAnimal].id}
+      />
       <div className="pt-4 font-inter rounded-xl px-10">
         <div className="flex items-center justify-center">
           <GoChevronLeft
@@ -75,7 +79,7 @@ export default function Animals() {
           <div className="grid gap-4 grid-cols-3  " style={{ maxHeight: 400 }}>
             <div className="col-span-2">
               <img
-                src={Cachorro}
+                src={`data:image/jpg;base64,${animals[currentAnimal].imgs[0]}`}
                 alt="tailwind logo"
                 className="rounded-xl w-full h-2/3 object-cover"
               />
@@ -122,7 +126,12 @@ export default function Animals() {
                       }
                       width="w-full"
                     />
-                    <ButtonSecundary text="Prontuário" onClickFunction={()=> setProntuarioModalIsOpen(!prontuarioModalIsOpen)}/> 
+                    <ButtonSecundary
+                      text="Prontuário"
+                      onClickFunction={() =>
+                        setProntuarioModalIsOpen(!prontuarioModalIsOpen)
+                      }
+                    />
                   </div>
                 </div>
               </div>

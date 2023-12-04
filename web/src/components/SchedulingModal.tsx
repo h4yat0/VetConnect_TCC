@@ -3,13 +3,18 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import ButtonDanger from "./buttons/ButtonDanger";
-import { DatePicker, TimePicker } from "@mui/x-date-pickers";
-import { getAccessToken, getAnimals, getId, getSchedules, updateSchedules } from "../redux/client";
+import {
+  getAccessToken,
+  getAnimals,
+  getId,
+  getSchedules,
+  updateSchedules,
+} from "../redux/client";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
-import api from "../api/axios";
 import AlertConfirm from "./AlertConfirm";
 import { getUnits } from "../redux/unit";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 interface Schedules {
   id: number;
@@ -36,14 +41,7 @@ interface AgendamentoModalProps {
 const SCHEDULE_URL = "api/agendamento/v1/agendar";
 const SCHEDULING_URL = "/api/agendamento/v1/buscarAgendamentos/";
 const CANCEL_AGENDAMENTO = "api/agendamento/v1/cancelar-agendamento/";
-
-function parseTimeString(timeString: string): { hour: number; minute: number } {
-  const [hourStr, minuteStr] = timeString.split(":");
-  const hour = parseInt(hourStr, 10);
-  const minute = parseInt(minuteStr, 10);
-
-  return { hour, minute };
-}
+const AVAILABLE_TIMES = "api/agendamento/v1/horarios-disponiveis/";
 
 export default function ScheduleModal({
   type,
@@ -53,58 +51,48 @@ export default function ScheduleModal({
   scheduleId,
   setIsOpen,
 }: AgendamentoModalProps) {
+  const axiosPrivate = useAxiosPrivate();
+
   const dispatch = useDispatch();
   const accessToken = useSelector(getAccessToken);
   const clientId = useSelector(getId);
 
+  const newScheduling = type == "new";
   const animals = [...useSelector(getAnimals)];
+  const animalsValidation = animals.length > 0 && animals[0].id !== -1;
+
   const units = [...useSelector(getUnits)];
   const schedule = [...useSelector(getSchedules)].find(
     (schedule) => schedule.id === scheduleId
   );
 
   const [alertConfirmIsOpen, setAlertConfirmIsOpen] = useState(false);
+
   const [selectedAnimal, setSelectedAnimal] = useState(animals[0]);
   const [selectedUnit, setSelectedUnit] = useState(units[0]);
-
-
-  const times = [
-      "07:00",
-      "07:30",
-      "08:00",
-      "08:30",
-      "09:00",
-      "09:30",
-      "11:30",
-      "12:30",
-      "13:30",
-      "14:30",
-      "15:00",
-      "15:30",
-      "16:00",
-      "16:30",
-    ]
-  
-  const [selectedTime, setSelectedTime] = useState(times[0]);
 
   const services = [...selectedUnit.services];
   const [selectedService, setSelectedService] = useState(services[0]);
 
-  const newScheduling = type == "new";
-
-  const minDate = dayjs().add(1, "day");
-  const maxDate = minDate.add(1, "month");
-  const minTime = parseTimeString(selectedUnit.openingTime);
-  const maxTime = parseTimeString(selectedUnit.closingTime);
-
-  const [date, setDate] = useState(minDate);
-  const [time, setTime] = useState(minTime);
+  const [date, setDate] = useState("");
+  const [availableTimes, setAvailableTimes] = useState(["HH:mm"]);
+  const [selectedTime, setSelectedTime] = useState(availableTimes[0]);
 
   const [observation, setObservation] = useState("Sem observações");
-  const [waitingList, setWaitingList] = useState(false)
+  const [waitingList, setWaitingList] = useState(false);
+
+  const minDate = () => {
+    const today = new Date().toISOString().split("T")[0];
+    return today;
+  };
+
+  const formatDate = (date: string) => {
+    const formatedDate = dayjs(date).format("DD/MM/YYYY");
+    return formatedDate;
+  };
 
   const getSchedulesApi = async () => {
-    let response = await api
+    let response = await axiosPrivate
       .get(SCHEDULING_URL + clientId, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -119,12 +107,63 @@ export default function ScheduleModal({
       });
   };
 
+  const getAvailableTimes = async () => {
+    if (
+      selectedUnit.id === undefined ||
+      selectedService.id === undefined ||
+      dayjs().isAfter(date)
+    ) {
+      return;
+    }
+
+    const unitSelected = selectedUnit.id;
+    const serviceSelected = selectedService.id;
+    const dateSelected = date;
+
+    let response = await axiosPrivate
+      .get(`${AVAILABLE_TIMES}${unitSelected}/${serviceSelected}/${dateSelected}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+
+        if (response.status === 204) {
+          setWaitingList(true);
+          setAlertConfirmIsOpen(true);
+          return;
+        }
+
+        let data = response.data;
+        setAvailableTimes([...data.horarios]);
+        setSelectedTime(availableTimes[0]);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (date != "") {
+      getAvailableTimes();
+    }
+  }, [date]);
+
+  useEffect(() => {
+    if (date != "") {
+      setDate("");
+      setAvailableTimes(["HH:mm"]);
+      setSelectedTime(availableTimes[0]);
+    }
+  }, [selectedUnit, selectedService]);
+
   const postScheduling = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (selectedService.id == undefined || selectedUnit.id == undefined) {
       return;
     }
-    let reponse = await api
+    let reponse = await axiosPrivate
       .post(
         SCHEDULE_URL,
         {
@@ -132,8 +171,8 @@ export default function ScheduleModal({
           idAnimal: selectedAnimal.id,
           idServico: selectedService.id,
           idUnidade: selectedUnit.id,
-          dataAgendada: date.format("DD/MM/YYYY"),
-          horaAgendada: `${time.hour}:${time.minute}`,
+          dataAgendada: date,
+          horaAgendada: selectedTime,
           valorAgendado: selectedService.price,
           observacao: observation,
         },
@@ -145,17 +184,12 @@ export default function ScheduleModal({
       )
       .then(function (response) {
         let data = response.data;
-        getSchedulesApi()
-        setIsOpen(false)
+        getSchedulesApi();
+        setIsOpen(false);
         console.log(data);
       })
       .catch(function (error) {
         console.log(error);
-        console.log(`${time.hour}:${time.minute}`);
-        if(error?.status == 409){
-          setWaitingList(true)
-          setAlertConfirmIsOpen(true)
-        }
         if (!error?.message) {
           // setErrorMessage("No server response");
         } else {
@@ -167,7 +201,7 @@ export default function ScheduleModal({
 
   const cancelScheduling = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let reponse = await api
+    let reponse = await axiosPrivate
       .put(
         `${CANCEL_AGENDAMENTO + scheduleId}`,
         {},
@@ -178,7 +212,7 @@ export default function ScheduleModal({
         }
       )
       .then(function (response) {
-        getSchedulesApi()
+        getSchedulesApi();
         setIsOpen(false);
         console.log(response);
       })
@@ -209,6 +243,12 @@ export default function ScheduleModal({
       }
     }
   };
+
+  useEffect(()=> {
+    if (!animalsValidation) {
+      setIsOpen(false)
+    }
+  }, [isOpen])
 
   return (
     <>
@@ -485,12 +525,15 @@ export default function ScheduleModal({
                               Data e horário do agendamento
                             </span>
                             <div className="flex gap-2">
-                              <DatePicker
-                                disablePast
+                              <input
+                                id="date"
+                                name="date"
+                                type="date"
                                 value={date}
-                                onChange={() => setDate(date)}
-                                defaultValue={minDate}
-                                maxDate={maxDate}
+                                min={minDate()}
+                                onChange={(e) => setDate(e.target.value)}
+                                required
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                               />
                               <Listbox
                                 value={selectedTime}
@@ -509,9 +552,9 @@ export default function ScheduleModal({
                                     leaveTo="opacity-0"
                                   >
                                     <Listbox.Options className="absolute max-h-44 z-50 mt-1 cursor-pointer w-full overflow-auto rounded py-1 bg-white text-base shadow-lg focus:outline-none sm:text-sm">
-                                      {times.map((time) => (
+                                      {availableTimes.map((availableTime) => (
                                         <Listbox.Option
-                                          key={time + 1}
+                                          key={availableTime + 1}
                                           className={({ active }) =>
                                             `relative cursor-default select-none py-2 pl-10 pr-4 ${
                                               active
@@ -519,7 +562,7 @@ export default function ScheduleModal({
                                                 : "text-gray-900"
                                             }`
                                           }
-                                          value={time}
+                                          value={availableTime}
                                         >
                                           {({ selected }) => (
                                             <>
@@ -530,7 +573,7 @@ export default function ScheduleModal({
                                                     : "font-normal"
                                                 }`}
                                               >
-                                                {time}
+                                                {availableTime}
                                               </span>
                                             </>
                                           )}
@@ -546,7 +589,9 @@ export default function ScheduleModal({
                           <div className="p-5 rounded border border-black  ">
                             <div className="text-black text-sm font-extrabold ">
                               {schedule != undefined
-                                ? `${schedule.scheduledDate} - ${schedule.scheduledTime}`
+                                ? `${formatDate(schedule.scheduledDate)} - ${
+                                    schedule.scheduledTime
+                                  }`
                                 : "data - hora"}
                             </div>
                           </div>

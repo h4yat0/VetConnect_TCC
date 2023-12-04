@@ -9,6 +9,7 @@ interface ClientState {
   email: string;
   password: string;
   accessToken: string;
+  refreshToken: string;
   roles: string[];
   animals: Animal[];
   streetName: string;
@@ -124,6 +125,7 @@ const initialState: ClientState = {
   email: "",
   password: "",
   accessToken: "",
+  refreshToken:'',
   roles: [],
   animals: [
     {
@@ -149,6 +151,9 @@ const clientSlice = createSlice({
   reducers: {
     updateAccessToken: (state, action: PayloadAction<string>) => {
       state.accessToken = action.payload;
+    },
+    updateRefreshToken: (state, action: PayloadAction<string>) => {
+      state.refreshToken = action.payload;
     },
     updateId: (state, action: PayloadAction<number>) => {
       state.id = action.payload;
@@ -220,9 +225,10 @@ export const {
   updateEmail,
   updatePassword,
   updateAccessToken,
+  updateRefreshToken,
   updateRoles,
   updateAnimals,
-  updateSchedules
+  updateSchedules,
 } = clientSlice.actions;
 
 export const getId = (state: { client: ClientState }) => state.client.id;
@@ -247,6 +253,8 @@ export const getCep = (state: { client: ClientState }) => state.client.cep;
 export const getPassword = (state: { client: ClientState }) => state.client.password;
 export const getAccessToken = (state: { client: ClientState }) =>
   state.client.accessToken;
+export const getRefreshToken = (state: { client: ClientState }) =>
+  state.client.refreshToken;
 export const getRoles = (state: { client: ClientState }) => state.client.roles;
 export const getAnimals = (state: { client: ClientState }) => state.client.animals;
 export const getSchedules = (state: { client: ClientState }) =>

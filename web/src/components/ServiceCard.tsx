@@ -34,7 +34,7 @@ export default function ServiceCard(props: ServiceCardProps) {
     >
       <div className="mt-4 ml-2">{iconSelect(title)}</div>
       <div className="w-full">
-        <h1 className="mt-4 ml-2 p-2 text-center text-xl font-bold text-gray-700 mb-4">
+        <h1 className="mt-4 p-2 text-center text-lg font-bold text-gray-700 mb-4">
           {title}
         </h1>
       </div>
