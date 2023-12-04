@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import clientReducer from "./client";
 import unitsReducer from "./unit"
+import funcionarioReducer from './funcionario'
 
 const store = configureStore({
   reducer: {
     client: clientReducer,
     units: unitsReducer,
+    funcionario: funcionarioReducer,
   },
 });
 
