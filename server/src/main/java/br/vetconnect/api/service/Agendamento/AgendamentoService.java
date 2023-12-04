@@ -198,4 +198,16 @@ public class AgendamentoService {
 
         return formReturnList;
     }
+
+    public boolean concluirAgendamento(Long idAgendamento) {
+        try {
+            AgendamentoEntity agendamentoEntity = repository.buscarAgendamento(idAgendamento);
+            agendamentoEntity.setStatus('2');
+            repository.save(agendamentoEntity);
+            return true;
+        }catch (Exception e){
+            return  false;
+        }
+
+    }
 }

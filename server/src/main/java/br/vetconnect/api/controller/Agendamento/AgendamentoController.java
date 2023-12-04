@@ -153,4 +153,23 @@ public class AgendamentoController {
             return ResponseEntity.ok().body(agendamentoFormReturns);
         }
     }
+
+    @Operation(summary = "endPoint para concluir o agendamento", description = "endPoint para concluir o agendamento",
+            tags ={"Agendamento"}, responses = {
+            @ApiResponse(description = "Sucesso", responseCode = "400", content = {@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ExceptionResponse.class)))}),
+            @ApiResponse(description = "Sucesso", responseCode = "204"),
+            @ApiResponse(description = "Algo inesperado aconteceu", responseCode = "500", content = {
+                    @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ExceptionResponse.class)))})
+
+    })
+    @PostMapping("v1/concluir-agendamento/{idAgendamento}")
+    public ResponseEntity<?> concluirAgendamento(@PathVariable Long idAgendamento){
+        boolean agendamentoConcluido = service.concluirAgendamento(idAgendamento);
+        if(agendamentoConcluido){
+            return ResponseEntity.noContent().build();
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(new Date(), HttpStatus.BAD_REQUEST, "Não foi possível concluir esse agendamento"));
+        }
+    }
+
 }

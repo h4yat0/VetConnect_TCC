@@ -61,7 +61,8 @@ public class SecurityConfig {
                                         "api/servico/v1/somente-servicos",
                                         "api/servico/v1/servicos-unidades",
                                         "api/servico/v1/todos-servicos",
-                                        "api/funcionario/v1/cadastrar"
+                                        "api/funcionario/v1/cadastrar",
+                                        "api/agendamento/v1/concluir-agendamento/**"
                                 ).permitAll()
                                 .requestMatchers("api/**").authenticated()
                                 .requestMatchers("/users").denyAll()
