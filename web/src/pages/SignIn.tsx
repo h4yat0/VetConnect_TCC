@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -248,12 +248,21 @@ export default function SignIn() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Não tem uma conta?{" "}
-            <a
-              href="/signup"
+            <Link
+              to={"/signup"}
               className="font-semibold leading-6 text-vetConnectPrimaryGreen hover:text-vetConnectSecundaryGreen"
             >
               Crie uma aqui
-            </a>
+            </Link>
+          </p>
+
+          <p className="mt-2 text-center text-sm text-gray-500">
+            <Link
+              to={"/"}
+              className="font-semibold leading-6 hover:text-vetConnectSecundaryGreen"
+            >
+              Voltar para a página principal
+            </Link>
           </p>
         </div>
       </div>

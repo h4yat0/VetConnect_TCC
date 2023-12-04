@@ -304,7 +304,7 @@ export default function AnimalModal({
                       ? "Cadastre seu animalzinho"
                       : "Edite as informações do seu animalzinho"}
                   </Dialog.Title>
-                  <div className="px-2 py-10 border-2 rounded-lg ">
+                  <div className="px-2 py-3 border-2 rounded-lg ">
                     <h1 className="font-inter font-black text-2xl w-full text-center pb-5 uppercase">
                       {type == "register"
                         ? "Cadastre seu animalzinho"
@@ -326,7 +326,7 @@ export default function AnimalModal({
                       <></>
                     )} */}
 
-                    <form className="space-y-6" onSubmit={postAnimal} method="POST">
+                    <form className="space-y-5" onSubmit={postAnimal} method="POST">
                       <div>
                         <label
                           htmlFor="animalName"
@@ -470,9 +470,7 @@ export default function AnimalModal({
                         </div>
                       </div>
                       <div>
-                        <label                        
-                          className="block text-sm font-medium leading-6 text-gray-900"
-                        >
+                        <label className="block text-sm font-medium leading-6 text-gray-900">
                           Sexo
                         </label>
                         <Listbox value={selectedSex} onChange={setSelectedSex}>
@@ -547,14 +545,12 @@ export default function AnimalModal({
 
                       {type == "update" ? (
                         <>
-                          <div>
+                          <div className="flex flex-col gap-1">
                             <ButtonPrimary
                               text="Alterar dados do animal"
                               width="w-full"
                               onClickFunction={postEditedInformation}
                             />
-                          </div>
-                          <div>
                             <ButtonDanger
                               text="Excluir animal"
                               onClickFunction={deleteAnimal}

@@ -143,8 +143,15 @@ export default function Navbar() {
           >
             Unidades
           </Link>
+          {/* 
+          <Link
+            to="/funcionario"
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
+            Funcionário
+          </Link> */}
 
-          {auth && animals.length > 0  && animals[0].id !== -1 ? (
+          {auth && animals.length > 0 && animals[0].id !== -1 ? (
             <Link
               to="/animal"
               className="text-sm font-semibold leading-6 text-gray-900"

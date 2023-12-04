@@ -42,16 +42,15 @@ export const router = createBrowserRouter([
                 element: <Prontuario />,
               },
               {
-                path: "funcionario",
-                element: <Funcionario />,
-              },
-              {
                 path: "ProntuarioCadastro",
                 element: <ProntuarioCadastro />,
               },
             ],
           },
-
+          {
+            path: "funcionario",
+            element: <Funcionario />,
+          },
           {
             path: "unidades",
             element: <UnitListPage />,

@@ -18,6 +18,7 @@ import {
   updateName,
   updatePassword,
   updatePhone,
+  updateSchedules,
   updateStreetNumber,
   updatestreetName,
 } from "../../redux/client";
@@ -30,6 +31,7 @@ interface jwtDecoded {
 
 const KEEP_LOGIN = "/api/cliente/v1/busca-por-email/";
 const ANIMALS_URL = "/api/animal/v1/buscar/";
+const SCHEDULING_URL = "/api/agendamento/v1/buscarAgendamentos/";
 
 const PersistLogin = () => {
   const dispatch = useDispatch();
@@ -48,7 +50,6 @@ const PersistLogin = () => {
     const verifyRefreshToken = async () => {
       try {
         await refresh();
-
       } catch (err) {
         console.error(err);
       } finally {
@@ -59,16 +60,16 @@ const PersistLogin = () => {
     !accessToken ? verifyRefreshToken() : setIsLoading(false);
   }, []);
 
-  useEffect(()=> {
-if (accessToken !== undefined && accessToken !== '') {
-  keepLogin()
-}
-
-  },[accessToken])
+  useEffect(() => {
+    if (accessToken !== undefined && accessToken !== "") {
+      keepLogin();
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     if (id > 0) {
       getAnimals();
+      getSchedulesApi();
     }
   }, [id]);
 
@@ -76,18 +77,15 @@ if (accessToken !== undefined && accessToken !== '') {
     if (accessToken !== "" && accessToken === undefined) {
       return;
     }
-    
+
     const accessDecoded: jwtDecoded = jwt(accessToken);
     const email = accessDecoded.email;
     let response = await api
-      .get(
-        `${KEEP_LOGIN + email}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      )
+      .get(`${KEEP_LOGIN + email}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then(function (response) {
         let data = response.data;
 
@@ -131,6 +129,21 @@ if (accessToken !== undefined && accessToken !== '') {
       });
   };
 
+  const getSchedulesApi = async () => {
+    let response = await api
+      .get(SCHEDULING_URL + id, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(function (response) {
+        let data = response.data;
+        dispatch(updateSchedules(data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   return <>{isloading ? <p>Loading...</p> : <Outlet />}</>;
 };
 
