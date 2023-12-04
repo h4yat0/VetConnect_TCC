@@ -36,8 +36,6 @@ const useRefreshToken = () => {
       );
         let data = response.data;
         const roles = jwt(data.accessToken) as { roles: string[] };
-        console.log(data.accessToken)
-        console.log(data.refreshToken)
 
         dispatch(updateRoles(roles.roles));
         dispatch(updateAccessToken(data.accessToken));            

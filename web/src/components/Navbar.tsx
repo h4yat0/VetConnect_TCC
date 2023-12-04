@@ -1,6 +1,6 @@
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import { useSelector } from "react-redux";
-import { getId } from "../redux/client";
+import { getAnimals, getId } from "../redux/client";
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Disclosure, Popover, Transition } from "@headlessui/react";
 
@@ -21,33 +21,6 @@ import vetConnectLogo from "../assets/svgs/vetConnectLogo.svg";
 import { Link, Navigate } from "react-router-dom";
 import useSimpleAuth from "../hooks/useSimpleAuth";
 
-const products = [
-  {
-    name: "Banho",
-    description: "Deixe seu pet limpo e cheiroso",
-    href: "#",
-    icon: FaShower,
-  },
-  {
-    name: "Tosa",
-    description: "Estilize o pelo do seu pet",
-    href: "#",
-    icon: IoCutSharp,
-  },
-  {
-    name: "Castração",
-    description: "Castre seu Animal",
-    href: "#",
-    icon: MdPets,
-  },
-  {
-    name: "Vacinação",
-    description: "Vacine seu pet",
-    href: "#",
-    icon: TbVaccine,
-  },
-];
-
 const callsToAction = [{ name: "Entre em Contato", href: "#", icon: FaPhone }];
 
 function classNames(...classes: string[]) {
@@ -57,6 +30,8 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
   const userId = useSelector(getId);
   const auth = useSimpleAuth();
+  const animals = useSelector(getAnimals);
+
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {}, [userId]);
@@ -64,7 +39,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white">      
+    <header className="bg-white">
       <nav
         className="max-w-8xl mx-auto flex items-center justify-between p-6 lg:px-8 font-inter"
         aria-label="Global"
@@ -169,7 +144,7 @@ export default function Navbar() {
             Unidades
           </Link>
 
-          {auth ? (
+          {auth && animals.length > 0  && animals[0].id !== -1 ? (
             <Link
               to="/animal"
               className="text-sm font-semibold leading-6 text-gray-900"
@@ -217,7 +192,7 @@ export default function Navbar() {
                 >
                   Página principal
                 </Link>
-
+                {/* 
                 <Disclosure
                   as="div"
                   className="-mx-3 text-sm font-semibold leading-6 text-gray-900"
@@ -248,8 +223,8 @@ export default function Navbar() {
                       </Disclosure.Panel>
                     </>
                   )}
-                </Disclosure>
-
+                </Disclosure> */}
+                <br />
                 <Link
                   to="/unidades"
                   className="text-sm font-semibold leading-6 text-gray-900"

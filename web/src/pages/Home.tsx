@@ -1,19 +1,17 @@
 import UnitCard from "../components/UnitCard";
-import ServiceCard from "../components/ServiceCard";
 import PromoCard from "../components/PromoCard";
 import { useEffect, useState } from "react";
-import HistoryCard from "../components/HistoryCard";
 import useSimpleAuth from "../hooks/useSimpleAuth";
 import ScheduleModal from "../components/SchedulingModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getUnits } from "../redux/unit";
-import unitsAndServices from "../hooks/useStoreRestock";
 import useRestockUnitsAndServices from "../hooks/useStoreRestock";
-import AlertConfirm from "../components/AlertConfirm";
 import api from "../api/axios";
+import useRefreshToken from "../hooks/useRefreshToken";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import {
   getAccessToken,
+  getAnimals,
   getId,
   getSchedules,
   updateSchedules,
@@ -21,16 +19,24 @@ import {
 import ScheduleCard from "../components/ScheduleCard";
 import ButtonSecundary from "../components/buttons/ButtonSecundary";
 import HistoricModal from "../components/HistoricModal";
+import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 
 const SCHEDULING_URL = "/api/agendamento/v1/buscarAgendamentos/";
 
-export default function Home() {
+export default function Home() {  
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const loggedIn = useSimpleAuth();
   const clientId = useSelector(getId);
   const accessToken = useSelector(getAccessToken);
-  const schedules = [...useSelector(getSchedules)].filter((schedule) => schedule.status == 1);
+  const schedules = [...useSelector(getSchedules)].filter(
+    (schedule) => schedule.status == 1
+  );
   const units = [...useSelector(getUnits)];
+  const animals = useSelector(getAnimals)  
+
+  const animalsValidation = animals.length > 0 && animals[0].id !== -1
 
   const { getUnitsAndServices } = useRestockUnitsAndServices();
 
@@ -43,24 +49,30 @@ export default function Home() {
 
   const [serviceId, setServiceId] = useState<number>(-1);
 
-  const handleNewSchedule = (
-    serviceId: number
-  ) => {
+  const formatDate = (date: string) => {
+    const formatedDate = dayjs(date).format("DD/MM/YYYY");
+    return formatedDate;
+  };
+
+  const handleNewSchedule = (serviceId: number) => {
     return () => {
-      setSchedulingType('new');
+      setSchedulingType("new");
       setServiceId(serviceId);
-      setScheduleId(-1)
+      setScheduleId(-1);
       setSchedulingIsOpen(true);
     };
   };
 
-  const handleSchedule=(schedulingType : 'inProgress' | 'finished' ,scheduleId : number)=>{
+  const handleSchedule = (
+    schedulingType: "inProgress" | "finished",
+    scheduleId: number
+  ) => {
     return () => {
       setSchedulingType(schedulingType);
       setScheduleId(scheduleId);
       setSchedulingIsOpen(true);
-    }
-  }
+    };
+  };
 
   const getSchedulesApi = async () => {
     let response = await api
@@ -116,14 +128,18 @@ export default function Home() {
               <div className="flex gap-8 pt-2 pb-6 px-2 overflow-x-auto">
                 <button
                   className="min-w-50 p-4 bg-white flex  items-center space-x-4 rounded-lg border-4 border-dashed hover:scale-105 hover:border-vetConnectPrimaryGreen hover:text-vetConnectPrimaryGreen transition transform duration-500 cursor-pointer"
-                  onClick={handleNewSchedule(-1)}
+                  onClick={
+                    animalsValidation
+                      ? handleNewSchedule(-1)
+                      : () => navigate("user/client")
+                  }
                 >
                   <div className="mt-4 ml-2">
                     <PlusIcon className="h-10 w-10" />
                   </div>
                   <div className="w-full">
                     <h1 className="p-2 text-left text-xl font-bold text-gray-700">
-                      Novo <br /> agendamento
+                      Você não tem um <br /> animal cadatrado
                     </h1>
                   </div>
                 </button>
@@ -136,7 +152,7 @@ export default function Home() {
                         animal={schedule.animal}
                         unit={schedule.unit}
                         service={schedule.service}
-                        scheduleDate={schedule.scheduledDate}
+                        scheduleDate={formatDate(schedule.scheduledDate)}
                         scheduleTime={schedule.scheduledTime}
                         handleSchedulingOpen={handleSchedule(
                           "inProgress",
@@ -163,7 +179,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </div>
+      </div>      
     </div>
   );
 }

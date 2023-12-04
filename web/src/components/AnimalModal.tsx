@@ -3,8 +3,8 @@ import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import { useDispatch, useSelector } from "react-redux";
 import { getAccessToken, getId, getName, updateAnimals } from "../redux/client";
-import { Dialog, Transition } from "@headlessui/react";
-import api from "../api/axios";
+import { Dialog, Listbox, Transition } from "@headlessui/react";
+import { axiosPrivate } from "../api/axios";
 import AlertModal from "./AlertModal";
 
 interface AnimalModalProps {
@@ -31,6 +31,8 @@ interface Animal {
 const ANIMALRECORD_URL = "api/animal/v1/cadastro";
 const ANIMALS_URL = "/api/animal/v1/buscar/";
 
+const sex = ["M", "F"];
+
 export default function AnimalModal({
   type,
   isOpen,
@@ -56,10 +58,10 @@ export default function AnimalModal({
   const [weigth, setWeigth] = useState("");
   const [size, setSize] = useState("");
   const [specie, setSpecie] = useState("");
-  const [sex, setSex] = useState("");
+  const [selectedSex, setSelectedSex] = useState(sex[0]);
   const [img, setImg] = useState("");
   const [file, setFile] = useState<File | null>(null);
-  const [base64Image, setBase64Image] = useState<string>('');
+  const [base64Image, setBase64Image] = useState<string>("");
 
   const id = useSelector(getId);
   const accessToken = useSelector(getAccessToken);
@@ -73,9 +75,37 @@ export default function AnimalModal({
       setWeigth(animals[currentAnimal].weigth);
       setSize(animals[currentAnimal].size);
       setSpecie(animals[currentAnimal].specie);
-      setSex(animals[currentAnimal].sex);
+      setSelectedSex(sex[animals[currentAnimal].sex == "M" ? 0 : 1]);
     }
   }, [currentAnimal]);
+
+  const validateInput = (input: string): string => {
+    const sanitizedInput = input.replace(/[^0-9.]/g, "");
+
+    // Garanta que há apenas uma vírgula
+    const indexOfDot = sanitizedInput.indexOf(".");
+
+    if (indexOfDot !== -1) {
+      const afterComma = sanitizedInput.slice(indexOfDot + 1);
+
+      if (afterComma.includes(".")) {
+        return sanitizedInput.slice(0, indexOfDot + 1);
+      }
+    }
+    return sanitizedInput;
+  };
+
+  const handleWeightChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    const sanitizedInput = validateInput(inputValue);
+    setWeigth(sanitizedInput);
+  };
+
+  const handleSizeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    const sanitizedInput = validateInput(inputValue);
+    setSize(sanitizedInput);
+  };
 
   function isEmptyString(str: string) {
     return str.trim() === "";
@@ -86,8 +116,8 @@ export default function AnimalModal({
 
     if (files && files.length > 0) {
       const selectedFile = files[0];
-      setImg(URL.createObjectURL(files[0]))
-      
+      setImg(URL.createObjectURL(files[0]));
+
       setFile(selectedFile);
       const reader = new FileReader();
 
@@ -99,16 +129,16 @@ export default function AnimalModal({
       };
 
       reader.readAsDataURL(selectedFile);
+    }
   }
-}
 
-function formatBase64(base64: string) {
-  const commaIndex = base64.indexOf(",");
-  return [base64.substring(commaIndex + 1).trim()];
-}
+  function formatBase64(base64: string) {
+    const commaIndex = base64.indexOf(",");
+    return [base64.substring(commaIndex + 1).trim()];
+  }
 
   const getAnimals = async () => {
-    let response = await api
+    let response = await axiosPrivate
       .get(ANIMALS_URL + id, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -125,7 +155,7 @@ function formatBase64(base64: string) {
 
   const postAnimal = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let reponse = await api
+    let reponse = await axiosPrivate
       .post(
         ANIMALRECORD_URL,
         {
@@ -137,8 +167,8 @@ function formatBase64(base64: string) {
           peso: weigth,
           tamanho: size,
           especie: specie,
-          sexo: sex,
-          imagens: formatBase64(base64Image)
+          sexo: selectedSex,
+          imagens: formatBase64(base64Image),
         },
         {
           headers: {
@@ -170,7 +200,7 @@ function formatBase64(base64: string) {
     if (e) {
       e.preventDefault();
     }
-    let reponse = await api
+    let reponse = await axiosPrivate
       .put(
         `api/animal/v1/alterar/${animalId}`,
         {
@@ -184,7 +214,7 @@ function formatBase64(base64: string) {
           peso: isEmptyString(weigth) ? animals[animalId]?.weigth : weigth,
           tamanho: isEmptyString(size) ? animals[animalId]?.size : size,
           especie: isEmptyString(specie) ? animals[animalId]?.specie : specie,
-          sexo: isEmptyString(sex) ? animals[animalId]?.sex : sex,
+          sexo: sex ? animals[animalId]?.sex : sex,
           imagens: [""],
         },
         {
@@ -207,7 +237,7 @@ function formatBase64(base64: string) {
     if (e) {
       e.preventDefault();
     }
-    let reponse = await api
+    let reponse = await axiosPrivate
       .delete(`api/animal/v1/delete/${animalId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -413,7 +443,7 @@ function formatBase64(base64: string) {
                             autoComplete="weigth"
                             required
                             value={weigth}
-                            onChange={(e) => setWeigth(e.target.value)}
+                            onChange={(e) => handleWeightChange(e)}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
@@ -434,31 +464,58 @@ function formatBase64(base64: string) {
                             autoComplete="size"
                             required
                             value={size}
-                            onChange={(e) => setSize(e.target.value)}
+                            onChange={(e) => handleSizeChange(e)}
                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
                           />
                         </div>
                       </div>
-
                       <div>
-                        <label
-                          htmlFor="sex"
+                        <label                        
                           className="block text-sm font-medium leading-6 text-gray-900"
                         >
                           Sexo
                         </label>
-                        <div className="mt-2">
-                          <input
-                            id="sex"
-                            name="sex"
-                            type="text"
-                            required
-                            value={sex}
-                            onChange={(e) => setSex(e.target.value)}
-                            maxLength={1}
-                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-vetConnectPrimaryGreen sm:text-sm sm:leading-6"
-                          />
-                        </div>
+                        <Listbox value={selectedSex} onChange={setSelectedSex}>
+                          <div className="relative">
+                            <Listbox.Button className="relative w-full min-h-[56px] p-[18px] cursor-pointer rounded text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-vetConnectPrimaryGreen sm:text-sm">
+                              <span className="block truncate">{selectedSex}</span>
+                            </Listbox.Button>
+                            <Transition
+                              as={Fragment}
+                              leave="transition ease-in duration-100"
+                              leaveFrom="opacity-100"
+                              leaveTo="opacity-0"
+                            >
+                              <Listbox.Options className="absolute max-h-44 z-50 mt-1 cursor-pointer w-full overflow-auto rounded py-1 bg-white text-base shadow-lg focus:outline-none sm:text-sm">
+                                {sex.map((sex, i) => (
+                                  <Listbox.Option
+                                    key={i}
+                                    className={({ active }) =>
+                                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                        active
+                                          ? "text-vetConnectPrimaryGreen font-extrabold"
+                                          : "text-gray-900"
+                                      }`
+                                    }
+                                    value={sex}
+                                  >
+                                    {({ selected }) => (
+                                      <>
+                                        <span
+                                          className={`block truncate ${
+                                            selected ? "font-medium" : "font-normal"
+                                          }`}
+                                        >
+                                          {sex}
+                                        </span>
+                                      </>
+                                    )}
+                                  </Listbox.Option>
+                                ))}
+                              </Listbox.Options>
+                            </Transition>
+                          </div>
+                        </Listbox>
                       </div>
 
                       <div>
@@ -478,7 +535,13 @@ function formatBase64(base64: string) {
                             className="block w-full border border-gray-300 rounded-md file:rounded file:bg-vetConnectGray file:text-white file:p-2 ring-0 text-gray-900 shadow-sm placeholder:text-gray-400 sm:text-sm sm:leading-6"
                           />
 
-                          {img && <img src={img} alt="Imagem selecionada" className="mt-1 rounded"/>}
+                          {img && (
+                            <img
+                              src={img}
+                              alt="Imagem selecionada"
+                              className="mt-1 rounded"
+                            />
+                          )}
                         </div>
                       </div>
 
