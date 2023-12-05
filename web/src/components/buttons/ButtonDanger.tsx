@@ -1,7 +1,7 @@
 interface buttonDangerProps {
 	text: string;
 	onClickFunction?: () => void;
-    width?: string;
+  width?: string;
 	disabled?: boolean;
 }
 
