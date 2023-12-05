@@ -154,7 +154,7 @@ export default function Animals() {
         </div>
 
         {/* Histórico de Serviços */}
-        <div>
+        <div className="mt-5">
           <h1 className="font-bold text-2xl m-2">Histórico de Serviços</h1>
           <div className=" rounded-xl px-4 ">
             {schedules.length > 0 ? (

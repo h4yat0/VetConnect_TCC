@@ -87,8 +87,11 @@ export default function UnitPage() {
                   <b>Especialidades:</b>
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {unit.specialty.split(",").map((especialit,i) => (
-                    <span className="p-1 rounded-md border-2 border-gray-400" key={i}>
+                  {unit.specialty.split(",").map((especialit, i) => (
+                    <span
+                      className="p-1 rounded-md border-2 border-gray-400"
+                      key={i}
+                    >
                       {especialit.trim()}
                     </span>
                   ))}
@@ -99,7 +102,7 @@ export default function UnitPage() {
         </div>
         <div className="pt-12">
           <h1 className="text-2xl font-bold">Serviços</h1>
-          <div className="grid grid-cols-4 gap-5 mt-3">
+          <div className="grid grid-cols-3 gap-5 mt-3 lg:grid-cols-3">
             {services.map((service) => (
               <ServiceCard
                 key={service.id}

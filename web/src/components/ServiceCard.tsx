@@ -29,7 +29,7 @@ export default function ServiceCard(props: ServiceCardProps) {
 
   return (
     <div
-      className="w-full min-w-100 p-4 bg-white flex space-x-4 rounded-lg shadow-md hover:scale-105 transition transform duration-500 cursor-pointer"
+      className="w-full min-w-fit p-4 bg-white flex space-x-4 rounded-lg shadow-md hover:scale-105 transition transform duration-500 cursor-pointer"
       onClick={() => handleSchedulingOpen()}
     >
       <div className="mt-4 ml-2">{iconSelect(title)}</div>
