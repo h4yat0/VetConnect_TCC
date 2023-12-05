@@ -30,6 +30,8 @@ public class AnimalMapper {
         entity.setSexo(animalCreate.getSexo());
         if(animalCreate.getRaca() != null){
             entity.setRaca(animalCreate.getRaca());
+        }else{
+            entity.setRaca("");
         }
         entity.setIdCliente(clienteEntity);
         return entity;
@@ -117,6 +119,8 @@ public class AnimalMapper {
         entity.setSexo(animal.getSexo());
         if(animal.getRaca() != null){
             entity.setRaca(animal.getRaca());
+        }else{
+            entity.setRaca("");
         }
         entity.setIdCliente(cliente);
         entity.setImagens(imagemAnimalMapper.formCreateParaEntity(animal.getImagens(), entity));

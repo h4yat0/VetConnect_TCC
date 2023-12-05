@@ -83,9 +83,13 @@ public class ClienteMapper {
 
         if(form.getComplemento() != null){
             clienteEntity.setComplemento(form.getComplemento());
+        }else{
+            clienteEntity.setComplemento("");
         }
         if(form.getImagem() != null){
             clienteEntity.setImagem(Base64.getDecoder().decode(form.getImagem()));
+        }else{
+            clienteEntity.setImagem(Base64.getDecoder().decode(""));
         }
 
         return clienteEntity;
@@ -110,9 +114,13 @@ public class ClienteMapper {
 
         if(form.getComplemento() != null){
             clienteEntity.setComplemento(form.getComplemento());
+        }else{
+            clienteEntity.setComplemento("");
         }
         if(form.getImagem() != null){
             clienteEntity.setImagem(Base64.getDecoder().decode(form.getImagem()));
+        }else{
+            clienteEntity.setImagem(Base64.getDecoder().decode(""));
         }
 
         return clienteEntity;

@@ -1,6 +1,7 @@
 package br.vetconnect.api.form.Animal;
 
 import br.vetconnect.api.form.Cliente.ClienteFormCreate;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,5 +27,6 @@ public class AnimalFormReturn extends RepresentationModel<AnimalFormReturn> impl
     private String tamanho;
     private String especie;
     private String sexo;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<byte[]> imagens;
 }

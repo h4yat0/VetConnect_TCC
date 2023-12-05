@@ -28,6 +28,8 @@ public class AgendamentoMapper {
         entity.setStatus('1');
         if(form.getObservacao() !=null){
             entity.setObservacao(form.getObservacao());
+        }else{
+            entity.setObservacao("");
         }
 
         return entity;
@@ -46,6 +48,8 @@ public class AgendamentoMapper {
         entity.setValorAgendado(form.getValorAgendado());
         if(form.getObservacao() !=null){
             entity.setObservacao(form.getObservacao());
+        }else{
+            entity.setObservacao("");
         }
 
         return entity;
