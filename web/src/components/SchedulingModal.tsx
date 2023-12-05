@@ -41,8 +41,8 @@ interface AgendamentoModalProps {
 const SCHEDULE_URL = "api/agendamento/v1/agendar";
 const SCHEDULING_URL = "/api/agendamento/v1/buscarAgendamentos/";
 const CANCEL_AGENDAMENTO = "api/agendamento/v1/cancelar-agendamento/";
-const AVAILABLE_TIMES_URL = "api/agendamento/v1/horarios-disponiveis/"
-const WAITING_LIST_URL = '/api/fila-espera/v1/cadastrar';
+const AVAILABLE_TIMES_URL = "api/agendamento/v1/horarios-disponiveis/";
+const WAITING_LIST_URL = "/api/fila-espera/v1/cadastrar";
 
 export default function ScheduleModal({
   type,
@@ -81,6 +81,7 @@ export default function ScheduleModal({
 
   const [observation, setObservation] = useState("Sem observações");
   const [waitingList, setWaitingList] = useState(false);
+  const [waitingListWarning, setWaitingListWarning] = useState(false);
 
   const minDate = () => {
     const today = new Date().toISOString().split("T")[0];
@@ -111,8 +112,8 @@ export default function ScheduleModal({
   const getAvailableTimes = async () => {
     if (
       selectedUnit.id === undefined ||
-      selectedService.id === undefined ||
-      dayjs().isAfter(date)
+      selectedService.id === undefined
+      // || dayjs().isAfter((date))
     ) {
       return;
     }
@@ -122,21 +123,22 @@ export default function ScheduleModal({
     const dateSelected = date;
 
     let response = await axiosPrivate
-      .get(`${AVAILABLE_TIMES_URL}${unitSelected}/${serviceSelected}/${dateSelected}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      .get(
+        `${AVAILABLE_TIMES_URL}${unitSelected}/${serviceSelected}/${dateSelected}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      )
       .then(function (response) {
-        console.log(response);
+        let data = response.data;
 
-        if (response.status === 204) {
-          setWaitingList(true);
-          setAlertConfirmIsOpen(true);
-          return;
+        if (data.filaDeEspera) {
+          setWaitingListWarning(true);
+          setAlertConfirmIsOpen(true)
         }
 
-        let data = response.data;
         setAvailableTimes([...data.horarios]);
         setSelectedTime(availableTimes[0]);
       })
@@ -145,8 +147,7 @@ export default function ScheduleModal({
       });
   };
 
-  const postWaitingList = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const postWaitingList = async () => {    
     if (selectedService.id == undefined || selectedUnit.id == undefined) {
       return;
     }
@@ -169,6 +170,8 @@ export default function ScheduleModal({
       .then(function (response) {
         let data = response.data;
         getSchedulesApi();
+        setWaitingList(false);
+        setWaitingListWarning(false)
         setIsOpen(false);
         console.log(data);
       })
@@ -183,22 +186,12 @@ export default function ScheduleModal({
       });
   };
 
-  useEffect(() => {
-    if (date != "") {
-      getAvailableTimes();
-    }
-  }, [date]);
+  const handleWaitingList = async () => {
+    setWaitingListWarning(false)
+    setWaitingList(true);
+  };
 
-  useEffect(() => {
-    if (date != "") {
-      setDate("");
-      setAvailableTimes(["HH:mm"]);
-      setSelectedTime(availableTimes[0]);
-    }
-  }, [selectedUnit, selectedService]);
-
-  const postScheduling = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const postScheduling = async () => {
     if (selectedService.id == undefined || selectedUnit.id == undefined) {
       return;
     }
@@ -238,8 +231,7 @@ export default function ScheduleModal({
       });
   };
 
-  const cancelScheduling = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const cancelScheduling = async () => {
     let reponse = await axiosPrivate
       .put(
         `${CANCEL_AGENDAMENTO + scheduleId}`,
@@ -259,6 +251,26 @@ export default function ScheduleModal({
         console.log(error);
       });
   };
+
+  useEffect(() => {
+    if (date != "") {
+      getAvailableTimes();
+    }
+  }, [date]);
+
+  useEffect(() => {
+    if (date != "") {
+      setDate("");
+      setAvailableTimes(["HH:mm"]);
+      setSelectedTime(availableTimes[0]);
+    }
+  }, [selectedUnit, selectedService]);
+
+  useEffect(() => {
+    setDate("");
+    setAvailableTimes(["HH:mm"]);
+    setSelectedTime(availableTimes[0]);
+  }, [isOpen]);
 
   useEffect(() => {
     if (serviceId !== -1) locateServiceId(serviceId);
@@ -283,11 +295,11 @@ export default function ScheduleModal({
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     if (!animalsValidation) {
-      setIsOpen(false)
+      setIsOpen(false);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   return (
     <>
@@ -295,11 +307,21 @@ export default function ScheduleModal({
         isOpen={alertConfirmIsOpen}
         setIsOpen={setAlertConfirmIsOpen}
         type="insert"
-        onConfirmFunction={newScheduling ? waitingList ? postWaitingList : postScheduling : cancelScheduling}
+        onConfirmFunction={
+          newScheduling
+            ? waitingListWarning
+              ? handleWaitingList
+              : waitingList
+              ? postWaitingList
+              : postScheduling
+            : cancelScheduling
+        }
         message={
           newScheduling
-            ? waitingList
-              ? "Deseja entrar na fila de espera?"
+            ? waitingListWarning
+              ? "A data e o horário selecionados não estão disponivéis. Deseja entrar na fila de espera?"
+              : waitingList
+              ? "Confirme a entrada na fila de espera"
               : "Confirme o agendamento"
             : "Confirme o cancelamento do agendamento"
         }
@@ -348,10 +370,9 @@ export default function ScheduleModal({
                             return (
                               <>
                                 <span>Agendamento em progresso</span>
-                                <span> - id:  {' '}
-                                  {schedule != undefined
-                                    ? schedule.id
-                                    : null}
+                                <span>
+                                  {" "}
+                                  - id: {schedule != undefined ? schedule.id : null}
                                 </span>
                               </>
                             );
