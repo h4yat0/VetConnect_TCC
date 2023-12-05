@@ -106,7 +106,7 @@ export default function UserClientPage() {
     setBirthDate(birthDateStore);
     setPhone(phoneStore);
     setEmail(emailStore);
-    setStreetName(nameStore);
+    setStreetName(streetNameStore);
     setStreetNumber(streetNumberStore);
     setBairro(bairroStore);
     setCity(cityStore);
