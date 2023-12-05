@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import AlertConfirm from "./AlertConfirm";
 import { getUnits } from "../redux/unit";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import Alert from "../components/Alert";
 
 interface Schedules {
   id: number;
@@ -81,7 +82,11 @@ export default function ScheduleModal({
 
   const [observation, setObservation] = useState("Sem observações");
   const [waitingList, setWaitingList] = useState(false);
+
   const [waitingListWarning, setWaitingListWarning] = useState(false);
+
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {}, [errorMessage]);
 
   const minDate = () => {
     const today = new Date().toISOString().split("T")[0];
@@ -178,11 +183,12 @@ export default function ScheduleModal({
       .catch(function (error) {
         console.log(error);
         if (!error?.message) {
-          // setErrorMessage("No server response");
+          setErrorMessage("Erro inesperado");
         } else {
-          // setErrorMessage(error.message);
+          setErrorMessage(
+            "Houve um erro durante a entrada na fila de espera. Verifique o preenchimento dos campos"
+          );
         }
-        // errRef.current?.focus();
       });
   };
 
@@ -223,11 +229,12 @@ export default function ScheduleModal({
       .catch(function (error) {
         console.log(error);
         if (!error?.message) {
-          // setErrorMessage("No server response");
+          setErrorMessage("Erro inesperado");
         } else {
-          // setErrorMessage(error.message);
+          setErrorMessage(
+            "Houve um erro durante o agendamento. Verifique o preenchimento dos campos"
+          );
         }
-        // errRef.current?.focus();
       });
   };
 
@@ -249,6 +256,13 @@ export default function ScheduleModal({
       })
       .catch(function (error) {
         console.log(error);
+        if (!error?.message) {
+          setErrorMessage("Erro inesperado");
+        } else {
+          setErrorMessage(
+            "Houve um erro durante o cancleamento. Tente novamente mais tarde"
+          );
+        }
       });
   };
 
@@ -311,6 +325,7 @@ export default function ScheduleModal({
       setObservation("Sem observações");
       setWaitingList(false);
       setWaitingListWarning(false);
+      setErrorMessage("");
     }
   }, [isOpen]);
 
@@ -406,6 +421,9 @@ export default function ScheduleModal({
                     </button>
                   </div>
                   <div className="mt-2">
+                    {errorMessage ? (
+                      <Alert title={errorMessage} description="" type="danger" />
+                    ) : null}
                     <div className="justify-between gap items-center flex py-2 gap-3">
                       <div className="w-full">
                         {newScheduling ? (
