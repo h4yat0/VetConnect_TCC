@@ -87,24 +87,11 @@ export default function UnitPage() {
                   <b>Especialidades:</b>
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="p-1 rounded-md border-2 border-gray-400">
-                    Dermatologia
-                  </span>
-                  <span className="p-1 rounded-md border-2 border-gray-400">
-                    Oftalmologia
-                  </span>
-                  <span className="p-1 rounded-md border-2 border-gray-400">
-                    Cardiologia
-                  </span>
-                  <span className="p-1 rounded-md border-2 border-gray-400">
-                    Cardiologia
-                  </span>
-                  <span className="p-1 rounded-md border-2 border-gray-400">
-                    Cardiologia
-                  </span>
-                  <span className="p-1 rounded-md border-2 border-gray-400">
-                    Cardiologia
-                  </span>{" "}
+                  {unit.specialty.split(",").map((especialit,i) => (
+                    <span className="p-1 rounded-md border-2 border-gray-400" key={i}>
+                      {especialit.trim()}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
