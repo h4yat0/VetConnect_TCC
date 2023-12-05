@@ -2,10 +2,11 @@ import { useState, Fragment, useEffect, ChangeEvent } from "react";
 import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccessToken, getId, getName, updateAnimals } from "../redux/client";
+import { getAccessToken, getId, getName, getAnimals, updateAnimals } from "../redux/client";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { axiosPrivate } from "../api/axios";
 import AlertModal from "./AlertModal";
+import { useNavigate } from "react-router-dom";
 
 interface AnimalModalProps {
   type: "register" | "update";
@@ -41,14 +42,17 @@ export default function AnimalModal({
   setIsOpen,
 }: AnimalModalProps) {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  
   const [alertType, setAlertType] = useState<"success" | "caution" | "danger">(
     "success"
   );
   const [alertMessage, setAlertMessage] = useState("");
   const [alertIsOpen, setAlertIsOpen] = useState(false);
 
-  let animals = [...animalsStore];
+  // cosnt animals = [...animalsStore];
+  
+  const animals = [...useSelector(getAnimals)];
   const currentAnimal = animals.findIndex((animal) => animal.id === animalId);
 
   const [name, setName] = useState("");
@@ -137,7 +141,7 @@ export default function AnimalModal({
     return [base64.substring(commaIndex + 1).trim()];
   }
 
-  const getAnimals = async () => {
+  const getAnimalsApi = async () => {
     let response = await axiosPrivate
       .get(ANIMALS_URL + id, {
         headers: {
@@ -179,7 +183,7 @@ export default function AnimalModal({
       .then(function (response) {
         let data = response.data;
 
-        getAnimals();
+        getAnimalsApi();
         setAlertMessage("Cadastro bem sucedido");
         setAlertType("success");
         setAlertIsOpen(true);
@@ -225,7 +229,7 @@ export default function AnimalModal({
       )
       .then(function (response) {
         let data = response.data;
-        getAnimals();
+        getAnimalsApi();
         console.log(response);
       })
       .catch(function (error) {
@@ -244,12 +248,14 @@ export default function AnimalModal({
         },
       })
       .then(function (response) {
-        getAnimals();
+        getAnimalsApi();
         setAlertMessage("Exclusão bem sucedido");
         setAlertType("success");
         setAlertIsOpen(true);
 
         setIsOpen(false);
+
+        if (animals.length == 0) navigate("user/client");
 
         console.log(response);
       })
