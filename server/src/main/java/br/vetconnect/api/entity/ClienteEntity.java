@@ -62,6 +62,6 @@ public class ClienteEntity {
     @OneToMany(mappedBy = "idCliente", cascade = CascadeType.ALL) //excluir todos os animais desse cliente não faz ele ser apagado
     private List<AnimalEntity> animais = new ArrayList<>();
 
-    @OneToMany(mappedBy = "idCliente")
+    @OneToMany(mappedBy = "idCliente", cascade = CascadeType.REMOVE)
     private List<FilaEsperaEntity> filaEsperaEntities;
 }
