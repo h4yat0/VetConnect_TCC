@@ -184,7 +184,7 @@ export default function UserClientPage() {
           setErrorMessage("Erro inesperado");
         } else {
           setErrorMessage(
-            "Houve um erro durante a edição das informações da sua conta. Verifique o preenchimento dos campos"
+            "Houve um erro durante a alteração das informações da sua conta. Verifique o preenchimento dos campos"
           );
         }
       });

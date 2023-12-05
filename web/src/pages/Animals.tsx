@@ -76,22 +76,24 @@ export default function Animals() {
             onClick={() => decrementCurrentAnimal()}
           />
 
-          <div className="grid gap-4 grid-cols-3  " style={{ maxHeight: 400 }}>
+          <div className="grid gap-4 grid-cols-2 w-full lg:grid-cols-3">
             <div className="col-span-2">
-              {animals[currentAnimal].imgs[0].length > 0 &&
-              animals[currentAnimal].imgs[0] !== undefined ? (
-                <img
-                  src={`data:image/jpg;base64,${animals[currentAnimal].imgs[0]}`}
-                  alt="tailwind logo"
-                  className="rounded-xl w-full max-h-[350px]  object-cover"
-                />
-              ) : (
-                <div className="rounded-xl w-full h-full max-h-[350px] bg-slate-500 flex justify-center items-center" >
-                  <span className="text-white">Sem imagem</span>
-                </div>
-              )}
+              <div className="w-full h-full overflow-hidden max-h-[350px]">
+                {animals[currentAnimal].imgs[0].length > 0 &&
+                animals[currentAnimal].imgs[0] !== undefined ? (
+                  <img
+                    src={`data:image/jpg;base64,${animals[currentAnimal].imgs[0]}`}
+                    alt="tailwind logo"
+                    className="rounded-xl w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="rounded-xl w-full h-full min-h-[300px] bg-vetConnectGray flex justify-center items-center">
+                    <span className="text-white">Sem imagem</span>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="p-4 rounded-lg border-vetConnectSecundaryGreen">
+            <div className="p-4 rounded-lg border-vetConnectSecundaryGreen max-h-[350px]">
               <h1 className="text-3xl font-bold">{animals[currentAnimal].name}</h1>
               <div className="pt-4 gap-y-6 flex flex-col">
                 <div className="text-lg">
@@ -108,22 +110,22 @@ export default function Animals() {
                     <b>Cor:</b> {animals[currentAnimal].color}
                   </p>
                   <p>
-                    <b>Sexo:</b>{" "}
-                    {animals[currentAnimal].sex == "M" ? "Macho" : "Fêmea"}
+                    <b>Peso:</b>{" "}
+                    {parseInt(animals[currentAnimal].weigth)
+                      .toFixed(2)
+                      .replace(".", ",")}
+                    kg
                   </p>
                   <p>
                     <b>Tamanho:</b>{" "}
                     {parseInt(animals[currentAnimal].size)
                       .toFixed(2)
                       .replace(".", ",")}
-                    m
+                    cm
                   </p>
                   <p>
-                    <b>Peso:</b>{" "}
-                    {parseInt(animals[currentAnimal].weigth)
-                      .toFixed(2)
-                      .replace(".", ",")}
-                    kg
+                    <b>Sexo:</b>{" "}
+                    {animals[currentAnimal].sex == "M" ? "Macho" : "Fêmea"}
                   </p>
                   <div className="pt-6 flex flex-col gap-1">
                     <ButtonPrimary

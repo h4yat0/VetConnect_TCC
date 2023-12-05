@@ -90,6 +90,8 @@ export default function AnimalModal({
       setSize(animals[currentAnimal].size);
       setSpecie(animals[currentAnimal].specie);
       setSelectedSex(sex[animals[currentAnimal].sex == "M" ? 0 : 1]);
+      setImg("")
+      setBase64Image(animals[currentAnimal].imgs[0].length > 0 ? animals[currentAnimal].imgs[0] : "")
     }
   }, [currentAnimal]);
 
@@ -227,17 +229,19 @@ export default function AnimalModal({
         `api/animal/v1/alterar/${animalId}`,
         {
           idCliente: id,
-          nome: isEmptyString(name) ? animals[animalId]?.name : name,
-          cor: isEmptyString(color) ? animals[animalId]?.color : color,
-          raca: isEmptyString(race) ? animals[animalId]?.race : race,
+          nome: isEmptyString(name) ? animals[currentAnimal]?.name : name,
+          cor: isEmptyString(color) ? animals[currentAnimal]?.color : color,
+          raca: isEmptyString(race) ? animals[currentAnimal]?.race : race,
           dataNascimento: isEmptyString(birthDate)
             ? animals[animalId]?.birthDate
             : birthDate,
-          peso: isEmptyString(weigth) ? animals[animalId]?.weigth : weigth,
-          tamanho: isEmptyString(size) ? animals[animalId]?.size : size,
-          especie: isEmptyString(specie) ? animals[animalId]?.specie : specie,
-          sexo: sex ? animals[animalId]?.sex : sex,
-          imagens: [""],
+          peso: isEmptyString(weigth) ? animals[currentAnimal]?.weigth : weigth,
+          tamanho: isEmptyString(size) ? animals[currentAnimal]?.size : size,
+          especie: isEmptyString(specie) ? animals[currentAnimal]?.specie : specie,
+          sexo: sex ? animals[currentAnimal]?.sex : sex,
+          imagens: isEmptyString(base64Image)
+            ? animals[currentAnimal].imgs[0]
+            : formatBase64(base64Image),
         },
         {
           headers: {
@@ -248,7 +252,11 @@ export default function AnimalModal({
       .then(function (response) {
         let data = response.data;
         getAnimalsApi();
+        setAlertMessage("Alteração bem sucedida");
+        setAlertType("success");
+        setAlertIsOpen(true);
         setErrorMessage("");
+        setIsOpen(false);
         console.log(response);
       })
       .catch(function (error) {
@@ -257,7 +265,7 @@ export default function AnimalModal({
           setErrorMessage("Erro inesperado");
         } else {
           setErrorMessage(
-            "Houve um erro durante a edição das informações, verifique o preenchimento dos campos"
+            "Houve um erro durante a alteração das informações, verifique o preenchimento dos campos"
           );
         }
       });
