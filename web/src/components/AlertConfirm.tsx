@@ -8,7 +8,7 @@ interface AlertModalProps {
   type: "insert" | "edit" | "delete";
   isOpen: boolean;
   message: string;
-  onConfirmFunction: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  onConfirmFunction: () => void;
   setIsOpen: (isOpen: boolean) => void;
 }
 
@@ -19,9 +19,8 @@ export default function AlertConfirm({
   onConfirmFunction,
   setIsOpen,
 }: AlertModalProps) {
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    await onConfirmFunction(e);
+  const handleSubmit = async () => {
+    await onConfirmFunction();
     setIsOpen(false);
   };
 
@@ -62,19 +61,19 @@ export default function AlertConfirm({
                 >
                   <span>Confirmação</span>
                 </Dialog.Title>
-                <form action="POST" onSubmit={handleSubmit}>
                   <div className="mt-2">
                     <p className="text-md text-gray-800">{message}</p>
                   </div>
 
                   <div className="mt-4 flex gap-2">
-                    <ButtonPrimary text="Sim" type="submit" />
-                    <ButtonSecundary
+                    <ButtonPrimary text="Sim" onClickFunction={handleSubmit}/>
+                    <ButtonSecundary                      
                       text="Não"
                       onClickFunction={() => setIsOpen(!isOpen)}
                     />
                   </div>
-                </form>
+                {/* <form action="POST" onSubmit={handleSubmit}>
+                </form> */}
               </Dialog.Panel>
             </Transition.Child>
           </div>
