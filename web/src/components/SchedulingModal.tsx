@@ -266,6 +266,10 @@ export default function ScheduleModal({
     }
   }, [selectedUnit, selectedService]);
 
+    useEffect(() => {
+        setSelectedService(services[0])
+    }, [selectedUnit]);
+
   useEffect(() => {
     setDate("");
     setAvailableTimes(["HH:mm"]);
