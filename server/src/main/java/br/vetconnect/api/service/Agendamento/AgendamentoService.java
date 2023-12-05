@@ -162,6 +162,7 @@ public class AgendamentoService {
         int minutosFim = Integer.parseInt(partesFim[1]);
 
         List<String> horariosResultantes = new ArrayList<>();
+        List<String> horariosResultantes2 = new ArrayList<>();
         LocalTime inicioEspediente = LocalTime.of(horasInicio, minutosInicio);
         LocalTime fimEspediente = LocalTime.of(horasFim, minutosFim);
         LocalTime duracaoHorario = LocalTime.parse(tempoServico);
@@ -176,6 +177,7 @@ public class AgendamentoService {
             if (!horariosString.contains(horarioAtual)) {
                 horariosResultantes.add(horarioAtual);
             }
+            horariosResultantes2.add(horarioAtual);
 
             inicioEspediente = inicioEspediente.plusHours(duracaoHorario.getHour())
                     .plusMinutes(duracaoHorario.getMinute())
@@ -183,7 +185,14 @@ public class AgendamentoService {
         }
 
         HorariosDisponiveis horariosDisponiveis = new HorariosDisponiveis();
-        horariosDisponiveis.setHorarios(horariosResultantes);
+        if(horariosResultantes.isEmpty()){
+            horariosDisponiveis.setFilaDeEspera(true);
+            horariosDisponiveis.setHorarios(horariosResultantes2);
+        }else{
+            horariosDisponiveis.setHorarios(horariosResultantes);
+            horariosDisponiveis.setFilaDeEspera(false);
+        }
+
         return horariosDisponiveis;
 
     }
