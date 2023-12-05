@@ -66,7 +66,7 @@ export default function ProntuarioModal({
       })
       .then(function (response) {
         let data = response.data;
-        setProntuario(data);      
+        setProntuario(data);          
       })
       .catch(function (error) {
         console.log(error);
@@ -128,7 +128,7 @@ export default function ProntuarioModal({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="min-w-[550px] min-h-[500px] max-h-[600px] overflow-y-auto transform rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <div className="justify-between items-center flex">
+                  <div className="justify-between items-center flex pb-4">
                     <Dialog.Title
                       as="h3"
                       className="text-2xl font-black leading-6 pb-2 text-gray-900"
@@ -150,7 +150,8 @@ export default function ProntuarioModal({
                         <div>
                           <h1 className="text-lg font-bold">Alergias</h1>
                           <ul className="list-disc">
-                            {prontuario?.alergia !== undefined ? (
+                            {prontuario?.alergia !== "" &&
+                            prontuario?.alergia !== undefined ? (
                               prontuario?.alergia.split(",").length > 0 ? (
                                 prontuario?.alergia.split(",").map((e) => (
                                   <li key={prontuario.id + e} className="ml-8">
@@ -158,17 +159,18 @@ export default function ProntuarioModal({
                                   </li>
                                 ))
                               ) : (
-                                <li>Sem enfermidades registradas</li>
+                                <li className="ml-4">Sem alergias registradas</li>
                               )
                             ) : (
-                              <li>Sem enfermidades registradas</li>
+                              <li className="ml-4">Sem alergias registradas</li>
                             )}
                           </ul>
                         </div>
                         <div>
                           <h1 className="text-lg font-bold">Enfermidades</h1>
                           <ul className="list-disc">
-                            {prontuario?.enfermidade !== undefined ? (
+                            {prontuario?.enfermidade !== "" &&
+                            prontuario?.enfermidade !== undefined ? (
                               prontuario?.enfermidade.split(",").length > 0 ? (
                                 prontuario?.enfermidade.split(",").map((e) => (
                                   <li key={prontuario.id + e} className="ml-8">
@@ -176,17 +178,18 @@ export default function ProntuarioModal({
                                   </li>
                                 ))
                               ) : (
-                                <li>Sem enfermidades registradas</li>
+                                <li className="ml-4">Sem enfermidades registradas</li>
                               )
                             ) : (
-                              <li>Sem enfermidades registradas</li>
+                              <li className="ml-4">Sem enfermidades registradas</li>
                             )}
                           </ul>
                         </div>
                         <div>
                           <h1 className="text-lg font-bold">Medicamentos</h1>
                           <ul className="list-disc">
-                            {prontuario?.medicamento !== undefined ? (
+                            {prontuario?.medicamento !== "" &&
+                            prontuario?.medicamento !== undefined ? (
                               prontuario?.medicamento.split(",").length > 0 ? (
                                 prontuario?.medicamento.split(",").map((e) => (
                                   <li key={prontuario.id + e} className="ml-8">
@@ -194,56 +197,54 @@ export default function ProntuarioModal({
                                   </li>
                                 ))
                               ) : (
-                                <li>Sem medicamentos registrados</li>
+                                <li className="ml-4">Sem medicamentos registrados</li>
                               )
                             ) : (
-                              <li>Sem medicamentos registrados</li>
+                              <li className="ml-4">Sem medicamentos registrados</li>
                             )}
                           </ul>
                         </div>
                       </div>
                       <div className="flex flex-col w-full gap-5">
-                        
                         {itensProntuario !== undefined &&
                         itensProntuario.length > 0 ? (
                           itensProntuario.map((item) => (
-                            <div className="border border-black rounded p-4 w-full" key={item.id}>
-         
-
+                            <div
+                              className="border border-black rounded p-4 w-full"
+                              key={item.id}
+                            >
                               <h1 className="text-lg font-bold">{item.data}</h1>
                               <div className="flex flex-col gap-2">
+                                <div className="border border-black rounded p-2">
+                                  <h2 className="font-bold">Sintomas</h2>
+                                  <p>{item.sintomas}</p>
+                                </div>
+                                <div className="border border-black rounded p-2">
+                                  <h2 className="font-bold">Diagnóstico</h2>
+                                  <p>{item.diagnostico}</p>
+                                </div>
 
-                              <div className="border border-black rounded p-2">
-                                <h2 className="font-bold">Sintomas</h2>
-                                <p>{item.sintomas}</p>
-                              </div>
-                              <div className="border border-black rounded p-2">
-                                <h2 className="font-bold">Diagnóstico</h2>
-                                <p>{item.diagnostico}</p>
-                              </div>
+                                <div className="border border-black rounded p-2">
+                                  <h2 className="font-bold">Prescrição</h2>
+                                  <p>{item.prescricao}</p>
+                                </div>
 
-                              <div className="border border-black rounded p-2">
-                                <h2 className="font-bold">Prescrição</h2>
-                                <p>{item.prescricao}</p>
+                                <div className="border border-black rounded p-2">
+                                  <h2 className="font-bold">Exames Solicitados</h2>
+                                  <p>{item.examesSolicitados}</p>
+                                </div>
+                                <div className="border border-black rounded p-2">
+                                  <h2 className="font-bold">Observações</h2>
+                                  <p>{item.observacoes}</p>
+                                </div>
                               </div>
-
-                              <div className="border border-black rounded p-2">
-                                <h2 className="font-bold">Exames Solicitados</h2>
-                                <p>{item.examesSolicitados}</p>
-                              </div>
-                              <div className="border border-black rounded p-2">
-                                <h2 className="font-bold">Observações</h2>
-                                <p>{item.observacoes}</p>
-                              </div>
-                              </div>
-                             </div>
+                            </div>
                           ))
-                          ) : (
-                             <div className="border border-black rounded p-4 w-full" >
-                               <h1>Não há nenhum dado de consultas</h1>
-                             </div>
-                            )}
-                           
+                        ) : (
+                          <div className="border border-black rounded p-4 w-full">
+                            <h1>Não há nenhum dado de consultas</h1>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
