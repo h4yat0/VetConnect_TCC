@@ -78,11 +78,18 @@ export default function Animals() {
 
           <div className="grid gap-4 grid-cols-3  " style={{ maxHeight: 400 }}>
             <div className="col-span-2">
-              <img
-                src={`data:image/jpg;base64,${animals[currentAnimal].imgs[0]}`}
-                alt="tailwind logo"
-                className="rounded-xl w-full max-h-[350px]  object-cover"
-              />
+              {animals[currentAnimal].imgs[0].length > 0 &&
+              animals[currentAnimal].imgs[0] !== undefined ? (
+                <img
+                  src={`data:image/jpg;base64,${animals[currentAnimal].imgs[0]}`}
+                  alt="tailwind logo"
+                  className="rounded-xl w-full max-h-[350px]  object-cover"
+                />
+              ) : (
+                <div className="rounded-xl w-full h-full max-h-[350px] bg-slate-500 flex justify-center items-center" >
+                  <span className="text-white">Sem imagem</span>
+                </div>
+              )}
             </div>
             <div className="p-4 rounded-lg border-vetConnectSecundaryGreen">
               <h1 className="text-3xl font-bold">{animals[currentAnimal].name}</h1>
