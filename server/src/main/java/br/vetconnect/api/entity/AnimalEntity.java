@@ -51,7 +51,7 @@ public class AnimalEntity {
     @OneToOne(mappedBy = "idAnimal", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private ProntuarioEntity prontuario;
 
-    @OneToMany(mappedBy = "idAnimal")
+    @OneToMany(mappedBy = "idAnimal", cascade = CascadeType.REMOVE)
     private List<AgendamentoEntity> agendamentoEntityList = new ArrayList<>();
 
     @OneToMany(mappedBy = "animal",  cascade = CascadeType.REMOVE, orphanRemoval = true)
