@@ -45,6 +45,7 @@ import { useEffect, useState, Fragment } from "react";
 import ButtonDanger from "../components/buttons/ButtonDanger.js";
 import { Link, Navigate } from "react-router-dom";
 import AnimalModal from "../components/AnimalModal.js";
+import Alert from "../components/Alert";
 
 function sanitizeString(str: string): string {
   return str.replace(/[.\-\s]/g, "");
@@ -60,9 +61,9 @@ export default function UserClientPage() {
     setEditDisabled(!editDisabled);
   };
 
-  function handleLogout(){
-    localStorage.clear()
-    location.reload()
+  function handleLogout() {
+    localStorage.clear();
+    location.reload();
   }
 
   const [isOpen, setIsOpen] = useState(false);
@@ -81,6 +82,9 @@ export default function UserClientPage() {
   const [complemento, setComplemento] = useState("");
   const [cep, setCep] = useState("");
 
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {}, [errorMessage]);
+
   const idStore = useSelector(getId);
   const nameStore = useSelector(getName);
   const cpfStore = useSelector(getCpf);
@@ -98,7 +102,7 @@ export default function UserClientPage() {
   const accessToken = useSelector(getAccessToken);
   const animalsStore = useSelector(getAnimals);
 
-  const animals = [...animalsStore]
+  const animals = [...animalsStore];
 
   useEffect(() => {
     setName(nameStore);
@@ -168,12 +172,21 @@ export default function UserClientPage() {
         dispatch(updatePhone(data.telefone));
         // dispatch(updatePassword(data.senha));
 
-        setEditDisabled(true)
+        setEditDisabled(true);
+
+        setErrorMessage("");
 
         console.log(response);
       })
       .catch(function (error) {
         console.log(error);
+        if (!error?.message) {
+          setErrorMessage("Erro inesperado");
+        } else {
+          setErrorMessage(
+            "Houve um erro durante a edição das informações da sua conta. Verifique o preenchimento dos campos"
+          );
+        }
       });
   };
 
@@ -187,10 +200,17 @@ export default function UserClientPage() {
       .then(function (response) {
         console.log(response);
         updateId(-1);
-        location.reload()        
+        location.reload();
       })
       .catch(function (error) {
         console.log(error);
+        if (!error?.message) {
+          setErrorMessage("Erro inesperado");
+        } else {
+          setErrorMessage(
+            "Houve um erro durante a exclusão da sua conta. Tente mais tarde"
+          );
+        }
       });
   };
 
@@ -226,6 +246,11 @@ export default function UserClientPage() {
             </div>
           </div>
           <div className="space-y-6">
+            {errorMessage ? (
+              <Alert title={errorMessage} description="" type="danger" />
+            ) : (
+              ""
+            )}
             <div>
               <label
                 htmlFor="name"
@@ -512,7 +537,7 @@ export default function UserClientPage() {
             ) : (
               ""
             )}
-          </div>          
+          </div>
         </div>
       </div>
     </>

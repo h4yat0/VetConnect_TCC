@@ -178,6 +178,7 @@ export default function ScheduleModal({
         setWaitingList(false);
         setWaitingListWarning(false);
         setIsOpen(false);
+        setErrorMessage("");
         console.log(data);
       })
       .catch(function (error) {
@@ -224,6 +225,7 @@ export default function ScheduleModal({
         let data = response.data;
         getSchedulesApi();
         setIsOpen(false);
+        setErrorMessage("");
         console.log(data);
       })
       .catch(function (error) {
@@ -252,6 +254,7 @@ export default function ScheduleModal({
       .then(function (response) {
         getSchedulesApi();
         setIsOpen(false);
+        setErrorMessage("");
         console.log(response);
       })
       .catch(function (error) {
