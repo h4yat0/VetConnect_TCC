@@ -136,7 +136,7 @@ export default function ScheduleModal({
 
         if (data.filaDeEspera) {
           setWaitingListWarning(true);
-          setAlertConfirmIsOpen(true)
+          setAlertConfirmIsOpen(true);
         }
 
         setAvailableTimes([...data.horarios]);
@@ -147,7 +147,7 @@ export default function ScheduleModal({
       });
   };
 
-  const postWaitingList = async () => {    
+  const postWaitingList = async () => {
     if (selectedService.id == undefined || selectedUnit.id == undefined) {
       return;
     }
@@ -171,7 +171,7 @@ export default function ScheduleModal({
         let data = response.data;
         getSchedulesApi();
         setWaitingList(false);
-        setWaitingListWarning(false)
+        setWaitingListWarning(false);
         setIsOpen(false);
         console.log(data);
       })
@@ -187,7 +187,7 @@ export default function ScheduleModal({
   };
 
   const handleWaitingList = async () => {
-    setWaitingListWarning(false)
+    setWaitingListWarning(false);
     setWaitingList(true);
   };
 
@@ -266,9 +266,9 @@ export default function ScheduleModal({
     }
   }, [selectedUnit, selectedService]);
 
-    useEffect(() => {
-        setSelectedService(services[0])
-    }, [selectedUnit]);
+  useEffect(() => {
+    setSelectedService(services[0]);
+  }, [selectedUnit]);
 
   useEffect(() => {
     setDate("");
@@ -302,6 +302,15 @@ export default function ScheduleModal({
   useEffect(() => {
     if (!animalsValidation) {
       setIsOpen(false);
+    }
+
+    if (!isOpen) {
+      setSelectedAnimal(animals[0]);
+      setSelectedUnit(units[0]);
+      setSelectedService(services[0]);
+      setObservation("Sem observações");
+      setWaitingList(false);
+      setWaitingListWarning(false);
     }
   }, [isOpen]);
 
