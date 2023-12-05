@@ -187,8 +187,7 @@ export default function UserClientPage() {
       .then(function (response) {
         console.log(response);
         updateId(-1);
-        window.location.href = "/";
-        navigate("/");
+        location.reload()        
       })
       .catch(function (error) {
         console.log(error);
@@ -227,8 +226,7 @@ export default function UserClientPage() {
               <ButtonDanger text="Sair" onClickFunction={() => handleLogout()} />
             </div>
           </div>
-
-          <form className="space-y-6" action="#" method="POST">
+          <div className="space-y-6">
             <div>
               <label
                 htmlFor="name"
@@ -508,14 +506,14 @@ export default function UserClientPage() {
                   <ButtonDanger
                     text="Deletar conta"
                     disabled={editDisabled}
-                    onClickFunction={deleteAccount}
+                    onClickFunction={() => deleteAccount()}
                   />
                 </div>
               </>
             ) : (
               ""
             )}
-          </form>
+          </div>          
         </div>
       </div>
     </>
