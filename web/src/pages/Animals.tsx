@@ -81,7 +81,7 @@ export default function Animals() {
               <img
                 src={`data:image/jpg;base64,${animals[currentAnimal].imgs[0]}`}
                 alt="tailwind logo"
-                className="rounded-xl w-full h-2/3 object-cover"
+                className="rounded-xl w-full max-h-[350px]  object-cover"
               />
             </div>
             <div className="p-4 rounded-lg border-vetConnectSecundaryGreen">

@@ -2,10 +2,12 @@ import { useState, Fragment, useEffect, ChangeEvent } from "react";
 import ButtonDanger from "./buttons/ButtonDanger";
 import ButtonPrimary from "./buttons/ButtonPrimary";
 import { useDispatch, useSelector } from "react-redux";
-import { getAccessToken, getId, getName, updateAnimals } from "../redux/client";
+import { getAccessToken, getId, getName, getAnimals, updateAnimals } from "../redux/client";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { axiosPrivate } from "../api/axios";
 import AlertModal from "./AlertModal";
+import Alert from "../components/Alert";
+import { useNavigate } from "react-router-dom";
 
 interface AnimalModalProps {
   type: "register" | "update";
@@ -41,14 +43,17 @@ export default function AnimalModal({
   setIsOpen,
 }: AnimalModalProps) {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  
   const [alertType, setAlertType] = useState<"success" | "caution" | "danger">(
     "success"
   );
   const [alertMessage, setAlertMessage] = useState("");
   const [alertIsOpen, setAlertIsOpen] = useState(false);
 
-  let animals = [...animalsStore];
+  // cosnt animals = [...animalsStore];
+  
+  const animals = [...useSelector(getAnimals)];
   const currentAnimal = animals.findIndex((animal) => animal.id === animalId);
 
   const [name, setName] = useState("");
@@ -62,9 +67,13 @@ export default function AnimalModal({
   const [img, setImg] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [base64Image, setBase64Image] = useState<string>("");
+	const [errorMessage, setErrorMessage] = useState("");
 
   const id = useSelector(getId);
   const accessToken = useSelector(getAccessToken);
+
+
+  useEffect(() => {}, [errorMessage]);
 
   useEffect(() => {
     if (animalId !== -1) {
@@ -137,7 +146,7 @@ export default function AnimalModal({
     return [base64.substring(commaIndex + 1).trim()];
   }
 
-  const getAnimals = async () => {
+  const getAnimalsApi = async () => {
     let response = await axiosPrivate
       .get(ANIMALS_URL + id, {
         headers: {
@@ -179,7 +188,7 @@ export default function AnimalModal({
       .then(function (response) {
         let data = response.data;
 
-        getAnimals();
+        getAnimalsApi();
         setAlertMessage("Cadastro bem sucedido");
         setAlertType("success");
         setAlertIsOpen(true);
@@ -188,11 +197,12 @@ export default function AnimalModal({
       .catch(function (error) {
         console.log(error);
         if (!error?.message) {
-          // setErrorMessage("No server response");
+          setErrorMessage("Erro inesperado");
         } else {
-          // setErrorMessage(error.message);
-        }
-        // errRef.current?.focus();
+          setErrorMessage(
+            "Houve um erro durante o cadastro, verifique o preenchimento dos campos"
+          );
+        }        
       });
   };
 
@@ -225,11 +235,18 @@ export default function AnimalModal({
       )
       .then(function (response) {
         let data = response.data;
-        getAnimals();
+        getAnimalsApi();
         console.log(response);
       })
       .catch(function (error) {
         console.log(error);
+                        if (!error?.message) {
+                          setErrorMessage("Erro inesperado");
+                        } else {
+                          setErrorMessage(
+                            "Houve um erro durante a edição das informações, verifique o preenchimento dos campos"
+                          );
+                        }
       });
   };
 
@@ -244,17 +261,26 @@ export default function AnimalModal({
         },
       })
       .then(function (response) {
-        getAnimals();
+        getAnimalsApi();
         setAlertMessage("Exclusão bem sucedido");
         setAlertType("success");
         setAlertIsOpen(true);
 
         setIsOpen(false);
 
+        if (animals.length == 0) navigate("user/client");
+
         console.log(response);
       })
       .catch(function (error) {
         console.log(error);
+                if (!error?.message) {
+                  setErrorMessage("Erro inesperado");
+                } else {
+                  setErrorMessage(
+                    "Houve um erro durante a exlusão do animal, verifique o preenchimento dos campos"
+                  );
+                }
       });
   };
 
@@ -325,7 +351,11 @@ export default function AnimalModal({
                     ) : (
                       <></>
                     )} */}
-
+                    {errorMessage ? (
+                      <Alert title={errorMessage} description="" type="danger" />
+                    ) : (
+                      ""
+                    )}
                     <form className="space-y-5" onSubmit={postAnimal} method="POST">
                       <div>
                         <label
