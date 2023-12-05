@@ -164,7 +164,7 @@ public class ClienteService extends MetodosAuxiliares {
 
     }
 
-    public void delete(Long id){repository.deleteById(id);}
+    public void delete(Long id){repository.deleteById(id); authService.delete(id); }
 
     public String buscarCpf(String cpf){
         return repository.buscarCpf(cpf);

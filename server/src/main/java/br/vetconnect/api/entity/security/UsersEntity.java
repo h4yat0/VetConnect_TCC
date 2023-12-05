@@ -44,7 +44,7 @@ public class UsersEntity implements UserDetails, Serializable {
     @Column(name = "enabled")
     private Boolean enabled;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(name = "user_permission", joinColumns = {@JoinColumn (name = "id_user")},
         inverseJoinColumns = {@JoinColumn (name = "id_permission")}
     )

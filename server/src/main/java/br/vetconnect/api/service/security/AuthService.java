@@ -148,4 +148,10 @@ public class AuthService {
         entity.setPassword(senhaNova);
         repository.save(entity);
     }
+
+    public void delete(Long id){
+        UsersEntity entity = repository.findByTipoEId(id);
+        entity.getPermissions().clear();
+        repository.deleteById(entity.getId());
+    }
 }
