@@ -168,6 +168,8 @@ export default function UserClientPage() {
         dispatch(updatePhone(data.telefone));
         // dispatch(updatePassword(data.senha));
 
+        setEditDisabled(true)
+
         console.log(response);
       })
       .catch(function (error) {
