@@ -215,7 +215,6 @@ export default function UserClientPage() {
         <div className="mx-24  px-12 py-10 border-2 rounded-lg ">
           <div className="flex justify-between items-center mb-8">
             <div className="flex justify-between items-center gap-4">
-              <div className="w-10 h-10 bg-slate-800 rounded-full"></div>
               <span className="font-bold text-xl">{nameStore}</span>
             </div>
             <div className="flex gap-1">
